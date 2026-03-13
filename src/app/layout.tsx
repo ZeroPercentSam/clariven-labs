@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://clarivenlabs.com"),
   title: "Clariven Labs | Premium Peptide Supply for Healthcare & Research",
   description:
     "Clariven Labs delivers pharmaceutical-grade peptides with ≥98% purity to clinics, compounding pharmacies, and research institutions. cGMP certified, COA-verified, USA-made.",
