@@ -104,17 +104,164 @@ function FadeIn({
   );
 }
 
-/* ─── Dot Grid Background ─── */
-function DotGrid() {
+/* ─── Molecular Network Background ─── */
+function MolecularNetwork() {
+  const nodes = [
+    { cx: 120, cy: 80, r: 3 },
+    { cx: 300, cy: 140, r: 2.5 },
+    { cx: 480, cy: 60, r: 3.5 },
+    { cx: 650, cy: 180, r: 2 },
+    { cx: 820, cy: 90, r: 3 },
+    { cx: 200, cy: 280, r: 2 },
+    { cx: 400, cy: 320, r: 3 },
+    { cx: 580, cy: 250, r: 2.5 },
+    { cx: 750, cy: 340, r: 3.5 },
+    { cx: 950, cy: 200, r: 2 },
+    { cx: 1100, cy: 120, r: 3 },
+    { cx: 1050, cy: 300, r: 2.5 },
+    { cx: 160, cy: 420, r: 2 },
+    { cx: 350, cy: 480, r: 3 },
+    { cx: 550, cy: 440, r: 2.5 },
+    { cx: 700, cy: 500, r: 2 },
+    { cx: 880, cy: 460, r: 3 },
+    { cx: 1000, cy: 420, r: 2 },
+    { cx: 80, cy: 560, r: 3.5 },
+    { cx: 260, cy: 600, r: 2 },
+    { cx: 450, cy: 580, r: 3 },
+    { cx: 620, cy: 620, r: 2.5 },
+    { cx: 830, cy: 580, r: 2 },
+    { cx: 1020, cy: 560, r: 3 },
+    { cx: 1150, cy: 480, r: 2 },
+  ];
+
+  const connections = [
+    [0, 1], [1, 2], [2, 4], [3, 4], [1, 5], [1, 6], [6, 7],
+    [7, 8], [4, 9], [9, 10], [10, 11], [8, 11], [5, 12],
+    [6, 13], [13, 14], [14, 15], [15, 16], [16, 17], [8, 16],
+    [12, 18], [18, 19], [19, 20], [20, 21], [21, 22], [22, 23],
+    [23, 24], [17, 24], [3, 7], [5, 6], [13, 19], [7, 14],
+    [11, 17], [9, 11], [2, 3], [14, 20], [16, 22], [15, 21],
+  ];
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <svg className="absolute inset-0 w-full h-full opacity-[0.07]">
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <pattern id="dotgrid" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="1" fill="#60A5FA" />
-          </pattern>
+          <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0D9488" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#0D9488" stopOpacity="0" />
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        <rect width="100%" height="100%" fill="url(#dotgrid)" />
+
+        {/* Connection lines */}
+        {connections.map(([a, b], i) => (
+          <motion.line
+            key={`line-${i}`}
+            x1={nodes[a].cx}
+            y1={nodes[a].cy}
+            x2={nodes[b].cx}
+            y2={nodes[b].cy}
+            stroke="rgba(13,148,136,0.12)"
+            strokeWidth="1"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.3 + i * 0.04, ease: 'easeOut' }}
+          />
+        ))}
+
+        {/* Animated pulse traveling along select connections */}
+        {[
+          [0, 1, 6, 7, 8, 16, 22, 23],
+          [10, 11, 17, 24],
+          [18, 19, 20, 21],
+        ].map((path, pi) => {
+          const points = path.map((idx) => `${nodes[idx].cx},${nodes[idx].cy}`).join(' ');
+          return (
+            <motion.polyline
+              key={`pulse-${pi}`}
+              points={points}
+              fill="none"
+              stroke="url(#pulseGrad)"
+              strokeWidth="1.5"
+              strokeDasharray="20 180"
+              initial={{ strokeDashoffset: 200 }}
+              animate={{ strokeDashoffset: -200 }}
+              transition={{ duration: 6 + pi, repeat: Infinity, ease: 'linear', delay: pi * 2 }}
+              opacity={0.4}
+            />
+          );
+        })}
+
+        <defs>
+          <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#0D9488" stopOpacity="0" />
+            <stop offset="50%" stopColor="#0D9488" stopOpacity="1" />
+            <stop offset="100%" stopColor="#1E40AF" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Nodes */}
+        {nodes.map((node, i) => (
+          <motion.g key={`node-${i}`}>
+            {/* Glow */}
+            <motion.circle
+              cx={node.cx}
+              cy={node.cy}
+              r={node.r * 6}
+              fill="url(#nodeGlow)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.15, 0.3, 0.15] }}
+              transition={{ duration: 3 + (i % 3), repeat: Infinity, delay: i * 0.15 }}
+            />
+            {/* Core node */}
+            <motion.circle
+              cx={node.cx}
+              cy={node.cy}
+              r={node.r}
+              fill="#0D9488"
+              filter="url(#glow)"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: [0.5, 0.9, 0.5], scale: 1 }}
+              transition={{
+                opacity: { duration: 2 + (i % 4), repeat: Infinity, delay: i * 0.1 },
+                scale: { duration: 0.5, delay: 0.5 + i * 0.06 },
+              }}
+            />
+          </motion.g>
+        ))}
+
+        {/* Hexagonal ring accents */}
+        {[
+          { cx: 150, cy: 150, size: 40 },
+          { cx: 900, cy: 400, size: 55 },
+          { cx: 1080, cy: 150, size: 35 },
+        ].map((hex, i) => {
+          const s = hex.size;
+          const points = Array.from({ length: 6 }, (_, k) => {
+            const angle = (Math.PI / 3) * k - Math.PI / 6;
+            return `${hex.cx + s * Math.cos(angle)},${hex.cy + s * Math.sin(angle)}`;
+          }).join(' ');
+          return (
+            <motion.polygon
+              key={`hex-${i}`}
+              points={points}
+              fill="none"
+              stroke="rgba(13,148,136,0.08)"
+              strokeWidth="1"
+              initial={{ opacity: 0, rotate: 0 }}
+              animate={{ opacity: 1, rotate: 30 }}
+              transition={{ duration: 20, repeat: Infinity, repeatType: 'reverse', delay: i * 3 }}
+              style={{ transformOrigin: `${hex.cx}px ${hex.cy}px` }}
+            />
+          );
+        })}
       </svg>
     </div>
   );
@@ -233,25 +380,8 @@ export default function Home() {
         ref={heroRef}
         className="relative min-h-[92vh] bg-cl-navy flex items-center justify-center overflow-hidden"
       >
-        {/* Gradient mesh bg */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-cl-blue/20 rounded-full blur-[128px] -translate-x-1/2 -translate-y-1/3" />
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cl-teal/15 rounded-full blur-[128px] translate-x-1/3 translate-y-1/4" />
-          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-cl-gold/5 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2" />
-        </div>
-
-        <DotGrid />
-
-        {/* Subtle horizontal lines */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent"
-              style={{ top: `${15 + i * 14}%` }}
-            />
-          ))}
-        </div>
+        {/* Molecular network background */}
+        <MolecularNetwork />
 
         <motion.div
           style={{ opacity: heroOpacity, y: heroY }}
