@@ -24,25 +24,25 @@ const navItems = [
     children: [
       {
         label: "Clinics & Providers",
-        href: "/who-we-serve/clinics",
+        href: "/clinics",
         description: "Anti-aging, functional medicine & wellness clinics",
         icon: Stethoscope,
       },
       {
         label: "Compounding Pharmacies",
-        href: "/who-we-serve/pharmacies",
+        href: "/pharmacies",
         description: "503A & 503B licensed compounding facilities",
         icon: Building2,
       },
       {
         label: "Research Institutions",
-        href: "/who-we-serve/research",
+        href: "/research",
         description: "Universities, labs & clinical research organizations",
         icon: FlaskConical,
       },
       {
         label: "Enterprise",
-        href: "/who-we-serve/enterprise",
+        href: "/enterprise",
         description: "Telemedicine platforms & large-scale operations",
         icon: Landmark,
       },
