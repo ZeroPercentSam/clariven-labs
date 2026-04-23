@@ -14,6 +14,7 @@ import {
   Landmark,
   ArrowRight,
   Shield,
+  Dna,
 } from "lucide-react";
 
 const navItems = [
@@ -106,32 +107,9 @@ export default function Header() {
           <div className="flex items-center justify-between h-[72px]">
             {/* Logo */}
             <Link href="/" className="relative group flex items-center gap-3">
-              {/* Logo icon — abstract peptide helix mark */}
-              <div className="relative w-9 h-9 flex-shrink-0">
-                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <path
-                    d="M18 2L18 34"
-                    stroke="url(#logoGrad)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    opacity="0.3"
-                  />
-                  <circle cx="18" cy="6" r="3" fill="#0D9488" opacity="0.9" />
-                  <circle cx="12" cy="12" r="2.5" fill="#14B8A6" opacity="0.7" />
-                  <circle cx="24" cy="12" r="2.5" fill="#1E40AF" opacity="0.7" />
-                  <circle cx="18" cy="18" r="3.5" fill="#0D9488" />
-                  <circle cx="12" cy="24" r="2.5" fill="#1E40AF" opacity="0.7" />
-                  <circle cx="24" cy="24" r="2.5" fill="#14B8A6" opacity="0.7" />
-                  <circle cx="18" cy="30" r="3" fill="#0D9488" opacity="0.9" />
-                  <path d="M18 6L12 12L18 18L24 24L18 30" stroke="#0D9488" strokeWidth="1" opacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M18 6L24 12L18 18L12 24L18 30" stroke="#1E40AF" strokeWidth="1" opacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
-                  <defs>
-                    <linearGradient id="logoGrad" x1="18" y1="2" x2="18" y2="34" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#0D9488" />
-                      <stop offset="1" stopColor="#1E40AF" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+              {/* Logo icon — matches footer */}
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cl-teal to-cl-blue flex items-center justify-center flex-shrink-0">
+                <Dna className="w-5 h-5 text-white" />
               </div>
 
               {/* Text mark */}
