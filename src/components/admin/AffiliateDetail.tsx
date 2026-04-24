@@ -26,17 +26,22 @@ type Order = {
   total_cents: number;
   discount_cents: number;
   status: string;
+  applied_code_id?: string | null;
   created_at: string;
 };
+
+type CodeTotals = Record<string, { ordersCount: number; gross: number; discount: number }>;
 
 export function AffiliateDetail({
   affiliate,
   codes: initialCodes,
   orders,
+  codeTotals,
 }: {
   affiliate: Affiliate;
   codes: Code[];
   orders: Order[];
+  codeTotals: CodeTotals;
 }) {
   const router = useRouter();
   const [name, setName] = useState(affiliate.name);
@@ -173,38 +178,65 @@ export function AffiliateDetail({
       {/* Codes */}
       <div className="bg-white border border-cl-gray-200 rounded-xl p-5">
         <h2 className="text-cl-navy font-semibold text-sm mb-3">Codes</h2>
-        <ul className="divide-y divide-cl-gray-100 mb-4">
-          {codes.length === 0 ? (
-            <li className="py-6 text-center text-sm text-cl-gray-500">No codes yet.</li>
-          ) : (
-            codes.map((c) => (
-              <li key={c.id} className="flex items-center gap-3 py-2">
-                <span className="font-mono text-cl-navy text-sm tracking-wider">{c.code}</span>
-                <span className="text-cl-gray-500 text-xs">{c.discount_pct}% off</span>
-                <span className="flex-1" />
-                <button
-                  type="button"
-                  onClick={() => toggleCode(c)}
-                  className={`px-2 py-0.5 text-xs rounded-full border ${
-                    c.active
-                      ? 'text-emerald-700 border-emerald-300 bg-emerald-50'
-                      : 'text-cl-gray-500 border-cl-gray-300 bg-cl-gray-50'
-                  }`}
-                >
-                  {c.active ? 'Active' : 'Inactive'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => deleteCode(c.id)}
-                  className="text-cl-gray-400 hover:text-red-500"
-                  aria-label="Delete"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </li>
-            ))
-          )}
-        </ul>
+        <p className="text-cl-gray-400 text-xs mb-3">
+          Per-code paid orders + revenue. Counts orders that have moved past payment.
+        </p>
+        {codes.length === 0 ? (
+          <p className="py-6 text-center text-sm text-cl-gray-500">No codes yet.</p>
+        ) : (
+          <div className="border border-cl-gray-100 rounded-lg overflow-hidden mb-4">
+            <div className="grid grid-cols-[140px_60px_70px_80px_100px_auto] gap-2 px-3 py-1.5 bg-cl-gray-50 text-[10px] uppercase tracking-wider text-cl-gray-500 font-semibold">
+              <div>Code</div>
+              <div className="text-right">% off</div>
+              <div className="text-right">Status</div>
+              <div className="text-right">Orders</div>
+              <div className="text-right">Gross</div>
+              <div></div>
+            </div>
+            <ul className="divide-y divide-cl-gray-100">
+              {codes.map((c) => {
+                const t = codeTotals[c.id] ?? { ordersCount: 0, gross: 0, discount: 0 };
+                return (
+                  <li
+                    key={c.id}
+                    className="grid grid-cols-[140px_60px_70px_80px_100px_auto] gap-2 items-center px-3 py-2"
+                  >
+                    <span className="font-mono text-cl-navy text-sm tracking-wider truncate">
+                      {c.code}
+                    </span>
+                    <span className="text-cl-gray-500 text-xs text-right">
+                      {Number(c.discount_pct)}%
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => toggleCode(c)}
+                      className={`text-[10px] uppercase tracking-wider ${
+                        c.active ? 'text-emerald-700' : 'text-cl-gray-400'
+                      }`}
+                      title="Toggle active"
+                    >
+                      {c.active ? 'active' : 'inactive'}
+                    </button>
+                    <span className="text-sm text-cl-navy text-right font-medium">
+                      {t.ordersCount}
+                    </span>
+                    <span className="text-sm text-cl-navy text-right">
+                      ${(t.gross / 100).toFixed(2)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => deleteCode(c.id)}
+                      className="text-cl-gray-400 hover:text-red-500 justify-self-end"
+                      aria-label="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
 
         <div className="flex flex-col sm:flex-row gap-2">
           <input

@@ -6,6 +6,8 @@ import { AffiliateDetail } from '@/components/admin/AffiliateDetail';
 
 export const dynamic = 'force-dynamic';
 
+const PAID_STATES = ['paid', 'preparing', 'shipped', 'delivered'] as const;
+
 export default async function AdminAffiliateDetail({
   params,
 }: {
@@ -22,13 +24,28 @@ export default async function AdminAffiliateDetail({
       .order('created_at', { ascending: false }),
     supabase
       .from('orders')
-      .select('id, order_number, total_cents, discount_cents, status, created_at')
+      .select('id, order_number, total_cents, discount_cents, status, applied_code_id, created_at')
       .eq('affiliate_id', id)
       .order('created_at', { ascending: false })
       .limit(100),
   ]);
 
   if (!affiliate) notFound();
+
+  // Compute per-code paid totals (server-side, before passing to client component).
+  const codeTotals: Record<
+    string,
+    { ordersCount: number; gross: number; discount: number }
+  > = {};
+  for (const o of orders ?? []) {
+    if (!o.applied_code_id) continue;
+    if (!PAID_STATES.includes(o.status as (typeof PAID_STATES)[number])) continue;
+    const t = codeTotals[o.applied_code_id] ?? { ordersCount: 0, gross: 0, discount: 0 };
+    t.ordersCount += 1;
+    t.gross += o.total_cents;
+    t.discount += o.discount_cents;
+    codeTotals[o.applied_code_id] = t;
+  }
 
   return (
     <div>
@@ -39,7 +56,12 @@ export default async function AdminAffiliateDetail({
         <ArrowLeft className="w-4 h-4" /> Affiliates
       </Link>
 
-      <AffiliateDetail affiliate={affiliate} codes={codes ?? []} orders={orders ?? []} />
+      <AffiliateDetail
+        affiliate={affiliate}
+        codes={codes ?? []}
+        orders={orders ?? []}
+        codeTotals={codeTotals}
+      />
     </div>
   );
 }
