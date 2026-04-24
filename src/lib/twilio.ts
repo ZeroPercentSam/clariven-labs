@@ -35,13 +35,14 @@ async function logMock(body: string, to: string) {
  */
 export async function sendKatieNewOrderSms(args: NewOrderSmsArgs): Promise<{ ok: boolean }> {
   const body = formatBody(args);
-  const to = process.env.KATIE_PHONE_NUMBER;
-  if (!to) return { ok: false };
+  const to = process.env.KATIE_PHONE_NUMBER ?? '';
 
   if (process.env.TWILIO_MOCK === 'true') {
-    await logMock(body, to);
+    await logMock(body, to || '+15555555555 (unset)');
     return { ok: true };
   }
+
+  if (!to) return { ok: false };
 
   const sid = process.env.TWILIO_ACCOUNT_SID;
   const token = process.env.TWILIO_AUTH_TOKEN;

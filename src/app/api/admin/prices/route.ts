@@ -1,19 +1,18 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 import { priceUpsertSchema } from '@/lib/schemas/price';
 
 async function requireAdmin() {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return { error: 'unauthorized', status: 401 as const };
+  if (!auth.user) return { error: 'unauthorized' as const, status: 401 as const };
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, email')
+    .select('role')
     .eq('id', auth.user.id)
     .single();
-  if (profile?.role !== 'admin') return { error: 'forbidden', status: 403 as const };
-  return { user: auth.user, profile };
+  if (profile?.role !== 'admin') return { error: 'forbidden' as const, status: 403 as const };
+  return { user: auth.user, supabase };
 }
 
 export async function POST(req: Request) {
@@ -26,8 +25,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'bad_request', details: parsed.error.issues }, { status: 400 });
   }
 
-  const admin = createAdminClient();
-  const { data, error } = await admin
+  const { data, error } = await gate.supabase
     .from('product_prices')
     .upsert(
       {
@@ -43,7 +41,7 @@ export async function POST(req: Request) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  await admin.from('admin_audit_log').insert({
+  await gate.supabase.from('admin_audit_log').insert({
     actor_id: gate.user.id,
     action: 'price.upsert',
     target_type: 'product_price',
@@ -62,11 +60,10 @@ export async function DELETE(req: Request) {
   const id = url.searchParams.get('id');
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
-  const admin = createAdminClient();
-  const { error } = await admin.from('product_prices').delete().eq('id', id);
+  const { error } = await gate.supabase.from('product_prices').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  await admin.from('admin_audit_log').insert({
+  await gate.supabase.from('admin_audit_log').insert({
     actor_id: gate.user.id,
     action: 'price.delete',
     target_type: 'product_price',

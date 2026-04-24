@@ -1,25 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 import { adminOrderPatchSchema } from '@/lib/schemas/admin';
 
-async function requireAdmin() {
+export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { id } = await ctx.params;
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return { error: 'unauthorized' as const, status: 401 as const };
+  if (!auth.user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', auth.user.id)
     .single();
-  if (profile?.role !== 'admin') return { error: 'forbidden' as const, status: 403 as const };
-  return { user: auth.user };
-}
-
-export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  const { id } = await ctx.params;
-  const gate = await requireAdmin();
-  if ('error' in gate) return NextResponse.json({ error: gate.error }, { status: gate.status });
+  if (profile?.role !== 'admin') return NextResponse.json({ error: 'forbidden' }, { status: 403 });
 
   const json = await req.json().catch(() => null);
   const parsed = adminOrderPatchSchema.safeParse(json);
@@ -30,10 +24,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     );
   }
 
-  const admin = createAdminClient();
   const patch = parsed.data;
-
-  const { data, error } = await admin
+  const { data, error } = await supabase
     .from('orders')
     .update(patch)
     .eq('id', id)
@@ -42,8 +34,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
-  await admin.from('admin_audit_log').insert({
-    actor_id: gate.user.id,
+  await supabase.from('admin_audit_log').insert({
+    actor_id: auth.user.id,
     action: 'order.patch',
     target_type: 'order',
     target_id: id,

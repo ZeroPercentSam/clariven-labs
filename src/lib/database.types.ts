@@ -420,6 +420,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      attach_invoice_to_order: {
+        Args: {
+          p_check_id: string
+          p_invoice_id: string
+          p_order_id: string
+          p_payment_result: number
+        }
+        Returns: undefined
+      }
       create_order_with_items: {
         Args: { p_code: string; p_items: Json; p_shipping: Json }
         Returns: {
@@ -430,6 +439,7 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      stamp_referral: { Args: { p_code: string }; Returns: undefined }
       validate_affiliate_code: {
         Args: { p_code: string }
         Returns: {

@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 
 export const metadata = { title: 'Create account — Clariven Labs' };
 
@@ -41,41 +40,21 @@ async function signupAction(formData: FormData) {
     redirect(`/signup?${p.toString()}`);
   }
 
-  // Best-effort: stamp referrer via service-role client (bypasses RLS).
-  // The `handle_new_user` trigger has already inserted the profile row with
-  // auth.user.id, so we UPDATE rather than INSERT.
-  if (refCode) {
-    try {
-      const admin = createAdminClient();
-      const { data: code } = await admin
-        .from('affiliate_codes')
-        .select('id, affiliate_id, active, expires_at')
-        .ilike('code', refCode)
-        .maybeSingle();
-      if (
-        code &&
-        code.active &&
-        (!code.expires_at || new Date(code.expires_at) > new Date())
-      ) {
-        await admin
-          .from('profiles')
-          .update({
-            referred_by_affiliate_id: code.affiliate_id,
-            referred_by_code_id: code.id,
-            full_name: fullName || null,
-          })
-          .eq('id', data.user.id);
-      }
-    } catch {
-      // Non-fatal — signup still succeeded.
+  // Stamp referral + name. Note: auth.signUp doesn't issue a session when
+  // email confirmation is required, so these RPC calls may be ignored by RLS
+  // until the user confirms + logs in. The user.user_metadata carries
+  // full_name from options.data above; on first login we stamp via /portal.
+  // When email confirmation is OFF (dev), `supabase.auth` now has a session
+  // and these calls do persist.
+  try {
+    if (refCode) {
+      await supabase.rpc('stamp_referral', { p_code: refCode });
     }
-  } else if (fullName) {
-    try {
-      const admin = createAdminClient();
-      await admin.from('profiles').update({ full_name: fullName }).eq('id', data.user.id);
-    } catch {
-      /* non-fatal */
+    if (fullName) {
+      await supabase.from('profiles').update({ full_name: fullName }).eq('id', data.user.id);
     }
+  } catch {
+    // Non-fatal — signup still succeeded.
   }
 
   redirect(`/signup?confirm=1&email=${encodeURIComponent(email)}`);

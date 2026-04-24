@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 import { orderCreateSchema } from '@/lib/schemas/order';
 import { createOneTimeInvoice } from '@/lib/gbp/invoices';
 import { sendKatieNewOrderSms } from '@/lib/twilio';
@@ -38,11 +37,10 @@ export async function POST(req: Request) {
 
   const { order_id: orderId, total_cents: totalCents } = rpc[0];
 
-  // 2. Fetch the order + profile to build invoice args.
-  const admin = createAdminClient();
+  // 2. Fetch order + profile via user-auth client (own rows via RLS).
   const [{ data: order }, { data: profile }] = await Promise.all([
-    admin.from('orders').select('order_number').eq('id', orderId).single(),
-    admin.from('profiles').select('email, full_name').eq('id', auth.user.id).single(),
+    supabase.from('orders').select('order_number').eq('id', orderId).single(),
+    supabase.from('profiles').select('email, full_name').eq('id', auth.user.id).single(),
   ]);
 
   const itemSummary = parsed.data.items
@@ -56,8 +54,8 @@ export async function POST(req: Request) {
     profile?.email ||
     'Clariven customer';
 
-  // 3. Create GBP invoice. Failure is non-fatal — we still persist the order,
-  //    customer can retry via "Resend invoice" in the portal.
+  // 3. Create GBP invoice + attach to order via user-auth RPC
+  //    (SECURITY DEFINER function verifies the caller owns this order).
   const invoice = await createOneTimeInvoice({
     orderNumber: order?.order_number ?? 0,
     customerName: customerName.slice(0, 100),
@@ -67,14 +65,12 @@ export async function POST(req: Request) {
   });
 
   if (invoice.ok) {
-    await admin
-      .from('orders')
-      .update({
-        gbp_invoice_id: invoice.invoiceId ?? null,
-        gbp_check_id: invoice.checkId ?? null,
-        gbp_payment_result: invoice.paymentResult ?? null,
-      })
-      .eq('id', orderId);
+    await supabase.rpc('attach_invoice_to_order', {
+      p_order_id: orderId,
+      p_invoice_id: invoice.invoiceId ?? '',
+      p_check_id: invoice.checkId ?? '',
+      p_payment_result: invoice.paymentResult ?? 3,
+    });
   }
 
   // 4. Fire-and-forget SMS to Katie.
