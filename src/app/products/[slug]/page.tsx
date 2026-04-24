@@ -22,6 +22,7 @@ import {
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { products, productCategories } from '@/lib/products';
+import { AddToCartControl } from '@/components/products/AddToCartControl';
 
 /* ─── FadeIn ─── */
 function FadeIn({
@@ -168,21 +169,13 @@ export default function ProductDetailPage() {
                   {product.description}
                 </p>
 
-                {/* Available strengths */}
+                {/* Strength picker + add-to-cart (prices live in Supabase product_prices) */}
                 <div className="mb-8">
-                  <h3 className="text-sm font-semibold text-cl-gray-400 uppercase tracking-wider mb-3">
-                    Available Strengths
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {product.strengths.map((str) => (
-                      <span
-                        key={str}
-                        className="px-4 py-2 rounded-xl bg-cl-gray-50 border border-cl-gray-200 text-sm font-medium text-cl-navy hover:border-cl-teal/30 hover:bg-cl-teal/5 transition-colors cursor-pointer"
-                      >
-                        {str}
-                      </span>
-                    ))}
-                  </div>
+                  <AddToCartControl
+                    productSlug={product.slug}
+                    productName={product.name}
+                    strengths={product.strengths}
+                  />
                 </div>
 
                 {/* Key benefits */}
@@ -200,15 +193,8 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {/* CTAs */}
+                {/* Secondary CTA — COA download stays as a placeholder (Phase > v1) */}
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Link
-                    href="/contact"
-                    className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all duration-300 shadow-lg shadow-cl-teal/20"
-                  >
-                    Request a Quote
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
                   <button className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-cl-gray-200 text-cl-navy font-semibold hover:border-cl-teal/30 hover:bg-cl-gray-50 transition-all duration-300">
                     <Download className="w-5 h-5" />
                     Download COA
