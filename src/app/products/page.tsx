@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -25,6 +25,7 @@ import {
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { products, productCategories, type Product } from '@/lib/products';
+import { createClient } from '@/lib/supabase/client';
 
 /* ─── Fade-in ─── */
 function FadeIn({
@@ -64,7 +65,15 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 /* ─── Product Card ─── */
-function ProductCard({ product, index }: { product: Product; index: number }) {
+function ProductCard({
+  product,
+  index,
+  fromPriceCents,
+}: {
+  product: Product;
+  index: number;
+  fromPriceCents: number | null;
+}) {
   const categoryLabel =
     productCategories.find((c) => c.id === product.category)?.name || product.category;
 
@@ -131,8 +140,18 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           </div>
 
           {/* Bottom */}
-          <div className="flex items-center justify-between pt-3 border-t border-cl-gray-100">
-            <span className="text-xs text-cl-gray-400">{product.form}</span>
+          <div className="flex items-end justify-between pt-3 border-t border-cl-gray-100">
+            <div>
+              <div className="text-xs text-cl-gray-400">{product.form}</div>
+              {fromPriceCents != null ? (
+                <div className="text-sm font-semibold text-cl-navy mt-0.5">
+                  From{' '}
+                  <span className="text-cl-teal">
+                    ${(fromPriceCents / 100).toFixed(0)}
+                  </span>
+                </div>
+              ) : null}
+            </div>
             <ChevronRight className="w-4 h-4 text-cl-gray-300 group-hover:text-cl-teal group-hover:translate-x-1 transition-all" />
           </div>
         </motion.div>
@@ -146,6 +165,34 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [priceMins, setPriceMins] = useState<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('product_prices')
+          .select('product_slug, price_cents')
+          .eq('active', true);
+        if (cancelled || !data) return;
+        const map = new Map<string, number>();
+        for (const row of data) {
+          const cur = map.get(row.product_slug);
+          if (cur == null || row.price_cents < cur) {
+            map.set(row.product_slug, row.price_cents);
+          }
+        }
+        setPriceMins(map);
+      } catch {
+        /* leave priceMins empty — cards just won't show "From $X" */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let result = products;
@@ -322,7 +369,12 @@ export default function ProductsPage() {
                     className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5"
                   >
                     {filteredProducts.map((product, i) => (
-                      <ProductCard key={product.id} product={product} index={i} />
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        index={i}
+                        fromPriceCents={priceMins.get(product.slug) ?? null}
+                      />
                     ))}
                   </motion.div>
                 ) : (
