@@ -6,6 +6,7 @@ import { getProfile } from '@/lib/auth/roles';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
 import { MessageThread } from '@/components/portal/MessageThread';
 import { ResendInvoiceButton } from '@/components/portal/ResendInvoiceButton';
+import { ReorderButton } from '@/components/portal/ReorderButton';
 import { trackingUrl } from '@/lib/tracking';
 
 export const dynamic = 'force-dynamic';
@@ -129,6 +130,14 @@ export default async function PortalOrderDetail({
               <ResendInvoiceButton orderId={order.id} />
             </div>
           ) : null}
+
+          <div className="bg-white border border-cl-gray-200 rounded-xl p-4">
+            <h3 className="text-cl-navy font-semibold text-sm mb-2">Reorder</h3>
+            <p className="text-cl-gray-500 text-xs mb-3 leading-relaxed">
+              Add these items back to your cart at today&apos;s prices.
+            </p>
+            <ReorderButton orderId={order.id} variant="wide" />
+          </div>
         </div>
       </div>
 

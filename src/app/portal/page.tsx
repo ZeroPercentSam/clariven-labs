@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Package } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
+import { ReorderButton } from '@/components/portal/ReorderButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,6 +54,7 @@ export default async function PortalOrdersPage() {
               </div>
             </div>
             <OrderStatusBadge status={o.status} />
+            <ReorderButton orderId={o.id} />
             <Link
               href={`/portal/orders/${o.id}`}
               className="text-cl-teal text-sm inline-flex items-center gap-1 hover:text-cl-teal-light"

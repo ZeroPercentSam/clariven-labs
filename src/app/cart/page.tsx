@@ -19,6 +19,22 @@ export default function CartPage() {
   const { cart, hydrated, setQuantity, removeLine, setAffiliateCode, clear } = useCart();
   const [codeInput, setCodeInput] = useState('');
   const [codeState, setCodeState] = useState<CodeState>({ status: 'idle' });
+  const [reorderToast, setReorderToast] = useState<string | null>(null);
+
+  // Pick up reorder confirmation set by ReorderButton, if any.
+  useEffect(() => {
+    try {
+      const msg = sessionStorage.getItem('cl_reorder_toast');
+      if (msg) {
+        setReorderToast(msg);
+        sessionStorage.removeItem('cl_reorder_toast');
+        const t = setTimeout(() => setReorderToast(null), 5000);
+        return () => clearTimeout(t);
+      }
+    } catch {
+      /* no-op */
+    }
+  }, []);
 
   // Keep text input in sync with saved code after hydration
   useEffect(() => {
@@ -95,9 +111,16 @@ export default function CartPage() {
     <main className="min-h-screen bg-white pt-[96px] pb-24 px-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold text-cl-navy mb-2">Your order</h1>
-        <p className="text-cl-gray-500 text-sm mb-8">
+        <p className="text-cl-gray-500 text-sm mb-4">
           Review your items and apply an affiliate code. Payment is invoiced after you submit.
         </p>
+        {reorderToast ? (
+          <div className="mb-6 inline-block px-4 py-2 rounded-lg bg-cl-teal/10 text-cl-teal text-sm">
+            {reorderToast}
+          </div>
+        ) : (
+          <div className="mb-4" />
+        )}
 
         <div className="grid lg:grid-cols-[1fr_360px] gap-10">
           {/* Line items */}
