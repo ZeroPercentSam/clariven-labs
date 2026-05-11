@@ -4,6 +4,7 @@ import { ArrowLeft, ExternalLink, Mail } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getProfile } from '@/lib/auth/roles';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
+import { OrderStatusTimeline } from '@/components/portal/OrderStatusTimeline';
 import { MessageThread } from '@/components/portal/MessageThread';
 import { ResendInvoiceButton } from '@/components/portal/ResendInvoiceButton';
 import { ReorderButton } from '@/components/portal/ReorderButton';
@@ -47,6 +48,10 @@ export default async function PortalOrderDetail({
           </p>
         </div>
         <OrderStatusBadge status={order.status} />
+      </div>
+
+      <div className="mb-6">
+        <OrderStatusTimeline status={order.status} />
       </div>
 
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
