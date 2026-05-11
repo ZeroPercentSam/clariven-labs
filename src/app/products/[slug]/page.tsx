@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -23,6 +24,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { products, productCategories } from '@/lib/products';
 import { AddToCartControl } from '@/components/products/AddToCartControl';
+import { createClient } from '@/lib/supabase/client';
 
 /* ─── FadeIn ─── */
 function FadeIn({
@@ -51,6 +53,34 @@ export default function ProductDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
   const product = products.find((p) => p.slug === slug);
+
+  const [coaUrl, setCoaUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!slug) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('product_coas')
+          .select('file_path')
+          .eq('product_slug', slug)
+          .eq('strength_label', '')
+          .maybeSingle();
+        if (cancelled || !data?.file_path) return;
+        const { data: pub } = supabase.storage
+          .from('product-coas')
+          .getPublicUrl(data.file_path);
+        setCoaUrl(pub.publicUrl);
+      } catch {
+        /* leave button hidden */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   if (!product) {
     return (
@@ -193,12 +223,29 @@ export default function ProductDetailPage() {
                   </div>
                 </div>
 
-                {/* Secondary CTA — COA download stays as a placeholder (Phase > v1) */}
+                {/* Secondary CTA — COA download (admin-uploaded PDF) */}
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <button className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-cl-gray-200 text-cl-navy font-semibold hover:border-cl-teal/30 hover:bg-cl-gray-50 transition-all duration-300">
-                    <Download className="w-5 h-5" />
-                    Download COA
-                  </button>
+                  {coaUrl ? (
+                    <a
+                      href={coaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-cl-teal/40 text-cl-navy font-semibold hover:border-cl-teal hover:bg-cl-teal/5 transition-all duration-300"
+                    >
+                      <Download className="w-5 h-5 text-cl-teal" />
+                      Download COA ({product.purity ?? '≥98%'} Purity)
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-cl-gray-200 text-cl-gray-400 font-semibold cursor-not-allowed"
+                      title="COA upload coming soon for this product"
+                    >
+                      <Download className="w-5 h-5" />
+                      COA on request
+                    </button>
+                  )}
                 </div>
               </motion.div>
             </div>
