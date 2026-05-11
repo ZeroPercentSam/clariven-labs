@@ -46,6 +46,20 @@ export function AddToCartControl({
     };
   }, [productSlug]);
 
+  // Once prices load, if the currently-selected strength is unpriced,
+  // switch to the cheapest priced strength. User-clicked priced strengths
+  // are preserved because the guard checks membership in `prices`.
+  useEffect(() => {
+    if (!prices || prices.length === 0) return;
+    const isCurrentPriced = prices.some((p) => p.strength_label === selectedStrength);
+    if (isCurrentPriced) return;
+    const cheapest = prices.reduce((min, p) =>
+      p.price_cents < min.price_cents ? p : min,
+    );
+    setSelectedStrength(cheapest.strength_label);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prices]);
+
   const priceMap = useMemo(() => {
     const m = new Map<string, number>();
     for (const p of prices ?? []) m.set(p.strength_label, p.price_cents);

@@ -15,7 +15,12 @@ import {
   ArrowRight,
   Shield,
   Dna,
+  ShoppingCart,
+  LogOut,
 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { useCart } from "@/lib/cart/store";
+import { cartCount } from "@/lib/cart/types";
 
 const navItems = [
   { label: "Products", href: "/products" },
@@ -60,6 +65,32 @@ export default function Header() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { scrollY } = useScroll();
+
+  const [authReady, setAuthReady] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { cart, hydrated: cartHydrated } = useCart();
+  const count = cartHydrated ? cartCount(cart) : 0;
+
+  useEffect(() => {
+    const supabase = createClient();
+    let mounted = true;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!mounted) return;
+      setIsLoggedIn(!!data.user);
+      setAuthReady(true);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
+      setIsLoggedIn(!!session?.user);
+      setAuthReady(true);
+    });
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
@@ -238,13 +269,56 @@ export default function Header() {
             </nav>
 
             {/* Right Side Actions */}
-            <div className="hidden lg:flex items-center gap-3">
-              <Link
-                href="/portal"
-                className="relative px-5 py-2 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 hover:bg-[#D4A843]/[0.06] transition-all duration-300 uppercase"
-              >
-                Client Portal
-              </Link>
+            <div className="hidden lg:flex items-center gap-2">
+              {/* Cart badge — only after hydration + has items */}
+              {count > 0 ? (
+                <Link
+                  href="/cart"
+                  aria-label={`Cart: ${count} item${count === 1 ? '' : 's'}`}
+                  className="relative px-3 py-2 text-white/80 hover:text-white transition-colors"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  <span className="absolute -top-0.5 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#0D9488] text-white text-[10px] font-bold flex items-center justify-center">
+                    {count > 99 ? '99+' : count}
+                  </span>
+                </Link>
+              ) : null}
+
+              {isLoggedIn && authReady ? (
+                <>
+                  <Link
+                    href="/portal"
+                    className="relative px-5 py-2 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 hover:bg-[#D4A843]/[0.06] transition-all duration-300 uppercase"
+                  >
+                    Client Portal
+                  </Link>
+                  <form action="/logout" method="POST">
+                    <button
+                      type="submit"
+                      aria-label="Sign out"
+                      title="Sign out"
+                      className="p-2 text-white/50 hover:text-white transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="px-3 py-2 text-[12px] font-semibold tracking-wider text-white/70 hover:text-white uppercase transition-colors"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="relative px-5 py-2 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 hover:bg-[#D4A843]/[0.06] transition-all duration-300 uppercase"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
 
               <Link
                 href="/contact"
@@ -365,13 +439,58 @@ export default function Header() {
 
               {/* Mobile CTAs */}
               <div className="px-4 pt-4 pb-8 space-y-3 border-t border-white/[0.06] mx-4">
-                <Link
-                  href="/portal"
-                  onClick={() => setMobileOpen(false)}
-                  className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 transition-all uppercase"
-                >
-                  Client Portal
-                </Link>
+                {count > 0 ? (
+                  <Link
+                    href="/cart"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between w-full px-5 py-3 text-[12px] font-semibold tracking-wider text-white border border-white/[0.15] rounded-lg uppercase"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <ShoppingCart className="w-4 h-4" /> Cart
+                    </span>
+                    <span className="min-w-[22px] h-[22px] px-1.5 rounded-full bg-[#0D9488] text-white text-[10px] font-bold flex items-center justify-center">
+                      {count > 99 ? '99+' : count}
+                    </span>
+                  </Link>
+                ) : null}
+
+                {isLoggedIn && authReady ? (
+                  <>
+                    <Link
+                      href="/portal"
+                      onClick={() => setMobileOpen(false)}
+                      className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 transition-all uppercase"
+                    >
+                      Client Portal
+                    </Link>
+                    <form action="/logout" method="POST">
+                      <button
+                        type="submit"
+                        className="block w-full text-center px-5 py-3 text-[12px] font-medium text-white/60 hover:text-white uppercase tracking-wider transition-colors"
+                      >
+                        Sign out
+                      </button>
+                    </form>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-white/80 hover:text-white uppercase transition-colors"
+                    >
+                      Sign in
+                    </Link>
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileOpen(false)}
+                      className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 transition-all uppercase"
+                    >
+                      Sign up
+                    </Link>
+                  </>
+                )}
+
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}

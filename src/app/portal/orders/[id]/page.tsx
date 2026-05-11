@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Mail } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Mail } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { getProfile } from '@/lib/auth/roles';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
 import { MessageThread } from '@/components/portal/MessageThread';
 import { ResendInvoiceButton } from '@/components/portal/ResendInvoiceButton';
+import { trackingUrl } from '@/lib/tracking';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,8 +90,31 @@ export default async function PortalOrderDetail({
           {order.tracking_number ? (
             <div className="bg-white border border-cl-gray-200 rounded-xl p-4">
               <h3 className="text-cl-navy font-semibold text-sm mb-2">Tracking</h3>
-              <p className="text-cl-gray-700 text-sm">{order.tracking_carrier ?? 'Carrier'}</p>
-              <p className="text-cl-navy font-medium">{order.tracking_number}</p>
+              {(() => {
+                const link = trackingUrl(order.tracking_carrier, order.tracking_number);
+                if (!link) {
+                  return (
+                    <>
+                      <p className="text-cl-gray-700 text-sm">{order.tracking_carrier ?? 'Carrier'}</p>
+                      <p className="text-cl-navy font-medium font-mono">{order.tracking_number}</p>
+                    </>
+                  );
+                }
+                return (
+                  <>
+                    <p className="text-cl-gray-700 text-sm">{link.carrier}</p>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-cl-teal font-medium font-mono hover:text-cl-teal-light hover:underline"
+                    >
+                      {link.number}
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </>
+                );
+              })()}
             </div>
           ) : null}
 

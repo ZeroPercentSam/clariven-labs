@@ -38,7 +38,12 @@ function writeStorage(cart: Cart) {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-    window.dispatchEvent(new CustomEvent('cl:cart-change'));
+    // Defer the cross-component notification to a microtask so other
+    // useCart subscribers don't setState while the calling component
+    // is still in the middle of its render/commit.
+    queueMicrotask(() => {
+      window.dispatchEvent(new CustomEvent('cl:cart-change'));
+    });
   } catch {
     /* quota or privacy mode — ignore */
   }
