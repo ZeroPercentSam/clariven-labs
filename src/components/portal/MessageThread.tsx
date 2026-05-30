@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
+import { formatDateTime } from '@/lib/format-datetime';
 
 export type Message = {
   id: string;
@@ -67,7 +68,7 @@ export function MessageThread({
                 <div className="flex items-center gap-2 text-[11px] text-cl-gray-500 mb-1 uppercase tracking-wider">
                   <span>{m.author_role === 'admin' ? 'Clariven team' : 'You'}</span>
                   <span>·</span>
-                  <span>{new Date(m.created_at).toLocaleString()}</span>
+                  <span>{formatDateTime(m.created_at)}</span>
                 </div>
                 <p className="text-sm text-cl-navy whitespace-pre-wrap">{m.body}</p>
               </li>

@@ -9,6 +9,7 @@ import { MessageThread } from '@/components/portal/MessageThread';
 import { ResendInvoiceButton } from '@/components/portal/ResendInvoiceButton';
 import { ReorderButton } from '@/components/portal/ReorderButton';
 import { trackingUrl } from '@/lib/tracking';
+import { formatDateTime } from '@/lib/format-datetime';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,7 +45,7 @@ export default async function PortalOrderDetail({
         <div>
           <h1 className="text-2xl font-bold text-cl-navy">Order #{order.order_number}</h1>
           <p className="text-cl-gray-500 text-sm mt-1">
-            Placed {new Date(order.created_at).toLocaleString()}
+            Placed {formatDateTime(order.created_at)}
           </p>
         </div>
         <OrderStatusBadge status={order.status} />

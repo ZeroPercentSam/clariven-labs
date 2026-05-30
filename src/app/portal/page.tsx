@@ -3,6 +3,7 @@ import { ArrowRight, Package } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
 import { ReorderButton } from '@/components/portal/ReorderButton';
+import { formatDate } from '@/lib/format-datetime';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,7 @@ export default async function PortalOrdersPage() {
                 Order #{o.order_number}
               </Link>
               <div className="text-cl-gray-500 text-xs mt-1">
-                {new Date(o.created_at).toLocaleDateString()} &middot; ${(o.total_cents / 100).toFixed(2)}
+                {formatDate(o.created_at)} &middot; ${(o.total_cents / 100).toFixed(2)}
               </div>
             </div>
             <OrderStatusBadge status={o.status} />

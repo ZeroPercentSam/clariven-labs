@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from 'react';
 import { Upload, FileText, Trash2, ExternalLink, Check } from 'lucide-react';
 import { uploadCoa, deleteCoa } from '@/lib/coas/actions';
+import { formatDate } from '@/lib/format-datetime';
 
 type Props = {
   productSlug: string;
@@ -92,7 +93,7 @@ export function CoaUpload({ productSlug, productName, currentCoa }: Props) {
               {currentCoa.file_bytes != null
                 ? `${(currentCoa.file_bytes / 1024).toFixed(0)} KB`
                 : ''}{' '}
-              · uploaded {new Date(currentCoa.updated_at).toLocaleDateString()}
+              · uploaded {formatDate(currentCoa.updated_at)}
             </p>
           </div>
           <a

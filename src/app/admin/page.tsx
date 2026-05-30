@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { ArrowRight, Clock, DollarSign, ShoppingBag, TrendingUp, Users } from 'lucide-react';
+import { formatDate, formatDateTime } from '@/lib/format-datetime';
 
 export const dynamic = 'force-dynamic';
 
@@ -77,7 +78,7 @@ export default async function AdminHome() {
       value: oldestPendingAgeDays != null ? `${oldestPendingAgeDays}d` : '—',
       sub:
         oldestPendingAt != null
-          ? `placed ${oldestPendingAt.toLocaleDateString()}`
+          ? `placed ${formatDate(oldestPendingAt.toISOString())}`
           : 'no pending orders',
       icon: Clock,
       tone: oldestPendingAgeDays != null && oldestPendingAgeDays >= 3 ? 'red' : 'gray',
@@ -152,7 +153,7 @@ export default async function AdminHome() {
                 </Link>
                 <div className="flex items-center gap-4 text-xs text-cl-gray-500">
                   <span>${(o.total_cents / 100).toFixed(2)}</span>
-                  <span>{o.gbp_paid_at ? new Date(o.gbp_paid_at).toLocaleString() : '—'}</span>
+                  <span>{formatDateTime(o.gbp_paid_at)}</span>
                 </div>
               </li>
             ))}

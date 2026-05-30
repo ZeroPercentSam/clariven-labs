@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/auth/roles';
+import { supabaseEnvConfigured } from '@/lib/supabase/env';
 
 export type ActionResult<T = void> =
   | { ok: true; data?: T }
@@ -10,12 +11,6 @@ export type ActionResult<T = void> =
 
 const ALLOWED_MIME = new Set(['application/pdf']);
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
-
-function envConfigured(): boolean {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  );
-}
 
 /**
  * Admin-only COA upload. One COA per (product_slug, strength_label);
@@ -26,7 +21,7 @@ function envConfigured(): boolean {
  * are missing, so missing config surfaces as an inline error instead of a 500.
  */
 export async function uploadCoa(formData: FormData): Promise<ActionResult> {
-  if (!envConfigured()) {
+  if (!supabaseEnvConfigured()) {
     return {
       ok: false,
       error:
@@ -122,7 +117,7 @@ export async function uploadCoa(formData: FormData): Promise<ActionResult> {
  * Admin-only deletion: removes the DB row and the underlying storage file.
  */
 export async function deleteCoa(coaId: string): Promise<ActionResult> {
-  if (!envConfigured()) {
+  if (!supabaseEnvConfigured()) {
     return { ok: false, error: 'Storage unavailable. Try again shortly.' };
   }
   try {

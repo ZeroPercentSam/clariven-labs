@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
+import { formatDateTime } from '@/lib/format-datetime';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,7 +87,7 @@ export default async function AdminOrdersList({
                   ${(o.total_cents / 100).toFixed(2)}
                 </div>
                 <div className="w-44 text-xs text-cl-gray-500 text-right">
-                  {new Date(o.created_at).toLocaleString()}
+                  {formatDateTime(o.created_at)}
                 </div>
                 <OrderStatusBadge status={o.status} />
               </li>

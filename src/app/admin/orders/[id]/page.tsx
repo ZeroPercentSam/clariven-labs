@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
 import { MessageThread } from '@/components/portal/MessageThread';
 import { OrderEditor } from '@/components/admin/OrderEditor';
+import { formatDateTime } from '@/lib/format-datetime';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,7 +54,7 @@ export default async function AdminOrderDetail({
         <div>
           <h1 className="text-2xl font-bold text-cl-navy">Order #{order.order_number}</h1>
           <p className="text-cl-gray-500 text-sm mt-1">
-            Placed {new Date(order.created_at).toLocaleString()}
+            Placed {formatDateTime(order.created_at)}
             {affiliateName ? <> · Referred by <span className="text-cl-teal">{affiliateName}</span></> : null}
           </p>
         </div>
@@ -141,8 +142,8 @@ export default async function AdminOrderDetail({
           <div className="bg-white border border-cl-gray-200 rounded-xl p-4 text-xs text-cl-gray-500">
             <p>Green invoice: {order.gbp_invoice_id ?? '—'}</p>
             <p>Payment result: {order.gbp_payment_result ?? '—'}</p>
-            <p>Last polled: {order.gbp_last_polled_at ? new Date(order.gbp_last_polled_at).toLocaleString() : '—'}</p>
-            <p>Paid at: {order.gbp_paid_at ? new Date(order.gbp_paid_at).toLocaleString() : '—'}</p>
+            <p>Last polled: {formatDateTime(order.gbp_last_polled_at)}</p>
+            <p>Paid at: {formatDateTime(order.gbp_paid_at)}</p>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
+import { formatDate } from '@/lib/format-datetime';
 
 type Affiliate = {
   id: string;
@@ -280,7 +281,7 @@ export function AffiliateDetail({
                   Order #{o.order_number}
                 </Link>
                 <div className="text-xs text-cl-gray-500">
-                  {new Date(o.created_at).toLocaleDateString()}
+                  {formatDate(o.created_at)}
                 </div>
                 <div className="text-sm text-cl-navy w-20 text-right">
                   ${(o.total_cents / 100).toFixed(2)}

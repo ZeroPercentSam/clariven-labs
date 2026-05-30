@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 
+// Next.js 16 `proxy` convention (formerly `middleware.ts`). Same matcher +
+// behavior; the file is renamed to match the Next-16 convention used by the
+// sibling Bioveris / Purity repos. The `@/lib/supabase/middleware` import is a
+// helper module (updateSession), unrelated to the framework entrypoint name.
+
 const SECURITY_HEADERS = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
   'X-Content-Type-Options': 'nosniff',
@@ -15,7 +20,7 @@ const ADMIN_PREFIX = '/admin';
 const REF_COOKIE = 'cl_ref';
 const REF_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   const { response, user, supabase } = await updateSession(request);
