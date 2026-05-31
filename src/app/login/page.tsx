@@ -27,6 +27,15 @@ export default async function LoginPage({
 }) {
   const { error, email = '', next = '/portal' } = await searchParams;
 
+  // Friendly copy for the auth-callback error codes (portable-fix #10) — fall
+  // back to the raw message for sign-in errors.
+  const ERROR_MESSAGES: Record<string, string> = {
+    missing_code: 'That link was missing its verification code. Request a new one.',
+    exchange_failed: 'That link has expired or was already used. Request a new one.',
+    auth_unavailable: 'Authentication is temporarily unavailable. Try again shortly.',
+  };
+  const errorMessage = error ? ERROR_MESSAGES[error] ?? error : null;
+
   return (
     <div className="min-h-screen bg-cl-navy flex items-center justify-center px-6 pt-24 pb-16">
       <div className="w-full max-w-md">
@@ -67,9 +76,18 @@ export default async function LoginPage({
             />
           </label>
 
-          {error ? (
+          <div className="text-right -mt-1">
+            <Link
+              href="/forgot-password"
+              className="text-cl-teal/80 hover:text-cl-teal text-xs"
+            >
+              Forgot password?
+            </Link>
+          </div>
+
+          {errorMessage ? (
             <p className="text-[13px] text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
-              {error}
+              {errorMessage}
             </p>
           ) : null}
 
