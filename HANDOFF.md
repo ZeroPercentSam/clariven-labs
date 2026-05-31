@@ -6,7 +6,7 @@
 
 ## Where we are
 
-**Snapshot as of 2026-05-30 — "Bioveris-grade" production sprint · Phases 0–2 complete + deployed.**
+**Snapshot as of 2026-05-31 — "Bioveris-grade" production sprint · Phases 0–2B complete + deployed.**
 
 ClarivenLabs (RUO / research-use-only) is being raised to the backend-completeness bar of its sibling **Bioveris**, RUO-adapted. Full plan (Tier B, RUO-adapted, with the INCLUDE/ADAPT/DROP scope table + pricing analysis): **`~/.claude/plans/i-am-going-to-validated-prism.md`** — read it. Sibling refs: Bioveris `/Users/samovington/Bioveris` (gold standard, 141 migrations), Purity Science `/Users/samovington/Purityscience` (pattern library, 109 migrations). Portable fixes: `/Users/samovington/Bioveris/docs/portable-fixes-2026-05-26.md`.
 
@@ -14,23 +14,34 @@ ClarivenLabs (RUO / research-use-only) is being raised to the backend-completene
 - **Phase 0** `fff9d56` — `src/middleware.ts` → `src/proxy.ts` (Next-16 convention); `src/lib/supabase/env.ts` (`supabaseEnvConfigured()`, invariant #8); `src/lib/format-datetime.ts` (America/Chicago) + DRY'd 11 server-rendered timestamp sites (fixed a live UTC-mislabel bug).
 - **Phase 1** `0d9b3a3` `babc221` `580f24b` — transactional email layer `src/lib/email/{client,send,log,log-constants,templates/}` + migration `0006_email_log` (live; advisors clean); RUO order emails (placed/paid/shipped) wired into `api/orders`, `poll-invoices` cron (service-role `logClient`), admin order PATCH; PKCE callback hardened (portable-fix #10) + new `/forgot-password` + `/reset-password`; `/admin/email-log` viewer; `scripts/configure-supabase-auth.mjs` (ready to run).
 - **Phase 2** `473a7ed` `7723831` — RUO compliance: purged 62 clinical lines across 12 files (4 parallel agents), retargeted audience pages to research, rewrote `/terms` + `/privacy` for **Clariven Labs LLC (Wyoming, Cheyenne venue)**, RUO labeling on PDP/cart/checkout/footer + a **required checkout acknowledgement** checkbox, and `tests/e2e/site-no-clinical.spec.ts` CI guard (12/12 routes green). Canonical RUO copy: `src/lib/compliance/ruo.ts` + `src/components/RuoDisclaimer.tsx`.
+- **Phase 2B** `05b1e1d` `f8cfa9b` `8411316` `6b7de90` — pricing, cost-visibility & client/rep resources:
+  - **GLP-1 research-alias rename** (Sam-confirmed): `semaglutide→single-regulator` (Single Regulator SIA-31-C18), `retatrutide→triple-regulator` (Triple Regulator TIA-39-C20), `survodutide→dual-regulator` (Dual Regulator DIA-39-C20). 308 redirects in `next.config.ts`; fixed 3 broken/clinical product links (`tirzepatide`, `cjc-1295-dac`, `cjc-1295-ipamorelin`) in Footer/clinics; sanitized clinical metadata in `layout.tsx` (`<head>` slipped past site-no-clinical, which only scans body text).
+  - **Pricing (4× markup, Sam-confirmed)** — migration `0008` seeds all **60 SKUs** with `cogs_cents` (Azoth Tier-1) + `price_cents = cogs_cents × 4` (cost + 300%; corrects 0005's wrong 3× note). `RUO_MARKUP_MULTIPLIER=4` in `src/lib/pricing.ts`.
+  - **Cost-hiding (M2B.4, security)** — migration `0007`: base-table SELECT locked to admins, anon SELECT revoked, public reads via SECURITY DEFINER `list_public_prices(p_slug)` (retail only, no cogs). 3 customer reads repointed to the RPC. `tests/e2e/price-cost-leak.spec.ts` CI lock. **Verified live**: anon base cogs read → 42501; RPC → 60 rows, no cogs key.
+  - **Admin pricing UI** — `/admin/pricing` now Cost | Retail | Margin($/%) + per-row "×4" + "Recompute all at 4× cost" bulk + "Save changed". `/admin/sales-sheet` = read-only cost/retail/profit by category w/ totals ("my eyes only").
+  - **Client resources (M2B.5)** — migration `0009`: `client_resources` table + PRIVATE `client-resources` bucket. `/portal/resources` (RUO-sanitized Client Starter Kit + signed-URL doc downloads), `/admin/resources` (upload/list/delete). `src/lib/resources/{queries,actions}.ts`.
 
-**State:** 7 migrations (`0001`–`0006`). `npm run typecheck` + `npm run build` green. Lint = **13 pre-existing errors** — do NOT regress (none are from this sprint). `graphify-out/` current (224 nodes). Git clean, pushed, deploy READY.
+**State:** **9 migrations (`0001`–`0009`).** `npm run typecheck` + `npm run build` green. Lint = **12 errors** (was 13 baseline — one fewer after the rename; none from this work, do NOT regress). `product_prices` seeded with 60 SKUs (4× retail). `graphify-out/` current (249 nodes). Git clean, pushed, all deploys READY (`6b7de90` live on clarivenlabs.com).
 
 **Decisions locked (from Sam):** scope = **Tier B** (full Bioveris parity, RUO-adapted); legal entity = **Clariven Labs LLC, Wyoming**; signup email-verification ON (`mailer_autoconfirm=false`); clinical-audience pages retargeted to research.
 
 **Blocked on Sam — creds (deferred to cutover):** create a Resend project + `updates.clarivenlabs.com` DNS (SPF/DKIM/DMARC), set `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (`ClarivenLabs <noreply@updates.clarivenlabs.com>`) / `RESEND_REPLY_TO` (`support@clarivenlabs.com`) on Vercel prod+preview+dev + `.env.local`, and provide a `SUPABASE_ACCESS_TOKEN` (sbp_…, rotate after) to run `scripts/configure-supabase-auth.mjs`. The email layer no-ops cleanly until the key lands — nothing breaks.
 
-**⚠️ OPEN DECISION — pricing markup (blocks Phase 2B):** migration `0005` comment treats "300% markup" as **3×** (`cogs = price/3`). The client PDFs (`/Users/samovington/Purityscience/docs/Clariven_Labs_Internal_Pricing.pdf` + `Azoth Manufacturing Sheet.pdf`) say *"300% markup (4x)"* and every SKU is exactly **4×**. Plan is to use **4× (`price_cents = cogs_cents × 4`)**, correcting 0005 — raises retail ~33%. Real column is `product_prices.cogs_cents`. Confirm with Sam before re-seeding.
+**✅ RESOLVED — pricing markup (Sam confirmed 2026-05-31):** retail = **4×** COGS (cost + 300%), matching the client sheet exactly on all 60 SKUs. Migration `0008` seeds it; `0007` corrects the old 3× comment; `RUO_MARKUP_MULTIPLIER=4` in `src/lib/pricing.ts`. Sam also confirmed the GLP-1 **slug + display + redirect** rename (not display-only).
 
 **⚠️ Legal pages = counsel-review draft** — flagged in-page ("Draft — pending legal review"). Lawyer must finalize: real Wyoming registered address (placeholder in place), arbitration clause, applicable privacy regimes (CCPA/GDPR). RUO research-use framing + buyer obligations + warranty/liability disclaimers are drafted.
 
 **Pre-existing test issues (do not "fix" by mistake — slated for Phase 7):**
-- `auth.spec.ts` × 2 + `admin-pricing.spec.ts`: sign-in redirect races `page.goto('/admin')` — cookie not always set in time. Long-standing flake.
+- `auth.spec.ts` × 2 + `admin-pricing.spec.ts`: sign-in redirect races `page.goto('/admin')` — cookie not always set in time. Long-standing flake (the sign-in race itself is unfixed; Phase 2B only made admin-pricing's data assertions deterministic + non-destructive).
 - `cart-and-order.spec.ts` "expired code is rejected": affiliate input is gated behind `cart.lines.length > 0`; test assumes otherwise. Pre-existing test bug.
-- `cart-and-order.spec.ts` "add to cart": clicks a "5 mg" semaglutide button, but the catalog realign (commit `faed47d`) left semaglutide with `["10 mg"]` only. Stale test data, not a regression.
+- ~~`cart-and-order.spec.ts` "add to cart" 5 mg~~ **FIXED in Phase 2B** — now `/products/single-regulator` + "10 mg" (real seeded price).
 
-**Up next: Phase 2B — pricing, catalog cost-visibility & client/rep resources.** Then Phase 3 (orgs/multi-tenant), 4 (rep/commissions), 5 (admin parity/impersonation/support), 6 (ops/perf), 7 (stabilize + cutover). See the plan file for the full phased roadmap.
+**Up next: Phase 3 — Organizations / multi-tenant + RUO institutional onboarding.** This is the **heaviest, riskiest milestone** (net-new schema, app-wide RLS rewrite, migrate existing `profiles`-only customers into a default org WITHOUT breaking live orders). The plan flags it as needing a confirmed approach first — see plan "Open TODOs": confirm the org model + whether per-org/volume pricing layers on now or later. Build the coupled core solo, advisors after each migration, keep service-role out of customer flows (invariant #1). Then Phase 4 (rep/commissions), 5 (admin parity/impersonation/support), 6 (ops/perf), 7 (stabilize + cutover). See the plan file for the full phased roadmap.
+
+**Phase 2B leftovers / notes for later:**
+- **E2E test lifecycle changed** — `product_prices` is now the real catalog (migration-seeded), so `truncateTestData()` no longer deletes it and `global-setup` no longer seeds it (would have wiped production pricing every run). Specs read real prices; `admin-pricing.spec` captures & restores the SKU it edits. The suite still shares the one prod Supabase project — a dedicated test project is the real Phase-7 fix.
+- **`list_public_prices` / all RPCs** show under the `*_security_definer_function_executable` advisor (WARN) — expected for the RLS-via-definer-RPC architecture; `list_public_prices` is intentionally anon-callable. Using a definer *function* (not a view) avoided the ERROR-level `security_definer_view` lint.
+- Client Starter Kit on `/portal/resources` is **static RUO content**; the source `Client_Facing_Starter_Kit.pdf` (clinical voice) was NOT used verbatim. Admin can upload supplementary PDFs via `/admin/resources`.
 
 ---
 
@@ -121,7 +132,8 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 | **`profiles`** | `id PK = auth.users.id`, `email citext unique`, `role ('customer' \| 'admin')`, `full_name`, `phone`, `shipping_address jsonb`, `referred_by_affiliate_id`, `referred_by_code_id` | Auto-created on `auth.users` insert via `handle_new_user()` trigger. Role-change trigger blocks self-promotion. |
 | **`affiliates`** | `name`, `email citext`, `commission_pct numeric(5,2)`, `active` | Admin-managed referral partners. |
 | **`affiliate_codes`** | `affiliate_id FK`, `code text unique`, `discount_pct numeric(5,2)`, `active`, `expires_at` | Functional index on `upper(code) where active` for case-insensitive lookups. |
-| **`product_prices`** | `(product_slug, strength_label) unique`, `price_cents`, `active`, `currency` | Catalog metadata is static in `src/lib/products.ts`; prices live here so admins can edit. |
+| **`product_prices`** | `(product_slug, strength_label) unique`, `price_cents`, `cogs_cents`, `active`, `currency` | Catalog metadata is static in `src/lib/products.ts`; prices live here. `cogs_cents` is admin-only (Azoth Tier-1 cost); retail `price_cents = cogs_cents × 4`. **Base SELECT is admin-only** (migration 0007) — customers read retail via `list_public_prices()`. 60 SKUs seeded (0008). |
+| **`client_resources`** | `title`, `description`, `category`, `file_path`, `file_name`, `file_bytes`, `sort_order`, `active`, `uploaded_by` | Admin-uploaded onboarding docs for `/portal/resources`. RLS: logged-in customers read `active` (anon none); admin writes. Files in PRIVATE `client-resources` bucket → signed-URL downloads. |
 | **`product_coas`** | `(product_slug, strength_label) unique`, `file_path`, `file_name`, `file_bytes`, `uploaded_by` | strength_label='' is the product-level default. Bucket `product-coas` is public-read. |
 | **`orders`** | `order_number serial`, `user_id FK`, `status enum`, `subtotal_cents`, `discount_cents`, `total_cents`, `shipping_address jsonb`, `applied_code_id`, `affiliate_id`, `tracking_carrier`, `tracking_number`, `notes_internal`, `gbp_invoice_id`, `gbp_check_id`, `gbp_payment_result`, `gbp_last_polled_at`, `gbp_paid_at` | Status flow: `pending_payment → processing → paid → preparing → shipped → delivered`, plus `cancelled` / `failed` off-path. |
 | **`order_items`** | `order_id FK`, `product_slug`, `product_name`, `strength_label`, `quantity`, `unit_price_cents`, `line_total_cents` | All product/price columns are snapshots at order time. |
@@ -135,6 +147,7 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 |---|---|---|---|
 | `is_admin()` | — | boolean | uses `auth.uid()` |
 | `validate_affiliate_code(p_code)` | text | `(valid bool, discount_pct numeric)` | **anon-callable** |
+| `list_public_prices(p_slug text default null)` | — | `(product_slug, strength_label, price_cents, currency)` | **anon-callable**; retail-only projection (NO cogs_cents). Cost-hiding boundary — all customer price reads go through this. |
 | `create_order_with_items(p_items jsonb, p_shipping jsonb, p_code text)` | — | `(order_id uuid, subtotal_cents, discount_cents, total_cents)` | requires session; self-referral guard |
 | `attach_invoice_to_order(p_order_id, p_invoice_id, p_check_id, p_payment_result)` | — | void | verifies `auth.uid() = order.user_id` |
 | `stamp_referral(p_code)` | text | void | stamps the caller's profile from the referral cookie |
@@ -147,6 +160,7 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 ### Storage buckets
 
 - **`product-coas`** — public-read, admin-write, 20 MB cap, PDF only. RLS in migration `0004_product_coas.sql`.
+- **`client-resources`** — **PRIVATE** (signed-URL downloads), authenticated-read + admin-write, 20 MB cap, PDF only. RLS in migration `0009_client_resources.sql`.
 
 ---
 
@@ -167,12 +181,15 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 - `/portal` — order list with status badges. **Each row has a Reorder button** (Checkpoint 4).
 - `/portal/orders/[id]` — line items, totals, shipping, **6-step horizontal status timeline** (Checkpoint 5), **clickable tracking link** to UPS/FedEx/USPS/DHL (G4), two-way message thread, Resend payment email button, wide Reorder card.
 - `/portal/account` — server-action form to update name, phone, shipping default.
+- `/portal/resources` — **NEW** — RUO-sanitized Client Starter Kit (research-voice onboarding) + signed-URL downloads of admin-published docs.
 
 ### Admin console (`/admin`)
 - `/admin` — **hero metrics**: Outstanding $, Oldest pending (red at 3+ days), Paid this week $, New orders (7d). Plus recent paid orders table (Checkpoint 6).
 - `/admin/orders` — list filterable by 8 statuses, search by order #.
 - `/admin/orders/[id]` — full order: customer info, items, payment metadata, affiliate referral, message thread, **OrderEditor** (status dropdown, tracking carrier/number, internal notes).
-- `/admin/pricing` — table of every product × strength SKU; set `price_cents` + toggle `active`.
+- `/admin/pricing` — every product × strength SKU with **Cost | Retail | Margin ($/%)** columns, per-row "×4" + "Recompute all at 4× cost" bulk + "Save changed". Cost is admin-only.
+- `/admin/sales-sheet` — **NEW** — read-only cost/retail/profit by category w/ category + grand totals ("my eyes only" margin reference; the RUO Starter Pack tool).
+- `/admin/resources` — **NEW** — upload/list/delete client onboarding docs (private bucket) surfaced on `/portal/resources`.
 - `/admin/coas` — **NEW** — products grouped by category with per-product COA upload (PDF → public bucket → DB row). Coverage stat (count uploaded / total products). Replace + delete actions (Checkpoint 3).
 - `/admin/affiliates` — two sections:
   1. Per-affiliate aggregates (codes / orders / gross / commission)
