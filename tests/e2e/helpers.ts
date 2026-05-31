@@ -111,6 +111,21 @@ export async function truncateTestData() {
       await supa.from('organizations').delete().in('id', ids);
     }
   }
+  // Phase 4 rep tables. sales_reps + consents cascade from a test-user delete,
+  // but truncateTestData runs independently of user deletion — clean explicitly,
+  // scoped to test-domain profiles. NEVER touch rep_agreement_versions (the
+  // seeded current ICA, like product_prices). FK-safe order: consents →
+  // sales_reps → invitations (assignments/commissions get added in c3/c4).
+  const { data: testProfiles } = await supa
+    .from('profiles')
+    .select('id')
+    .like('email', `%@${TEST_EMAIL_DOMAIN}`);
+  const repIds = (testProfiles ?? []).map((p) => p.id);
+  if (repIds.length) {
+    await supa.from('rep_agreement_consents').delete().in('rep_user_id', repIds);
+    await supa.from('sales_reps').delete().in('id', repIds);
+  }
+  await supa.from('rep_invitations').delete().like('email', `%@${TEST_EMAIL_DOMAIN}`);
   // NOTE: product_prices is the real 60-SKU catalog (seeded by migration 0008).
   // Do NOT truncate it here — that would wipe production pricing on every
   // `npm run test:e2e`. Specs read the real seed; price-mutating specs restore.

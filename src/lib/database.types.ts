@@ -812,6 +812,129 @@ export type Database = {
           },
         ]
       }
+      rep_agreement_consents: {
+        Row: {
+          created_at: string
+          id: string
+          ip: string | null
+          rep_user_id: string
+          signed_at: string
+          signed_legal_name: string
+          user_agent: string | null
+          version_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          rep_user_id: string
+          signed_at?: string
+          signed_legal_name: string
+          user_agent?: string | null
+          version_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          rep_user_id?: string
+          signed_at?: string
+          signed_legal_name?: string
+          user_agent?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rep_agreement_consents_rep_user_id_fkey"
+            columns: ["rep_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_agreement_consents_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "rep_agreement_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rep_agreement_versions: {
+        Row: {
+          body_md: string
+          created_at: string
+          created_by: string | null
+          effective_at: string
+          id: string
+          label: string
+          retired_at: string | null
+        }
+        Insert: {
+          body_md: string
+          created_at?: string
+          created_by?: string | null
+          effective_at?: string
+          id?: string
+          label: string
+          retired_at?: string | null
+        }
+        Update: {
+          body_md?: string
+          created_at?: string
+          created_by?: string | null
+          effective_at?: string
+          id?: string
+          label?: string
+          retired_at?: string | null
+        }
+        Relationships: []
+      }
+      rep_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_user_id: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invitation_note: string | null
+          invited_by_admin_id: string | null
+          revoked_at: string | null
+          revoked_reason: string | null
+          status: string
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_user_id?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invitation_note?: string | null
+          invited_by_admin_id?: string | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          status?: string
+          token?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_user_id?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invitation_note?: string | null
+          invited_by_admin_id?: string | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          status?: string
+          token?: string
+        }
+        Relationships: []
+      }
       sales_reps: {
         Row: {
           address_city: string | null
@@ -1013,6 +1136,7 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: Json }
+      accept_rep_invitation: { Args: { p_token: string }; Returns: Json }
       attach_invoice_to_order: {
         Args: {
           p_check_id: string
@@ -1041,6 +1165,7 @@ export type Database = {
         }[]
       }
       get_invitation_preview: { Args: { p_token: string }; Returns: Json }
+      get_rep_invitation_preview: { Args: { p_token: string }; Returns: Json }
       is_active_rep: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }

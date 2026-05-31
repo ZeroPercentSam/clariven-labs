@@ -15,7 +15,10 @@ const SECURITY_HEADERS = {
   'X-DNS-Prefetch-Control': 'off',
 };
 
-const PROTECTED_PREFIXES = ['/portal', '/admin', '/checkout', '/cart', '/onboarding'] as const;
+const PROTECTED_PREFIXES = ['/portal', '/admin', '/checkout', '/cart', '/onboarding', '/rep'] as const;
+// /rep-invite is the anon invitation-preview surface — it starts with '/rep'
+// but must NOT require auth. Exclude it from the auth gate.
+const PUBLIC_REP_PREFIX = '/rep-invite';
 const ADMIN_PREFIX = '/admin';
 // Routes that additionally require an APPROVED organization (the order
 // approval-gate's UX layer). /portal + /onboarding stay reachable so a pending
@@ -46,8 +49,10 @@ export async function proxy(request: NextRequest) {
     response.headers.set(k, v);
   }
 
-  // Gate protected routes.
-  const needsAuth = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
+  // Gate protected routes. /rep-invite is the anon exception under the /rep prefix.
+  const needsAuth =
+    PROTECTED_PREFIXES.some((p) => pathname.startsWith(p)) &&
+    !pathname.startsWith(PUBLIC_REP_PREFIX);
   if (needsAuth && !user) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
