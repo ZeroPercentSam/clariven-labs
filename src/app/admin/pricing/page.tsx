@@ -22,6 +22,7 @@ export default async function AdminPricingPage() {
         productName: p.name,
         strengthLabel: s,
         priceCents: price?.price_cents ?? null,
+        cogsCents: price?.cogs_cents ?? null,
         active: price?.active ?? false,
       };
     }),
@@ -31,7 +32,8 @@ export default async function AdminPricingPage() {
     <div>
       <h1 className="text-2xl font-bold text-cl-navy mb-2">Pricing</h1>
       <p className="text-cl-gray-500 text-sm mb-6">
-        Set a price per strength. Inactive rows aren't shown to customers.
+        Cost, retail, and margin per strength. Retail = cost &times; 4 (300% markup).
+        Cost is admin-only and never shown to customers. Inactive rows aren&apos;t shown to customers.
       </p>
       <PricingEditor initialRows={rows} />
     </div>

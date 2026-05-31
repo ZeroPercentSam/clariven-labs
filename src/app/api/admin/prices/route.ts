@@ -25,18 +25,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'bad_request', details: parsed.error.issues }, { status: 400 });
   }
 
+  const upsertRow: {
+    product_slug: string;
+    strength_label: string;
+    price_cents: number;
+    active: boolean;
+    cogs_cents?: number | null;
+  } = {
+    product_slug: parsed.data.product_slug,
+    strength_label: parsed.data.strength_label,
+    price_cents: parsed.data.price_cents,
+    active: parsed.data.active ?? true,
+  };
+  // Only touch cogs_cents when the caller sent it, so a price-only save can't
+  // wipe an existing cost. cogs_cents is admin-only and never customer-facing.
+  if (parsed.data.cogs_cents !== undefined) {
+    upsertRow.cogs_cents = parsed.data.cogs_cents;
+  }
+
   const { data, error } = await gate.supabase
     .from('product_prices')
-    .upsert(
-      {
-        product_slug: parsed.data.product_slug,
-        strength_label: parsed.data.strength_label,
-        price_cents: parsed.data.price_cents,
-        active: parsed.data.active ?? true,
-      },
-      { onConflict: 'product_slug,strength_label' },
-    )
-    .select('id, product_slug, strength_label, price_cents, active')
+    .upsert(upsertRow, { onConflict: 'product_slug,strength_label' })
+    .select('id, product_slug, strength_label, price_cents, cogs_cents, active')
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

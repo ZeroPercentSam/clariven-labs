@@ -400,6 +400,7 @@ export type Database = {
       product_prices: {
         Row: {
           active: boolean
+          cogs_cents: number | null
           created_at: string
           currency: string
           id: string
@@ -410,6 +411,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          cogs_cents?: number | null
           created_at?: string
           currency?: string
           id?: string
@@ -420,6 +422,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          cogs_cents?: number | null
           created_at?: string
           currency?: string
           id?: string

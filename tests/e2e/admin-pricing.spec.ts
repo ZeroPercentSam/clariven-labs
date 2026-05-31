@@ -26,7 +26,8 @@ test('admin sets a price via the pricing page', async ({ page }) => {
     const row = page.getByText(SLUG).first();
     await expect(row).toBeVisible();
 
-    const priceInput = page.locator('input[type="number"]').first();
+    // Target the Retail input specifically (the row also has a Cost input now).
+    const priceInput = page.getByLabel('Retail').first();
     await priceInput.fill('149.00');
     await page.getByRole('button', { name: /save/i }).first().click();
     await expect(page.getByRole('button', { name: /^saved/i }).first()).toBeVisible({ timeout: 5000 });
