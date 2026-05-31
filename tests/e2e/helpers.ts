@@ -94,7 +94,14 @@ export async function truncateTestData() {
   // backfilled customer orgs (migration 0010) use `<emaillocal>-<hex>` slugs and
   // are NEVER matched. Orders above are already cleared, releasing
   // orders.organization_id (ON DELETE RESTRICT).
-  for (const prefix of ['e2e-std-%', 'e2e-orgiso-%', 'e2e-gate-%', 'e2e-onb-%', 'e2e-orev-%']) {
+  for (const prefix of [
+    'e2e-std-%',
+    'e2e-orgiso-%',
+    'e2e-gate-%',
+    'e2e-onb-%',
+    'e2e-orev-%',
+    'e2e-inv-%',
+  ]) {
     const { data: orgs } = await supa.from('organizations').select('id').like('slug', prefix);
     const ids = (orgs ?? []).map((o) => o.id);
     if (ids.length) {

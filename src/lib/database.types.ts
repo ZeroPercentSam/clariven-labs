@@ -814,6 +814,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_invitation: { Args: { p_token: string }; Returns: Json }
       attach_invoice_to_order: {
         Args: {
           p_check_id: string
@@ -841,6 +842,7 @@ export type Database = {
           total_cents: number
         }[]
       }
+      get_invitation_preview: { Args: { p_token: string }; Returns: Json }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }
       list_public_prices: {
@@ -853,6 +855,16 @@ export type Database = {
         }[]
       }
       stamp_referral: { Args: { p_code: string }; Returns: undefined }
+      submit_invitation_request: {
+        Args: {
+          p_email: string
+          p_full_name: string
+          p_organization_name?: string
+          p_reason?: string
+          p_research_context?: string
+        }
+        Returns: string
+      }
       user_org_id: { Args: never; Returns: string }
       user_org_role: { Args: never; Returns: string }
       validate_affiliate_code: {

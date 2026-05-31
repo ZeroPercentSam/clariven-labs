@@ -25,6 +25,11 @@ export default async function PortalLayout({ children }: { children: React.React
               <Link href="/portal/account" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
                 Account
               </Link>
+              {profile.role !== 'admin' && profile.organization_id ? (
+                <Link href="/portal/team" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+                  Team
+                </Link>
+              ) : null}
               {profile.role === 'admin' ? (
                 <Link
                   href="/admin"

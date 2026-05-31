@@ -80,7 +80,7 @@ test.describe.serial('self-service RUO onboarding', () => {
 
     await page.getByRole('button', { name: /submit for review/i }).click();
     await page.waitForURL(/\/onboarding\/pending/);
-    await expect(page.getByText(/under review/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /under review/i })).toBeVisible();
 
     // DB: the org was bootstrapped pending, with owner membership + attestation.
     const supa = admin();
