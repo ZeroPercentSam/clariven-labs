@@ -378,7 +378,7 @@ export type Database = {
           id: string
           notes_internal: string | null
           order_number: number
-          organization_id: string | null
+          organization_id: string
           shipping_address: Json
           status: string
           subtotal_cents: number
@@ -401,7 +401,7 @@ export type Database = {
           id?: string
           notes_internal?: string | null
           order_number?: number
-          organization_id?: string | null
+          organization_id: string
           shipping_address: Json
           status?: string
           subtotal_cents?: number
@@ -424,7 +424,7 @@ export type Database = {
           id?: string
           notes_internal?: string | null
           order_number?: number
-          organization_id?: string | null
+          organization_id?: string
           shipping_address?: Json
           status?: string
           subtotal_cents?: number

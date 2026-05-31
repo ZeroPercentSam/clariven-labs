@@ -14,11 +14,19 @@ test('poll-invoices cron is authed and touches pending orders', async ({ request
   const firstUser = users?.users.find((u) => u.email?.includes('e2e-customer@'));
   if (!firstUser) test.skip(true, 'seeded user missing');
 
+  // orders.organization_id is NOT NULL (0014) — use the customer's backfilled org.
+  const { data: prof } = await supa
+    .from('profiles')
+    .select('organization_id')
+    .eq('id', firstUser!.id)
+    .single();
+
   // Manually create an order row with a mock invoice id
   const { data: order } = await supa
     .from('orders')
     .insert({
       user_id: firstUser!.id,
+      organization_id: prof!.organization_id!,
       shipping_address: { full_name: 'x', line1: 'x', city: 'x', state: 'x', postal_code: 'x' },
       subtotal_cents: 1000,
       total_cents: 1000,
