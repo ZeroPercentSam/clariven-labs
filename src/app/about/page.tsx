@@ -167,8 +167,8 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-              Founded by pharmaceutical scientists and healthcare veterans, Clariven Labs
-              was built to solve a fundamental problem: the healthcare industry deserves
+              Founded by analytical chemists and life-science research veterans, Clariven Labs
+              was built to solve a fundamental problem: the research community deserves
               a peptide supplier it can truly trust.
             </p>
           </motion.div>
@@ -195,19 +195,19 @@ export default function AboutPage() {
                 icon: Target,
                 title: 'Our Mission',
                 description:
-                  'To deliver pharmaceutical-grade peptides with uncompromising quality, enabling healthcare providers and researchers to advance patient outcomes with confidence in every vial.',
+                  'To deliver research-grade peptides with uncompromising quality, enabling laboratories and research institutions to advance experimental results with confidence in every vial.',
               },
               {
                 icon: Eye,
                 title: 'Our Vision',
                 description:
-                  'To become the most trusted peptide supply partner in American healthcare — setting the industry benchmark for purity, compliance, and client service.',
+                  'To become the most trusted peptide supply partner for American research laboratories — setting the industry benchmark for purity, compliance, and client service.',
               },
               {
                 icon: Lightbulb,
                 title: 'Our Values',
                 description:
-                  'Integrity in every batch. Transparency in every COA. Accountability in every interaction. We believe the standard of care starts with the standard of supply.',
+                  'Integrity in every batch. Transparency in every COA. Accountability in every interaction. We believe the standard of research starts with the standard of supply.',
               },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.15}>
@@ -242,27 +242,27 @@ export default function AboutPage() {
               </FadeIn>
               <FadeIn delay={0.1}>
                 <p className="text-cl-gray-500 leading-relaxed mb-5">
-                  Clariven Labs was founded in 2019 when a group of pharmaceutical scientists
-                  and integrative medicine practitioners recognized a critical gap in the
-                  peptide supply chain. Too many providers were forced to choose between
+                  Clariven Labs was founded in 2019 when a group of analytical chemists
+                  and research-operations specialists recognized a critical gap in the
+                  peptide supply chain. Too many laboratories were forced to choose between
                   affordable peptides and verifiable quality.
                 </p>
               </FadeIn>
               <FadeIn delay={0.2}>
                 <p className="text-cl-gray-500 leading-relaxed mb-5">
                   We set out to build something different — a vertically integrated peptide
-                  manufacturer with pharmaceutical-grade standards at every step. From raw
+                  manufacturer with research-grade standards at every step. From raw
                   material sourcing to final QC release, every process is designed for one
-                  outcome: peptides that clinicians can trust with their patients.
+                  outcome: peptides that researchers can trust in their studies.
                 </p>
               </FadeIn>
               <FadeIn delay={0.3}>
                 <p className="text-cl-gray-500 leading-relaxed">
-                  Today, Clariven Labs serves over 500 healthcare providers nationwide,
-                  from single-practitioner clinics to multi-state compounding pharmacy
+                  Today, Clariven Labs serves over 500 research laboratories nationwide,
+                  from single-investigator labs to multi-site university research
                   networks. Our team has grown, but our founding principle hasn&apos;t changed:
                   every vial that leaves our facility must meet the standard we&apos;d want
-                  for our own families.
+                  for our own benchtop.
                 </p>
               </FadeIn>
             </div>
@@ -272,37 +272,37 @@ export default function AboutPage() {
               <TimelineItem
                 year="2019"
                 title="Founded in San Diego, CA"
-                description="Clariven Labs established with a mission to bring pharmaceutical-grade peptide supply to underserved clinics and pharmacies."
+                description="Clariven Labs established with a mission to bring research-grade peptide supply to underserved academic and independent laboratories."
                 delay={0}
               />
               <TimelineItem
                 year="2020"
                 title="cGMP Certification Achieved"
-                description="Full cGMP compliance certification, establishing our quality management system to pharmaceutical manufacturing standards."
+                description="Full cGMP compliance certification, establishing our quality management system to ISO-grade research manufacturing standards."
                 delay={0.1}
               />
               <TimelineItem
                 year="2021"
                 title="100+ Product Catalog"
-                description="Expanded to over 100 peptide formulations across therapeutic categories, serving 150+ healthcare providers."
+                description="Expanded to over 100 peptide formulations across research categories, serving 150+ research laboratories."
                 delay={0.2}
               />
               <TimelineItem
                 year="2022"
-                title="503A/503B Facility Network"
-                description="Partnered with 503A and 503B licensed compounding facilities, expanding our manufacturing and distribution capabilities."
+                title="Quality-Controlled Laboratory Network"
+                description="Partnered with ISO-grade research manufacturing partners, expanding our manufacturing and distribution capabilities."
                 delay={0.3}
               />
               <TimelineItem
                 year="2023"
-                title="500+ Provider Milestone"
-                description="Crossed 500 active healthcare provider accounts and 2 million vials shipped with 99.7% order accuracy."
+                title="500+ Laboratory Milestone"
+                description="Crossed 500 active research laboratory accounts and 2 million vials shipped with 99.7% order accuracy."
                 delay={0.4}
               />
               <TimelineItem
                 year="2024"
                 title="National Expansion"
-                description="Expanded priority shipping to all 50 states with 48-hour delivery, launched dedicated enterprise accounts for large health systems."
+                description="Expanded priority shipping to all 50 states with 48-hour delivery, launched dedicated enterprise accounts for large research institutions."
                 delay={0.5}
               />
             </div>
@@ -318,7 +318,7 @@ export default function AboutPage() {
         </div>
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-            <StatBlock value="500+" label="Healthcare Providers" delay={0} />
+            <StatBlock value="500+" label="Research Laboratories" delay={0} />
             <StatBlock value="2M+" label="Vials Shipped" delay={0.1} />
             <StatBlock value="99.7%" label="Order Accuracy" delay={0.2} />
             <StatBlock value="50+" label="Peptide Formulations" delay={0.3} />
@@ -338,7 +338,7 @@ export default function AboutPage() {
                 The Team Behind the Science
               </h2>
               <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                Led by pharmaceutical scientists, quality engineers, and healthcare
+                Led by analytical chemists, quality engineers, and life-science
                 industry veterans with decades of combined experience.
               </p>
             </div>
@@ -348,7 +348,7 @@ export default function AboutPage() {
             <TeamMember
               name="Dr. Jonathan Mercer"
               role="Co-Founder & CEO"
-              bio="Former VP of Pharmaceutical Development at a leading biotech firm. 20+ years in peptide chemistry and drug development."
+              bio="Former VP of Peptide Development at a leading biotech firm. 20+ years in peptide chemistry and analytical method development."
               initials="JM"
               delay={0}
             />
@@ -362,14 +362,14 @@ export default function AboutPage() {
             <TeamMember
               name="Robert Kincaid"
               role="VP of Quality & Compliance"
-              bio="15+ years in pharmaceutical quality systems. Previously QA Director at a 503B outsourcing facility. Architect of our cGMP program."
+              bio="15+ years in analytical quality systems. Previously QA Director at an ISO-grade research manufacturing facility. Architect of our cGMP program."
               initials="RK"
               delay={0.2}
             />
             <TeamMember
               name="Dr. Elena Vasquez"
               role="VP of Client Solutions"
-              bio="Former integrative medicine practitioner and pharmacy consultant. Bridges the gap between clinical needs and supply chain execution."
+              bio="Research operations and analytical chemistry background. Bridges the gap between research needs and supply chain execution."
               initials="EV"
               delay={0.3}
             />
@@ -411,12 +411,12 @@ export default function AboutPage() {
               {
                 icon: Award,
                 title: 'Regulatory Expertise',
-                desc: 'Our compliance team maintains active relationships with state boards of pharmacy and stays ahead of regulatory changes.',
+                desc: 'Our compliance team maintains active relationships with regulatory agencies and standards bodies and stays ahead of regulatory changes.',
               },
               {
                 icon: Handshake,
                 title: 'Named Account Specialists',
-                desc: 'Every client is assigned a dedicated specialist who understands your practice and anticipates your needs.',
+                desc: 'Every client is assigned a dedicated specialist who understands your research program and anticipates your needs.',
               },
               {
                 icon: Globe,
@@ -451,7 +451,7 @@ export default function AboutPage() {
                   Partner With Clariven Labs
                 </h2>
                 <p className="text-white/55 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ healthcare providers who trust Clariven Labs for their
+                  Join 500+ research laboratories who trust Clariven Labs for their
                   most critical peptide needs. Let&apos;s build a supply chain you can count on.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

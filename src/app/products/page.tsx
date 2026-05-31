@@ -232,14 +232,14 @@ export default function ProductsPage() {
               Product Catalog
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Pharmaceutical-Grade
+              Research-Grade
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
                 Peptide Portfolio
               </span>
             </h1>
             <p className="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed mb-8">
-              Browse our comprehensive catalog of 50+ peptides across therapeutic categories.
+              Browse our comprehensive catalog of 50+ peptides across research categories.
               Every product meets ≥98% purity with batch-specific COAs.
             </p>
 
@@ -347,7 +347,7 @@ export default function ProductsPage() {
                     Need a custom formulation?
                   </h4>
                   <p className="text-white/50 text-xs leading-relaxed mb-4">
-                    Our team can develop custom peptide blends tailored to your practice needs.
+                    Our team can develop custom peptide blends tailored to your research needs.
                   </p>
                   <Link
                     href="/contact"

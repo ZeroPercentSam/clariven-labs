@@ -19,8 +19,8 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-6">
-              Premium pharmaceutical-grade peptides for healthcare providers,
-              compounding pharmacies, and research institutions.
+              Research-grade peptides and reference materials for laboratories,
+              universities, and research institutions.
             </p>
             <div className="flex gap-3">
               {['LinkedIn', 'Twitter', 'Instagram'].map((social) => (
@@ -95,8 +95,8 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'Clinics & Providers', href: '/clinics' },
-                { label: 'Compounding Pharmacies', href: '/pharmacies' },
+                { label: 'Academic Labs', href: '/clinics' },
+                { label: 'Biotech & Industry', href: '/pharmacies' },
                 { label: 'Research Institutions', href: '/research' },
                 { label: 'Enterprise', href: '/enterprise' },
               ].map((item) => (
@@ -143,9 +143,10 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} Clariven Labs, LLC. All rights reserved.
             </p>
             <p className="text-white/20 text-xs text-center md:text-right max-w-xl leading-relaxed">
-              Disclaimer: Products sold by Clariven Labs are intended for research, educational,
-              and clinical compounding purposes only. These statements have not been evaluated
-              by the FDA. Products are not intended to diagnose, treat, cure, or prevent any disease.
+              For Research Use Only. Products sold by Clariven Labs LLC are intended for
+              laboratory research use only — not for human or animal consumption. They are not
+              drugs, foods, cosmetics, or medical devices, and are not intended to diagnose,
+              treat, cure, or prevent any disease. These statements have not been evaluated by the FDA.
             </p>
           </div>
         </div>

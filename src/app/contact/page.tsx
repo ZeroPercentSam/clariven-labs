@@ -94,8 +94,8 @@ export default function ContactPage() {
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-              Whether you&apos;re a clinic exploring peptide therapies, a pharmacy expanding
-              your formulary, or a research institution sourcing compounds — we&apos;re here to help.
+              Whether you&apos;re a research lab evaluating peptides, an institution scaling
+              procurement, or a research group sourcing reference compounds — we&apos;re here to help.
             </p>
           </motion.div>
         </div>
@@ -213,7 +213,7 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="john@clinic.com"
+                          placeholder="john@lab.edu"
                         />
                       </div>
                       <div>
@@ -244,7 +244,7 @@ export default function ContactPage() {
                           value={formData.organization}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="Your clinic or organization"
+                          placeholder="Your lab or institution"
                         />
                       </div>
                       <div>
@@ -259,13 +259,13 @@ export default function ContactPage() {
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
                         >
                           <option value="">Select your role</option>
-                          <option value="physician">Physician / Medical Director</option>
-                          <option value="np-pa">Nurse Practitioner / PA</option>
-                          <option value="pharmacist">Pharmacist</option>
-                          <option value="pharmacy-owner">Pharmacy Owner</option>
-                          <option value="researcher">Researcher / PI</option>
+                          <option value="principal-investigator">Principal Investigator</option>
+                          <option value="research-scientist">Research Scientist</option>
+                          <option value="lab-manager">Lab Manager</option>
+                          <option value="lab-director">Laboratory Director</option>
+                          <option value="researcher">Researcher / Postdoc</option>
                           <option value="procurement">Procurement / Purchasing</option>
-                          <option value="practice-manager">Practice Manager</option>
+                          <option value="institution-admin">Institution Administrator</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -357,7 +357,7 @@ export default function ContactPage() {
                   {/* Benefits card */}
                   <div className="p-6 rounded-2xl bg-gradient-to-br from-cl-navy to-cl-navy-light">
                     <h3 className="text-white font-semibold mb-4">
-                      Why Providers Switch to Clariven
+                      Why Labs Switch to Clariven
                     </h3>
                     <div className="space-y-3">
                       {[
@@ -478,7 +478,7 @@ export default function ContactPage() {
             {[
               {
                 q: 'What is the minimum order quantity?',
-                a: 'We offer flexible ordering with no minimum for most products. Volume pricing is available for practices ordering 50+ units per month.',
+                a: 'We offer flexible ordering with no minimum for most products. Volume pricing is available for labs ordering 50+ units per month.',
               },
               {
                 q: 'How quickly can I receive my first order?',
@@ -490,11 +490,11 @@ export default function ContactPage() {
               },
               {
                 q: 'What documentation do I need to open an account?',
-                a: 'We require a valid medical license or pharmacy license, DEA registration (if applicable), and basic business verification. Our team will guide you through the process.',
+                a: 'We verify that buyers are qualified research professionals or institutions (e.g., institutional affiliation or a research-use attestation) plus basic business verification. No medical license is required because products are sold for research use only. Our team will guide you through the process.',
               },
               {
                 q: 'Can you develop custom formulations?',
-                a: 'Absolutely. Our formulation team can develop custom peptide blends, specific concentrations, and multi-peptide combinations tailored to your practice protocols.',
+                a: 'Absolutely. Our formulation team can develop custom peptide blends, specific concentrations, and multi-peptide combinations tailored to your research protocols.',
               },
             ].map((faq, i) => (
               <FadeIn key={i} delay={i * 0.05}>

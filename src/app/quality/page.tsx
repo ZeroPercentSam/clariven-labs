@@ -98,7 +98,7 @@ const testingMethods = [
   {
     icon: Scan,
     name: 'Sterility Testing',
-    description: 'USP <71> compliant sterility testing confirms the absence of viable microorganisms in injectable-grade products.',
+    description: 'USP <71> compliant sterility testing confirms the absence of viable microorganisms in research-grade products.',
     detail: 'USP compliant',
   },
   {
@@ -125,9 +125,9 @@ const certifications = [
   },
   {
     icon: ClipboardCheck,
-    title: '503A/503B Compliance',
-    description: 'Licensed facility network supports both 503A patient-specific and 503B outsourcing facility distribution pathways under the FD&C Act.',
-    badge: 'Licensed Facilities',
+    title: 'RUO Quality & Documentation',
+    description: 'Quality-controlled laboratory network provides research-use-only supply for qualified institutions, with full batch documentation and chain-of-custody.',
+    badge: 'RUO Documentation',
   },
   {
     icon: FileCheck,
@@ -137,9 +137,9 @@ const certifications = [
   },
   {
     icon: Lock,
-    title: 'DEA Registered',
-    description: 'Registered with the Drug Enforcement Administration for controlled substance handling where applicable, maintaining full chain-of-custody documentation.',
-    badge: 'Registered',
+    title: 'Chain-of-Custody Controls',
+    description: 'Controlled-access handling procedures for restricted research materials where applicable, maintaining full chain-of-custody documentation.',
+    badge: 'Documented',
   },
 ];
 
@@ -191,7 +191,7 @@ export default function QualityPage() {
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
               From raw material sourcing to final product release, every decision we make is
-              guided by a single principle: your patients and research deserve the highest
+              guided by a single principle: your research deserves the highest
               standard of purity and compliance.
             </p>
 
@@ -242,7 +242,7 @@ export default function QualityPage() {
                 We maintain relationships with fewer, more qualified suppliers rather than chasing
                 lowest-cost sourcing. Every manufacturing partner undergoes rigorous qualification
                 audits and ongoing performance monitoring. The result: consistent, reliable product
-                quality that your patients and research can depend on.
+                quality that your research can depend on.
               </p>
 
               <div className="space-y-3">
@@ -270,7 +270,7 @@ export default function QualityPage() {
                       { icon: ShieldCheck, label: 'cGMP Certified', color: 'text-cl-teal' },
                       { icon: BadgeCheck, label: 'ISO 9001:2015', color: 'text-cl-blue-accent' },
                       { icon: Award, label: 'USP Compliant', color: 'text-cl-gold' },
-                      { icon: FileCheck, label: 'DEA Registered', color: 'text-cl-teal-light' },
+                      { icon: FileCheck, label: 'Chain-of-Custody', color: 'text-cl-teal-light' },
                     ].map((cert, i) => (
                       <motion.div
                         key={cert.label}
@@ -360,8 +360,8 @@ export default function QualityPage() {
               Compliance-First Infrastructure
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              We maintain the highest regulatory standards so you can focus on your patients
-              and research with complete confidence in your supply chain.
+              We maintain the highest regulatory standards so you can focus on your research
+              with complete confidence in your supply chain.
             </p>
           </FadeIn>
 
@@ -558,7 +558,7 @@ export default function QualityPage() {
               },
               {
                 title: 'Regulatory Compliance Guide',
-                description: 'Overview of 503A/503B regulations, peptide classification, and prescriber requirements.',
+                description: 'Overview of research-use-only requirements, peptide classification, and qualified-researcher / institutional verification.',
                 action: 'Download Guide',
                 icon: FileText,
               },

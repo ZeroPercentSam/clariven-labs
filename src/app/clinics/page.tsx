@@ -46,27 +46,27 @@ export default function ClinicsPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cl-teal text-sm font-medium mb-6">
               <Stethoscope className="w-4 h-4" />
-              For Clinics & Healthcare Providers
+              For Academic & Research Laboratories
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Peptide Therapy Starts
+              Rigorous Research Starts
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
                 With a Trusted Supply
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-              Clariven Labs partners with forward-thinking clinics and medical practices to deliver
-              pharmaceutical-grade peptides with the purity, documentation, and support your
-              patients deserve.
+              Clariven Labs partners with universities, academic labs, and core facilities to supply
+              research-grade peptides with the purity, documentation, and support your
+              investigators require. For laboratory research use only.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Open a Clinic Account
+                Open a Lab Account
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/products" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                Browse Peptides
+                Browse Research Peptides
               </Link>
             </div>
           </motion.div>
@@ -79,22 +79,22 @@ export default function ClinicsPage() {
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">The Challenge</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Your Patients Deserve Better Than Uncertainty
+              Your Research Deserves Better Than Uncertainty
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              Peptide therapy is growing rapidly — but sourcing reliable, compliant peptides
-              shouldn&apos;t feel like navigating a minefield.
+              Demand for research peptides is growing rapidly — but sourcing reliable, well-characterized
+              reference material shouldn&apos;t feel like navigating a minefield.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { icon: Shield, title: 'Purity You Can Verify', description: 'Every vial ships with a batch-specific COA showing HPLC purity ≥98%, mass spec identity confirmation, and endotoxin results.' },
-              { icon: FileCheck, title: 'Compliance Documentation', description: 'Full regulatory documentation package including 503A/503B compliance records, facility certifications, and prescriber support materials.' },
-              { icon: Clock, title: '48-Hour Fulfillment', description: 'Priority processing ensures your clinic never runs out. Same-day shipping available for urgent patient needs.' },
-              { icon: Headphones, title: 'Named Account Specialist', description: 'A dedicated specialist who knows your practice, anticipates reorder needs, and resolves issues before they become problems.' },
-              { icon: TrendingUp, title: 'Volume-Based Pricing', description: 'Transparent tiered pricing that scales with your practice. No hidden fees, no surprise surcharges, no minimum order requirements.' },
-              { icon: FlaskConical, title: 'Custom Formulations', description: 'Need a specific concentration or peptide combination? Our formulation team works directly with you to develop custom protocols.' },
+              { icon: FileCheck, title: 'Documentation for Reproducibility', description: 'Full characterization package including batch records, reference standard data, and facility certifications to support reproducible in-vitro work.' },
+              { icon: Clock, title: '48-Hour Fulfillment', description: 'Priority processing ensures your lab never stalls mid-study. Same-day shipping available for time-sensitive experiments.' },
+              { icon: Headphones, title: 'Named Account Specialist', description: 'A dedicated specialist who knows your lab, anticipates reorder needs, and resolves issues before they become problems.' },
+              { icon: TrendingUp, title: 'Volume-Based Pricing', description: 'Transparent tiered pricing that scales with your grant budget. No hidden fees, no surprise surcharges, no minimum order requirements.' },
+              { icon: FlaskConical, title: 'Custom Preparations', description: 'Need a specific concentration or peptide combination for an assay? Our formulation team works directly with you to prepare custom research lots.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-lg hover:shadow-cl-teal/5 transition-all duration-300">
@@ -110,26 +110,26 @@ export default function ClinicsPage() {
         </div>
       </section>
 
-      {/* ════════ POPULAR FOR CLINICS ════════ */}
+      {/* ════════ POPULAR FOR LABS ════════ */}
       <section className="py-20 bg-cl-gray-50">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Most Requested</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Popular Peptides for Clinical Practice
+              Popular Peptides for Laboratory Research
             </h2>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { name: 'Semaglutide', category: 'Weight Management', slug: 'semaglutide' },
-              { name: 'BPC-157', category: 'Healing & Recovery', slug: 'bpc-157' },
-              { name: 'CJC-1295 / Ipamorelin', category: 'Growth Hormone', slug: 'cjc-1295-ipamorelin' },
-              { name: 'NAD+', category: 'Anti-Aging', slug: 'nad-plus' },
-              { name: 'Tirzepatide', category: 'Weight Management', slug: 'tirzepatide' },
-              { name: 'PT-141', category: 'Sexual Health', slug: 'pt-141' },
-              { name: 'Thymosin Alpha-1', category: 'Immune Support', slug: 'thymosin-alpha-1' },
-              { name: 'Sermorelin', category: 'Growth Hormone', slug: 'sermorelin' },
+              { name: 'Semaglutide', category: 'Metabolic Research', slug: 'semaglutide' },
+              { name: 'BPC-157', category: 'Tissue Repair Research', slug: 'bpc-157' },
+              { name: 'CJC-1295 / Ipamorelin', category: 'GH Secretagogue Research', slug: 'cjc-1295-ipamorelin' },
+              { name: 'NAD+', category: 'Cellular Senescence Research', slug: 'nad-plus' },
+              { name: 'Tirzepatide', category: 'Metabolic Research', slug: 'tirzepatide' },
+              { name: 'PT-141', category: 'Melanocortin Research', slug: 'pt-141' },
+              { name: 'Thymosin Alpha-1', category: 'Immunology Research', slug: 'thymosin-alpha-1' },
+              { name: 'Sermorelin', category: 'GH Secretagogue Research', slug: 'sermorelin' },
             ].map((peptide, i) => (
               <FadeIn key={peptide.slug} delay={i * 0.04}>
                 <Link href={`/products/${peptide.slug}`}>
@@ -155,13 +155,13 @@ export default function ClinicsPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;Switching to Clariven Labs transformed how we manage our peptide
-              program. The consistency, documentation, and dedicated support are
-              exactly what a medical practice needs.&rdquo;
+              &ldquo;Switching to Clariven Labs transformed how we source materials for our
+              peptide studies. The consistency, documentation, and dedicated support are
+              exactly what an academic lab needs.&rdquo;
             </div>
             <div>
-              <p className="text-cl-teal font-semibold">Dr. Sarah Mitchell, MD</p>
-              <p className="text-white/40 text-sm">Medical Director, Integrative Wellness Center</p>
+              <p className="text-cl-teal font-semibold">Dr. Sarah Mitchell, PhD</p>
+              <p className="text-white/40 text-sm">Principal Investigator, University Peptide Research Lab</p>
             </div>
           </FadeIn>
         </div>
@@ -178,10 +178,10 @@ export default function ClinicsPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { step: '01', title: 'Submit Inquiry', description: 'Fill out our quick form with your practice details and peptide interests.' },
-              { step: '02', title: 'Account Setup', description: 'Our team verifies your credentials and sets up your dedicated account within 24 hours.' },
+              { step: '01', title: 'Submit Inquiry', description: 'Fill out our quick form with your lab details and research peptide interests.' },
+              { step: '02', title: 'Account Setup', description: 'Our team verifies your institution and sets up your dedicated account within 24 hours.' },
               { step: '03', title: 'Place Your Order', description: 'Browse our catalog, get custom pricing, and place your first order with your account specialist.' },
-              { step: '04', title: 'Receive & Treat', description: 'Orders ship within 48 hours with full COA documentation and cold chain packaging.' },
+              { step: '04', title: 'Receive & Research', description: 'Orders ship within 48 hours with full COA documentation and cold chain packaging.' },
             ].map((item, i) => (
               <FadeIn key={item.step} delay={i * 0.08}>
                 <div className="text-center">
@@ -202,11 +202,11 @@ export default function ClinicsPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Ready to Elevate Your Peptide Program?
+              Ready to Elevate Your Research Supply?
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Join 500+ healthcare providers who trust Clariven Labs for pharmaceutical-grade
-              peptides with uncompromising quality and compliance.
+              Join 500+ academic and research labs that trust Clariven Labs for research-grade
+              peptides with uncompromising quality and documentation. For laboratory research use only.
             </p>
             <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
               Schedule a Consultation

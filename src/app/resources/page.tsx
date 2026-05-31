@@ -35,17 +35,17 @@ function FadeIn({ children, delay = 0, className }: { children: React.ReactNode;
 
 const featuredArticles = [
   {
-    title: 'Understanding GLP-1 Receptor Agonists: A Clinical Overview',
-    excerpt: 'An evidence-based review of semaglutide, tirzepatide, and emerging GLP-1 therapies for metabolic health management in clinical practice.',
-    category: 'Clinical Review',
+    title: 'Understanding GLP-1 Receptor Agonists: A Research Overview',
+    excerpt: 'An evidence-based review of semaglutide, tirzepatide, and emerging GLP-1 receptor agonists in metabolic research.',
+    category: 'Research Review',
     readTime: '8 min read',
     date: 'March 2026',
     icon: TrendingUp,
     featured: true,
   },
   {
-    title: 'BPC-157 Research: Mechanisms of Action and Therapeutic Potential',
-    excerpt: 'A comprehensive summary of current research on BPC-157 peptide, covering tissue repair, anti-inflammatory pathways, and preclinical data.',
+    title: 'BPC-157 Research: Mechanisms of Action and Investigational Potential',
+    excerpt: 'A comprehensive summary of current research on BPC-157 peptide, covering tissue repair, anti-inflammatory pathways, and in-vitro assay data.',
     category: 'Research Summary',
     readTime: '12 min read',
     date: 'February 2026',
@@ -53,8 +53,8 @@ const featuredArticles = [
     featured: true,
   },
   {
-    title: 'Navigating 503A vs. 503B Compounding Regulations',
-    excerpt: 'A practical guide for pharmacies and providers on FDA oversight frameworks, documentation requirements, and compliance best practices.',
+    title: 'Research-Use-Only Peptides: Sourcing, Documentation & Compliance',
+    excerpt: 'A practical guide for laboratories on RUO sourcing frameworks, documentation requirements, and chain-of-custody best practices.',
     category: 'Compliance Guide',
     readTime: '10 min read',
     date: 'February 2026',
@@ -64,19 +64,19 @@ const featuredArticles = [
 ];
 
 const articles = [
-  { title: 'Growth Hormone Peptides: CJC-1295, Ipamorelin, and Sermorelin Compared', category: 'Clinical Review', readTime: '7 min', icon: FlaskConical },
+  { title: 'Growth Hormone Peptides: CJC-1295, Ipamorelin, and Sermorelin Compared', category: 'Research Review', readTime: '7 min', icon: FlaskConical },
   { title: 'Peptide Stability: Best Practices for Storage and Handling', category: 'Technical Guide', readTime: '5 min', icon: Shield },
   { title: 'The Role of Thymosin Alpha-1 in Immune Modulation', category: 'Research Summary', readTime: '9 min', icon: Brain },
   { title: 'Understanding COAs: How to Read a Certificate of Analysis', category: 'Education', readTime: '6 min', icon: FileText },
-  { title: 'Peptide Therapy in Regenerative Medicine: Current Applications', category: 'Clinical Review', readTime: '11 min', icon: Microscope },
+  { title: 'Peptides in Regenerative Research: Current Applications', category: 'Research Review', readTime: '11 min', icon: Microscope },
   { title: 'Quality Assurance in Peptide Manufacturing: From Synthesis to COA', category: 'Technical Guide', readTime: '8 min', icon: Shield },
 ];
 
 const guides = [
-  { title: 'Peptide Prescriber Quick Reference', description: 'Dosing ranges, reconstitution guides, and clinical considerations for the most prescribed peptides.', type: 'PDF Guide' },
-  { title: 'Compounding Pharmacy Compliance Checklist', description: 'Step-by-step checklist for maintaining 503A/503B compliance with peptide APIs.', type: 'Checklist' },
+  { title: 'Peptide Handling Quick Reference', description: 'Reconstitution, storage & stability guidance for common research peptides.', type: 'PDF Guide' },
+  { title: 'Research Lab Documentation Checklist', description: 'COA, purity & chain-of-custody tracking for research peptides.', type: 'Checklist' },
   { title: 'Peptide Storage & Handling Protocol', description: 'Temperature requirements, reconstitution procedures, and stability data for proper peptide management.', type: 'Protocol' },
-  { title: 'Starting a Peptide Therapy Program', description: 'Business and clinical considerations for adding peptide therapies to your practice.', type: 'White Paper' },
+  { title: 'Standing Up a Peptide Research Program', description: 'Sourcing and documentation considerations for adding research peptides to your lab.', type: 'White Paper' },
 ];
 
 export default function ResourcesPage() {
@@ -101,8 +101,8 @@ export default function ResourcesPage() {
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-              Clinical reviews, compliance guides, research summaries, and technical resources
-              curated for healthcare providers and researchers working with peptides.
+              Research reviews, compliance guides, research summaries, and technical resources
+              curated for researchers and laboratories working with peptides.
             </p>
           </motion.div>
         </div>
@@ -184,10 +184,10 @@ export default function ResourcesPage() {
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Downloads</p>
             <h2 className="text-2xl sm:text-3xl font-bold text-cl-navy mb-4">
-              Clinical & Compliance Guides
+              Research & Compliance Guides
             </h2>
             <p className="text-cl-gray-500 max-w-xl mx-auto">
-              Practical resources for your practice. Available to registered Clariven Labs clients.
+              Practical resources for your lab. Available to registered Clariven Labs clients.
             </p>
           </FadeIn>
 
@@ -220,8 +220,8 @@ export default function ResourcesPage() {
               Stay Informed
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Get the latest peptide research, compliance updates, and clinical insights
-              delivered to your inbox. For healthcare professionals only.
+              Get the latest peptide research, compliance updates, and research insights
+              delivered to your inbox. For qualified research professionals only.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
               <input
@@ -233,7 +233,7 @@ export default function ResourcesPage() {
                 Subscribe
               </button>
             </div>
-            <p className="text-xs text-white/30 mt-3">No spam. Unsubscribe anytime. For licensed healthcare professionals.</p>
+            <p className="text-xs text-white/30 mt-3">No spam. Unsubscribe anytime. For qualified research professionals.</p>
           </FadeIn>
         </div>
       </section>

@@ -282,23 +282,23 @@ function TrustBadge({ icon: Icon, label }: { icon: React.ElementType; label: str
 
 /* ─── Product Category Card ─── */
 const categoryIcons: Record<string, React.ElementType> = {
-  'Weight Management': TrendingUp,
+  'Metabolic Research': TrendingUp,
   'Growth Hormone Peptides': Activity,
-  'Healing & Recovery': Heart,
-  'Anti-Aging & Longevity': Sparkles,
-  'Cognitive & Neuroprotection': Brain,
-  'Immune Support': ShieldCheck,
+  'Tissue & Repair Research': Heart,
+  'Longevity Research': Sparkles,
+  'Cognitive & Neuroscience': Brain,
+  'Immunology Research': ShieldCheck,
   'Bioregulators': Dna,
   'Premium Blends': Beaker,
 };
 
 const categoryData = [
-  { name: 'Weight Management', desc: 'Semaglutide, Retatrutide, Liraglutide & more', count: 7, slug: 'weight-management' },
+  { name: 'Metabolic Research', desc: 'Semaglutide, Retatrutide, Liraglutide & more', count: 7, slug: 'weight-management' },
   { name: 'Growth Hormone Peptides', desc: 'CJC-1295, Ipamorelin, Sermorelin & more', count: 12, slug: 'growth-hormone' },
-  { name: 'Healing & Recovery', desc: 'BPC-157, TB-500, LL-37, KPV & more', count: 8, slug: 'healing-recovery' },
-  { name: 'Anti-Aging & Longevity', desc: 'Epitalon, GHK-Cu, MOTS-C & more', count: 6, slug: 'anti-aging' },
-  { name: 'Cognitive & Neuroprotection', desc: 'Selank, Semax, PE-22-28 & more', count: 4, slug: 'cognitive' },
-  { name: 'Immune Support', desc: 'Thymosin Alpha 1, Thymalin & more', count: 2, slug: 'immune' },
+  { name: 'Tissue & Repair Research', desc: 'BPC-157, TB-500, LL-37, KPV & more', count: 8, slug: 'healing-recovery' },
+  { name: 'Longevity Research', desc: 'Epitalon, GHK-Cu, MOTS-C & more', count: 6, slug: 'anti-aging' },
+  { name: 'Cognitive & Neuroscience', desc: 'Selank, Semax, PE-22-28 & more', count: 4, slug: 'cognitive' },
+  { name: 'Immunology Research', desc: 'Thymosin Alpha 1, Thymalin & more', count: 2, slug: 'immune' },
   { name: 'Bioregulators', desc: 'Pinealon, Cortagen, Vesugen & more', count: 9, slug: 'bioregulators' },
   { name: 'Premium Blends', desc: 'BPC/TB-500, CagriSema, Glow & more', count: 8, slug: 'blends' },
 ];
@@ -396,7 +396,7 @@ export default function Home() {
           >
             <div className="w-2 h-2 rounded-full bg-cl-teal animate-pulse" />
             <span className="text-cl-teal text-sm font-medium tracking-wide">
-              Now Serving 500+ Healthcare Providers Nationwide
+              Now Serving 500+ Research Laboratories Nationwide
             </span>
           </motion.div>
 
@@ -407,7 +407,7 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.08] tracking-tight mb-6"
           >
-            Pharmaceutical-Grade Peptides.
+            Research-Grade Peptides.
             <br />
             <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
               Uncompromising Purity.
@@ -421,7 +421,7 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Serving clinics, compounding pharmacies, and research institutions with
+            Serving research institutions, universities, and biotech laboratories with
             ≥98% purity peptides. cGMP manufactured, batch-specific COAs, third-party verified.
           </motion.p>
 
@@ -470,7 +470,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
-              { value: 500, suffix: '+', label: 'Healthcare Providers', icon: Building2 },
+              { value: 500, suffix: '+', label: 'Research Laboratories', icon: Building2 },
               { value: 100, suffix: '+', label: 'Peptide Formulations', icon: FlaskConical },
               { value: 48, label: 'Hour Priority Shipping', icon: Truck, suffix: '-Hr' },
               { value: 100, suffix: '%', label: 'Third-Party Tested', icon: Shield },
@@ -500,11 +500,11 @@ export default function Home() {
                 Why Clariven Labs
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-                Why Leading Providers Choose Us
+                Why Leading Laboratories Choose Us
               </h2>
               <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                From regulatory compliance to dedicated support, we set the standard
-                for pharmaceutical-grade peptide supply.
+                From quality compliance to dedicated support, we set the standard
+                for research-grade peptide supply.
               </p>
             </div>
           </FadeIn>
@@ -512,14 +512,14 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <ValueCard
               icon={FlaskConical}
-              title="Pharmaceutical-Grade Purity"
+              title="Reference-Grade Purity"
               description="Every batch undergoes rigorous HPLC and mass spectrometry analysis. ≥98% purity guaranteed with batch-specific Certificates of Analysis available for every product."
               delay={0}
             />
             <ValueCard
               icon={Shield}
               title="Compliance-First Infrastructure"
-              description="Manufactured within our 503A/503B licensed facility network. Full regulatory documentation, FDA-compliant labeling, and complete chain-of-custody traceability."
+              description="Manufactured within our quality-controlled, research-use-only laboratory network. Full quality documentation, accurate labeling, and complete chain-of-custody traceability."
               delay={0.15}
             />
             <ValueCard
@@ -544,8 +544,8 @@ export default function Home() {
                 Comprehensive Peptide Catalog
               </h2>
               <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                Over 50 pharmaceutical-grade peptides across 8 therapeutic categories,
-                available in multiple strengths and formulations.
+                Over 50 research-grade peptides across 8 research categories,
+                available in multiple quantities and formulations.
               </p>
             </div>
           </FadeIn>
@@ -612,10 +612,10 @@ export default function Home() {
                 Trusted by Professionals
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Built for the Standard of Care
+                Built for Research Rigor
               </h2>
               <p className="text-white/50 max-w-2xl mx-auto text-lg">
-                Healthcare providers and researchers nationwide trust Clariven Labs
+                Research institutions and scientists nationwide trust Clariven Labs
                 for their most critical peptide needs.
               </p>
             </div>
@@ -651,15 +651,15 @@ export default function Home() {
           {/* Testimonials */}
           <div className="grid md:grid-cols-3 gap-6">
             <TestimonialCard
-              quote="Switching to Clariven Labs transformed our peptide program. The purity consistency is unmatched, and their account team responds faster than any supplier we've worked with."
+              quote="Switching to Clariven Labs transformed our research program. The purity consistency is unmatched, and their account team responds faster than any supplier we've worked with."
               name="Dr. Rebecca Chen"
-              role="Medical Director, Vitality Integrative Medicine"
+              role="Lab Director, Vitality Biosciences Research"
               delay={0}
             />
             <TestimonialCard
-              quote="As a 503A compounding pharmacy, we can't afford supply chain disruptions. Clariven's 48-hour fulfillment and batch-specific COAs have made them our primary peptide source."
-              name="James Hartwell, RPh"
-              role="Director of Operations, Summit Compounding"
+              quote="As a high-throughput research lab, we can't afford supply chain disruptions. Clariven's 48-hour fulfillment and batch-specific COAs have made them our primary peptide source."
+              name="James Hartwell, PhD"
+              role="Director of Operations, Summit Bioanalytical"
               delay={0.15}
             />
             <TestimonialCard
@@ -691,9 +691,9 @@ export default function Home() {
                   Peptide Supply Chain?
                 </h2>
                 <p className="text-cl-gray-500 text-lg mb-8 leading-relaxed">
-                  Join 500+ clinics, pharmacies, and research institutions that trust
-                  Clariven Labs for pharmaceutical-grade peptides. Speak with a specialist
-                  today and discover why providers are making the switch.
+                  Join 500+ research institutions, universities, and biotech laboratories that trust
+                  Clariven Labs for research-grade peptides. Speak with a specialist
+                  today and discover why laboratories are making the switch.
                 </p>
                 <div className="space-y-4">
                   {[
@@ -735,7 +735,7 @@ export default function Home() {
                   </div>
                   <input
                     type="text"
-                    placeholder="Organization / Practice Name"
+                    placeholder="Organization / Laboratory Name"
                     className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
                   />
                   <input
@@ -745,8 +745,8 @@ export default function Home() {
                   />
                   <select className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition">
                     <option value="">I am a...</option>
-                    <option value="clinic">Clinic / Medical Practice</option>
-                    <option value="pharmacy">Compounding Pharmacy</option>
+                    <option value="clinic">University / Academic Lab</option>
+                    <option value="pharmacy">Biotech / CRO</option>
                     <option value="research">Research Institution</option>
                     <option value="other">Other</option>
                   </select>

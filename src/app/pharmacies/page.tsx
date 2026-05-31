@@ -46,23 +46,23 @@ export default function PharmaciesPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cl-teal text-sm font-medium mb-6">
               <Pill className="w-4 h-4" />
-              For Compounding Pharmacies
+              For Biotech & Contract Research
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              API-Grade Peptides for
+              Research-Grade Peptides for
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-                Compounding Excellence
+                R&amp;D at Scale
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-              Clariven Labs provides compounding pharmacies with pharmaceutical-grade Active
-              Pharmaceutical Ingredients (APIs) backed by complete regulatory documentation
-              and batch traceability.
+              Clariven Labs supplies biotech R&amp;D teams, pharma research groups, and CROs with
+              research-grade peptide reference material backed by complete characterization
+              documentation and batch-to-batch consistency. For laboratory research use only.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Open a Pharmacy Account
+                Open an R&amp;D Account
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/quality" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
@@ -73,28 +73,28 @@ export default function PharmaciesPage() {
         </div>
       </section>
 
-      {/* ════════ PHARMACY-SPECIFIC VALUE PROPS ════════ */}
+      {/* ════════ R&D-SPECIFIC VALUE PROPS ════════ */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
-            <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Built for Pharmacy</p>
+            <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Built for R&amp;D</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Your Compounding Partner, Not Just a Supplier
+              Your Research Supply Partner, Not Just a Vendor
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              We understand the unique regulatory, quality, and operational demands
-              of compounding pharmacies — because we built our supply chain around them.
+              We understand the unique characterization, quality, and operational demands
+              of biotech and CRO research programs — because we built our supply chain around them.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Scale, title: '503A/503B Compliance', description: 'Complete documentation packages designed for both patient-specific (503A) and outsourcing facility (503B) requirements under federal and state regulations.' },
-              { icon: FileCheck, title: 'Full COA & Documentation', description: 'Batch-specific COAs with HPLC, MS, endotoxin, sterility results plus safety data sheets, stability reports, and supplier qualification files.' },
-              { icon: Layers, title: 'Bulk API Supply', description: 'Gram-to-kilogram quantities with consistent lot sizes. Multi-lot reservations available for high-volume compounding operations.' },
-              { icon: Package, title: 'GMP-Grade Packaging', description: 'Properly labeled, sealed, and stored APIs arrive in pharmaceutical-grade packaging with tamper-evident seals and temperature indicators.' },
-              { icon: Truck, title: 'Reliable Supply Chain', description: 'Multi-source manufacturing network eliminates single-point-of-failure risks. Safety stock programs available for critical formulations.' },
-              { icon: Building2, title: 'Facility Audit Support', description: 'We support your Board of Pharmacy inspections with supplier qualification documentation, audit histories, and regulatory correspondence.' },
+              { icon: Scale, title: 'MTAs & Procurement Support', description: 'Material Transfer Agreements, purchase-order workflows, and vendor-onboarding paperwork handled to fit institutional and corporate procurement processes.' },
+              { icon: FileCheck, title: 'Full COA & Documentation', description: 'Batch-specific COAs with HPLC, MS, endotoxin, and sterility results plus safety data sheets, stability reports, and supplier qualification files.' },
+              { icon: Layers, title: 'Bulk Research Material', description: 'Gram-to-kilogram quantities with consistent lot sizes. Multi-lot reservations available for high-volume R&D programs.' },
+              { icon: Package, title: 'Research-Grade Packaging', description: 'Properly labeled, sealed, and stored material arrives in research-grade packaging with tamper-evident seals and temperature indicators.' },
+              { icon: Truck, title: 'Reliable Supply Chain', description: 'Multi-source manufacturing network eliminates single-point-of-failure risks. Safety stock programs available for critical research lots.' },
+              { icon: Building2, title: 'Vendor Qualification Support', description: 'We support your supplier-qualification and quality audits with characterization documentation, audit histories, and technical correspondence.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-lg hover:shadow-cl-teal/5 transition-all duration-300">
@@ -115,14 +115,14 @@ export default function PharmaciesPage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeIn>
-              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Regulatory Ready</p>
+              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Audit Ready</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-6">
-                Compliance Documentation That Passes Inspection
+                Documentation That Passes Vendor Qualification
               </h2>
               <p className="text-cl-gray-500 leading-relaxed mb-8">
-                State board inspections and FDA audits require meticulous documentation
-                of your API supply chain. Clariven Labs provides the complete documentation
-                package your pharmacy needs to demonstrate compliance.
+                Corporate quality systems and institutional supplier reviews require meticulous
+                documentation of your research material supply chain. Clariven Labs provides the
+                complete characterization package your R&amp;D program needs to qualify a vendor.
               </p>
               <div className="space-y-3">
                 {[
@@ -130,10 +130,10 @@ export default function PharmaciesPage() {
                   'Certificate of Conformance for each lot',
                   'Supplier qualification and audit reports',
                   'Safety Data Sheets (SDS) for all products',
-                  'ICH-compliant stability study data',
-                  'cGMP manufacturing facility documentation',
+                  'ICH-aligned stability study data',
+                  'Manufacturing facility quality documentation',
                   'Chain of custody and traceability records',
-                  'Drug Master File (DMF) reference letters',
+                  'Reference standard characterization data',
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-cl-teal shrink-0 mt-0.5" />
@@ -172,13 +172,13 @@ export default function PharmaciesPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;As a 503B outsourcing facility, supplier qualification is critical.
-              Clariven Labs provides the most complete documentation package we&apos;ve
-              seen from any peptide API supplier.&rdquo;
+              &ldquo;For a CRO, supplier qualification is critical. Clariven Labs provides
+              the most complete characterization package we&apos;ve seen from any research
+              peptide supplier.&rdquo;
             </div>
             <div>
-              <p className="text-cl-teal font-semibold">Michael Torres, RPh</p>
-              <p className="text-white/40 text-sm">Director of Quality, Regional Compounding Pharmacy</p>
+              <p className="text-cl-teal font-semibold">Michael Torres, PhD</p>
+              <p className="text-white/40 text-sm">Director of Quality, Contract Research Organization</p>
             </div>
           </FadeIn>
         </div>
@@ -189,11 +189,11 @@ export default function PharmaciesPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Upgrade Your API Supply Chain
+              Upgrade Your Research Supply Chain
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Request bulk pricing, sample COAs, or schedule a call with our pharmacy
-              sales team. We&apos;ll show you why leading compounders choose Clariven.
+              Request bulk pricing, sample COAs, or schedule a call with our research
+              supply team. We&apos;ll show you why leading biotech and CRO labs choose Clariven.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
@@ -201,7 +201,7 @@ export default function PharmaciesPage() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/products" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View API Catalog
+                View Research Catalog
               </Link>
             </div>
           </FadeIn>
