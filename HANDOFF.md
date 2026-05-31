@@ -6,7 +6,7 @@
 
 ## Where we are
 
-**Snapshot as of 2026-05-31 — "Bioveris-grade" production sprint · Phases 0–2B complete + deployed; Phase 3 (orgs) STARTED — commit 1/N (additive foundation) deployed.**
+**Snapshot as of 2026-05-31 — "Bioveris-grade" production sprint · Phases 0–2B complete + deployed; Phase 3 (orgs / multi-tenant) COMPLETE — all 6 commits deployed READY on clarivenlabs.com.**
 
 ClarivenLabs (RUO / research-use-only) is being raised to the backend-completeness bar of its sibling **Bioveris**, RUO-adapted. Full plan (Tier B, RUO-adapted, with the INCLUDE/ADAPT/DROP scope table + pricing analysis): **`~/.claude/plans/i-am-going-to-validated-prism.md`** — read it. Sibling refs: Bioveris `/Users/samovington/Bioveris` (gold standard, 141 migrations), Purity Science `/Users/samovington/Purityscience` (pattern library, 109 migrations). Portable fixes: `/Users/samovington/Bioveris/docs/portable-fixes-2026-05-26.md`.
 
@@ -20,9 +20,15 @@ ClarivenLabs (RUO / research-use-only) is being raised to the backend-completene
   - **Cost-hiding (M2B.4, security)** — migration `0007`: base-table SELECT locked to admins, anon SELECT revoked, public reads via SECURITY DEFINER `list_public_prices(p_slug)` (retail only, no cogs). 3 customer reads repointed to the RPC. `tests/e2e/price-cost-leak.spec.ts` CI lock. **Verified live**: anon base cogs read → 42501; RPC → 60 rows, no cogs key.
   - **Admin pricing UI** — `/admin/pricing` now Cost | Retail | Margin($/%) + per-row "×4" + "Recompute all at 4× cost" bulk + "Save changed". `/admin/sales-sheet` = read-only cost/retail/profit by category w/ totals ("my eyes only").
   - **Client resources (M2B.5)** — migration `0009`: `client_resources` table + PRIVATE `client-resources` bucket. `/portal/resources` (RUO-sanitized Client Starter Kit + signed-URL doc downloads), `/admin/resources` (upload/list/delete). `src/lib/resources/{queries,actions}.ts`.
-- **Phase 3 — commit 1/N** `2715a5c` — **ADDITIVE multi-tenant foundation (zero behavioral change; RLS still keys on user_id).** Migration `0010`: `organizations` (`approval_status`), `org_members` (owner/admin/buyer/viewer), `org_attestations` (RUO research-use, no clinical fields), `org_invitations`, `invitation_requests` — all RLS-enabled. Helper fns `user_org_id()`/`user_org_role()`/`is_org_admin()` (SECURITY DEFINER, table-reading, no JWT hook). `profiles.organization_id` + `orders.organization_id` (nullable). Backfilled every existing customer → personal **auto-approved** org + owner membership (9 orgs; 0 null-org orders). **Plan: `~/.claude/plans/indexed-sparking-adleman.md`** (approved — full 6-commit sequence). Extends the existing `profiles`/`is_admin` model (`org_members` join table; `is_admin()`/`role='admin'` = staff).
+- **Phase 3 — Organizations / multi-tenant (COMPLETE, 6 commits `2715a5c` → `c352349`, all deployed READY).** Plan: `~/.claude/plans/indexed-sparking-adleman.md`. Extends the existing `profiles`/`is_admin` model — `org_members` join table for customer org-roles; `is_admin()`/`role='admin'` stays the staff signal. No JWT hook (table-reading SECURITY DEFINER helpers).
+  - **c1** `2715a5c` (`0010`) — ADDITIVE foundation: `organizations`(`approval_status`), `org_members`(owner/admin/buyer/viewer), `org_attestations`(RUO research-use, no clinical fields), `org_invitations`, `invitation_requests` (all RLS); helpers `user_org_id()`/`user_org_role()`/`is_org_admin()`; nullable `profiles.organization_id`+`orders.organization_id`; backfilled 9 existing customers → personal **auto-approved** orgs + owner membership (0 null-org orders).
+  - **c2** `37cccd1` (`0011`) — RLS cutover (behavioral): `create_order_with_items` now stamps `organization_id` + **raises 42501 unless the org is `approved`** (the approval gate — RPC is the only INSERT path); orders/order_items/order_messages SELECT flipped to `organization_id=(select user_org_id()) OR user_id=(select auth.uid()) OR (select is_admin())` (user_id-OR kept one release). `orders.organization_id` **NOT NULL still deferred** (its own later migration; precheck 0 null-org orders). Gate lock: `tests/e2e/org-isolation.spec.ts`.
+  - **c3** `f8a6d8b` — proxy onboarding gate: no-org/pending customer hitting `/cart` or `/checkout` → `/onboarding/attest` or `/onboarding/pending`; admins exempt; `/portal`+`/onboarding` reachable. `roles.ts` `getOrg()`. Lock: `onboarding-gate.spec.ts`.
+  - **c4** `c87dcc0` (`0012`) — self-service onboarding: `bootstrap_organization` RPC + private `org-attestations` bucket (per-action storage RLS); `/onboarding/attest` (research-use attestation form + optional PDF, RUO-clean copy) + `/onboarding/pending`; portal bounces no-org customers in. Lock: `onboarding.spec.ts`.
+  - **c5** `21ad060` — admin org review: `/admin/organizations[/id]` approve/reject (signed-URL PDF view), `admin_audit_log`, opens the gate on approve / records reviewer note on reject. Lock: `admin-org-review.spec.ts`.
+  - **c6** `c352349` (`0013`) — team invitations: `get_invitation_preview`/`accept_invitation`/`submit_invitation_request` RPCs; `/portal/team` (org-admin invite/revoke + shareable `/invite/<token>` link) + `/invite/[token]` (anon preview → accept, joins existing org, no attestation). Lock: `team-invite.spec.ts`.
 
-**State:** **10 migrations (`0001`–`0010`).** `npm run typecheck` + `npm run build` green. Lint = **12 errors** (was 13 baseline — one fewer after the rename; none from this work, do NOT regress). `product_prices` seeded with 60 SKUs (4× retail); 9 orgs backfilled. `graphify-out/` current (249 nodes). Git clean, pushed, deploys READY (`2715a5c` building→READY; `6b7de90` was last verified live).
+**State:** **13 migrations (`0001`–`0013`).** `npm run typecheck` + `npm run build` green. Lint = **12 errors** (baseline; none from this work, do NOT regress). Org-scoped RLS + the hard approval gate are LIVE on prod. `product_prices` = 60 SKUs (4× retail); 9 backfilled orgs (all approved). `graphify-out/` current (297 nodes). Git clean, pushed; latest prod deploy `c352349` (`dpl_53W4S9hVaagqyw1jdk6LMwpjAK9s`) READY. Supabase advisors WARN-only (new RLS-via-definer-RPC functions are anon/authenticated-executable by design; every policy `(select ...)`-wrapped, every new fn `search_path`-locked).
 
 **Decisions locked (from Sam):** scope = **Tier B** (full Bioveris parity, RUO-adapted); legal entity = **Clariven Labs LLC, Wyoming**; signup email-verification ON (`mailer_autoconfirm=false`); clinical-audience pages retargeted to research.
 
@@ -37,7 +43,11 @@ ClarivenLabs (RUO / research-use-only) is being raised to the backend-completene
 - `cart-and-order.spec.ts` "expired code is rejected": affiliate input is gated behind `cart.lines.length > 0`; test assumes otherwise. Pre-existing test bug.
 - ~~`cart-and-order.spec.ts` "add to cart" 5 mg~~ **FIXED in Phase 2B** — now `/products/single-regulator` + "10 mg" (real seeded price).
 
-**Up next: Phase 3 — commit 2/N (the RISKY behavioral cutover).** Approved plan + full sequence: **`~/.claude/plans/indexed-sparking-adleman.md`**. Commit 1 (additive `0010`) is DONE + deployed. Commit 2 = migration `0011`: (1) update `create_order_with_items` to set `organization_id` + raise `42501` unless org `approval_status='approved'` (the approval gate); (2) THEN flip orders/order_items/order_messages RLS to `organization_id = (select user_org_id()) OR user_id = (select auth.uid()) OR (select is_admin())` (keep user_id-OR one release); orders INSERT stays `with check(false)`. **Statement order matters** (RPC before RLS). **Gate: write `tests/e2e/org-isolation.spec.ts` (org A can't read org B) + verify existing-order-flow before merging commit 2.** Then commits 3 (proxy/auth wiring) → 4 (onboarding `/onboarding/attest` + bootstrap RPC + attestation bucket, `0012`) → 5 (admin org approve/reject UI) → 6 (invitations, `0013`). NOT NULL on orders.organization_id is its own later migration after 0011 verified. Then Phase 4 (rep/commissions), 5 (admin parity/impersonation/support), 6 (ops/perf), 7 (stabilize + cutover).
+**Up next: Phase 4 — Rep / affiliate / commission engine** (`~/.claude/plans/i-am-going-to-validated-prism.md` § Phase 4). Net-new, money-handling subsystem — port `lib/rep/`+`app/rep/` (codes, commissions, dashboard, onboarding, orders, support) + rep admin (`app/admin/{reps,commissions}`); `rep_commissions` ledger (base = subtotal−discount−COGS, default **20%**; reversals via negative `parent_commission_id`; team-leader splits); rep invites (`app/rep-invite/[token]`, direct-password signup); ICA `rep_agreement_versions` (v1.0 = **Clariven Labs LLC, Wyoming**, Cheyenne venue); Markdown render. Build the coupled commission/RLS core SOLO; test-as-you-go (rep-invite signup E2E, penny-perfect team-leader split, commission appears on paid order). **Recommend writing a detailed commit-sequence plan first** (like indexed-sparking-adleman did for Phase 3). Then Phase 5 (admin parity/impersonation/support), 6 (ops/perf), 7 (stabilize + cutover).
+
+**Deferred from Phase 3 (do before/with a later phase):**
+- **`orders.organization_id` → NOT NULL**: its own migration, only after 0011 verified live (it is). Precheck `select count(*) from orders where organization_id is null` = 0, then `set not null` + drop the `user_id =` OR-clause from `ord_read`/`item_read`/`msg_read`/`msg_ins` (defense-in-depth was kept "one release"). Safe to do at the start of Phase 4.
+- **Optional c7**: `invitation_requests` public "request access" intake page + `/admin/invitation-requests` review UI (the `submit_invitation_request` RPC already exists from 0013).
 
 **Phase 2B leftovers / notes for later:**
 - **E2E test lifecycle changed** — `product_prices` is now the real catalog (migration-seeded), so `truncateTestData()` no longer deletes it and `global-setup` no longer seeds it (would have wiped production pricing every run). Specs read real prices; `admin-pricing.spec` captures & restores the SKU it edits. The suite still shares the one prod Supabase project — a dedicated test project is the real Phase-7 fix.
@@ -141,6 +151,11 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 | **`order_messages`** | `order_id FK`, `author_id`, `author_role`, `body` | Two-way thread between customer + admin. |
 | **`admin_audit_log`** | `actor_id`, `action`, `target_type`, `target_id`, `payload jsonb` | Every admin mutation should insert here. |
 | **`gbp_notifications`** | `id`, `invoice_id`, `message`, `entry_client_id`, `pulled_at`, `processed_at`, `time_created` | Cache for Green.Money's pull-queue (no webhooks). |
+| **`organizations`** | `name`, `slug unique`, `legal_name`, **`approval_status`** (`pending\|approved\|rejected\|suspended`), `billing_email`, `phone`, `notes` | Phase 3. Customer accounts. Only `approved` orgs can order (gate in the order RPC). 9 backfilled personal orgs are auto-approved. RLS: member reads own (`id=user_org_id()`), admin all. |
+| **`org_members`** | `(organization_id, user_id) PK`, `org_role` (`owner\|admin\|buyer\|viewer`) | Phase 3. Authoritative customer org-membership (join table). `profiles.organization_id` is the denormalized default-org pointer. |
+| **`org_attestations`** | `organization_id`, `legal_entity_name`, `research_context`, `institutional_affiliation`, `orcid_or_inst_id`, `file_path`, `status`, `rejection_reason`, `reviewed_by/at` | Phase 3. RUO research-use attestation (replaces clinical license — no NPI/503A/state/expiry). PDF in private `org-attestations` bucket. |
+| **`org_invitations`** | `organization_id`, `email`, `org_role` (`admin\|buyer\|viewer`), `token unique`, `status`, `expires_at` (7d), `invited_by`, `accepted_*` | Phase 3. Team invites. Partial-unique `(org, lower(email)) where pending`. |
+| **`invitation_requests`** | `email`, `full_name`, `organization_name`, `research_context`, `reason`, `status` (`new\|reviewed\|invited\|declined`), `reviewed_by/at`, `admin_notes` | Phase 3. Public "request access" intake (written via `submit_invitation_request`; admin-only read). Review UI is optional/deferred. |
 
 ### RPCs (all SECURITY DEFINER)
 
@@ -152,6 +167,11 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 | `create_order_with_items(p_items jsonb, p_shipping jsonb, p_code text)` | — | `(order_id uuid, subtotal_cents, discount_cents, total_cents)` | requires session; self-referral guard |
 | `attach_invoice_to_order(p_order_id, p_invoice_id, p_check_id, p_payment_result)` | — | void | verifies `auth.uid() = order.user_id` |
 | `stamp_referral(p_code)` | text | void | stamps the caller's profile from the referral cookie |
+| `user_org_id()` / `user_org_role()` / `is_org_admin()` | — | uuid / text / bool | Phase 3 org helpers (SECURITY DEFINER, table-reading, no JWT hook). Used in org-scoped RLS + app gating. |
+| `bootstrap_organization(name, legal_name, billing_email, phone)` | — | uuid | Phase 3. Atomic create-org-`pending` + link profile + owner membership; refuses a second org; collision-safe slug. authenticated only. |
+| `get_invitation_preview(p_token)` | text | json | Phase 3. **anon-callable** sanitized invite preview for `/invite/[token]`. |
+| `accept_invitation(p_token)` | text | json | Phase 3. Email-match + pending/unexpired + not-already-in-another-org; links caller into the org (no attestation). |
+| `submit_invitation_request(email, full_name, …)` | — | uuid | Phase 3. **anon-callable** public intake into `invitation_requests`. |
 
 ### Extensions
 
@@ -162,6 +182,7 @@ All tables in `public` schema, all with RLS enabled. Source of truth is `supabas
 
 - **`product-coas`** — public-read, admin-write, 20 MB cap, PDF only. RLS in migration `0004_product_coas.sql`.
 - **`client-resources`** — **PRIVATE** (signed-URL downloads), authenticated-read + admin-write, 20 MB cap, PDF only. RLS in migration `0009_client_resources.sql`.
+- **`org-attestations`** — **PRIVATE**, 20 MB cap, PDF only. Path `org-attestations/{org_id}/{file}`. Per-action storage RLS (`0012`): a member reads their own org's folder, the org-admin uploads to it, staff full access, deletes staff-only. Signed-URL view in `/admin/organizations/[id]`.
 
 ---
 
