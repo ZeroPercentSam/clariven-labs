@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ArrowRight, Package } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { OrderStatusBadge } from '@/components/portal/OrderStatusBadge';
@@ -9,6 +10,22 @@ export const dynamic = 'force-dynamic';
 
 export default async function PortalOrdersPage() {
   const supabase = await createClient();
+
+  // New customers land here after their first login. If they have no org yet,
+  // send them into onboarding (the post-signup entry point). Pending orgs stay
+  // reachable so they can see their status; staff (NULL org) are exempt.
+  const { data: auth } = await supabase.auth.getUser();
+  if (auth.user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, organization_id')
+      .eq('id', auth.user.id)
+      .single();
+    if (profile && profile.role !== 'admin' && !profile.organization_id) {
+      redirect('/onboarding/attest');
+    }
+  }
+
   const { data: orders } = await supabase
     .from('orders')
     .select('id, order_number, status, total_cents, created_at, gbp_invoice_id')

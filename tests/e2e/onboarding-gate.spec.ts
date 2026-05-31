@@ -20,7 +20,8 @@ async function login(page: Page, email: string) {
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(TEST_PASSWORD);
   await page.getByRole('button', { name: /sign in/i }).click();
-  await page.waitForURL(/\/(admin|portal)/);
+  // A no-org customer is bounced from /portal into onboarding, so accept either.
+  await page.waitForURL(/\/(admin|portal|onboarding)/);
 }
 
 async function cleanup() {

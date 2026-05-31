@@ -823,6 +823,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      bootstrap_organization: {
+        Args: {
+          p_billing_email?: string
+          p_legal_name?: string
+          p_name: string
+          p_phone?: string
+        }
+        Returns: string
+      }
       create_order_with_items: {
         Args: { p_code: string; p_items: Json; p_shipping: Json }
         Returns: {
