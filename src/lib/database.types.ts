@@ -890,6 +890,121 @@ export type Database = {
         }
         Relationships: []
       }
+      rep_commissions: {
+        Row: {
+          assignment_id: string | null
+          base_cents: number
+          code_id: string | null
+          cogs_cents: number
+          commission_cents: number
+          created_at: string
+          earned_at: string
+          id: string
+          order_id: string
+          organization_id: string
+          paid_at: string | null
+          paid_batch_id: string | null
+          paid_note: string | null
+          parent_commission_id: string | null
+          rate: number
+          rep_user_id: string
+          reversed_at: string | null
+          reversed_reason: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assignment_id?: string | null
+          base_cents: number
+          code_id?: string | null
+          cogs_cents?: number
+          commission_cents: number
+          created_at?: string
+          earned_at?: string
+          id?: string
+          order_id: string
+          organization_id: string
+          paid_at?: string | null
+          paid_batch_id?: string | null
+          paid_note?: string | null
+          parent_commission_id?: string | null
+          rate: number
+          rep_user_id: string
+          reversed_at?: string | null
+          reversed_reason?: string | null
+          source: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assignment_id?: string | null
+          base_cents?: number
+          code_id?: string | null
+          cogs_cents?: number
+          commission_cents?: number
+          created_at?: string
+          earned_at?: string
+          id?: string
+          order_id?: string
+          organization_id?: string
+          paid_at?: string | null
+          paid_batch_id?: string | null
+          paid_note?: string | null
+          parent_commission_id?: string | null
+          rate?: number
+          rep_user_id?: string
+          reversed_at?: string | null
+          reversed_reason?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rep_commissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "rep_org_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_commissions_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_commissions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_commissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_commissions_parent_commission_id_fkey"
+            columns: ["parent_commission_id"]
+            isOneToOne: false
+            referencedRelation: "rep_commissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_commissions_rep_user_id_fkey"
+            columns: ["rep_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rep_invitations: {
         Row: {
           accepted_at: string | null
@@ -1254,6 +1369,10 @@ export type Database = {
           discount_pct: number
           valid: boolean
         }[]
+      }
+      write_rep_commission_for_order: {
+        Args: { p_order_id: string }
+        Returns: undefined
       }
     }
     Enums: {
