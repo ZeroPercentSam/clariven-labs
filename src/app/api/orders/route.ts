@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { orderCreateSchema } from '@/lib/schemas/order';
 import { createOneTimeInvoice } from '@/lib/gbp/invoices';
 import { sendKatieNewOrderSms } from '@/lib/twilio';
+import { sendEmail } from '@/lib/email/send';
+import { orderPlacedEmail } from '@/lib/email/templates/order-placed';
 
 export async function POST(req: Request) {
   const supabase = await createClient();
@@ -80,6 +82,24 @@ export async function POST(req: Request) {
     itemCount: parsed.data.items.reduce((s, i) => s + i.quantity, 0),
     totalCents,
   });
+
+  // 5. Fire-and-forget order-received email (best-effort; invariant 7 — never
+  //    rolls back the order; no-ops cleanly until RESEND_API_KEY is set).
+  const customerEmail = profile?.email ?? auth.user.email ?? '';
+  if (customerEmail) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+    void sendEmail({
+      to: customerEmail,
+      kind: 'order-placed',
+      ...orderPlacedEmail({
+        customerName,
+        orderNumber: order?.order_number ?? 0,
+        totalCents,
+        itemSummary,
+        ctaUrl: `${siteUrl}/portal/orders/${orderId}`,
+      }),
+    });
+  }
 
   return NextResponse.json({
     ok: true,

@@ -1,4 +1,6 @@
 import 'server-only';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/lib/database.types';
 import { getFromAddress, getReplyToAddress, getResendClient } from './client';
 import { logEmailEvent } from './log';
 import type { EmailKind } from './log-constants';
@@ -26,7 +28,12 @@ export type SendEmailResult =
  * row state is the source of truth (invariant 7). Every call writes a
  * write-through row to email_log; the log write swallows its own errors.
  */
-export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult> {
+export async function sendEmail(
+  input: SendEmailInput,
+  // Cron routes pass a service-role client so the email_log write-through
+  // survives RLS (no cookie session in a cron request).
+  opts?: { logClient?: SupabaseClient<Database> },
+): Promise<SendEmailResult> {
   const client = getResendClient();
   if (!client) {
     console.info('[email:noop]', { to: input.to, subject: input.subject, kind: input.kind });
@@ -60,22 +67,28 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
 
   if (sendError) {
     console.error('[email:error]', { to: input.to, subject: input.subject, kind: input.kind, error: sendError });
-    await logEmailEvent({
-      to: input.to,
-      kind: input.kind,
-      status: 'error',
-      subject: input.subject,
-      error: sendError.message,
-    });
+    await logEmailEvent(
+      {
+        to: input.to,
+        kind: input.kind,
+        status: 'error',
+        subject: input.subject,
+        error: sendError.message,
+      },
+      opts?.logClient,
+    );
     return { ok: false, error: sendError.message };
   }
-  await logEmailEvent({
-    to: input.to,
-    kind: input.kind,
-    status: 'sent',
-    subject: input.subject,
-    resendMessageId: data?.id ?? null,
-  });
+  await logEmailEvent(
+    {
+      to: input.to,
+      kind: input.kind,
+      status: 'sent',
+      subject: input.subject,
+      resendMessageId: data?.id ?? null,
+    },
+    opts?.logClient,
+  );
   return { ok: true, id: data?.id ?? null };
 }
 

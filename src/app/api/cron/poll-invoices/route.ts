@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getInvoiceStatus } from '@/lib/gbp/invoices';
 import { GBP_PAYMENT_RESULT } from '@/lib/gbp/types';
+import { sendEmail } from '@/lib/email/send';
+import { orderPaidEmail } from '@/lib/email/templates/order-paid';
 
 // Vercel Cron hits this every 15 minutes. Updates status based on Green.Money
 // `InvoiceStatus`. Guarded by CRON_SECRET.
@@ -42,7 +44,7 @@ export async function GET(request: NextRequest) {
 
   const { data: orders, error } = await admin
     .from('orders')
-    .select('id, gbp_invoice_id, status, gbp_last_polled_at')
+    .select('id, user_id, order_number, total_cents, gbp_invoice_id, status, gbp_last_polled_at')
     .in('status', ['pending_payment', 'processing'])
     .not('gbp_invoice_id', 'is', null)
     .or(`gbp_last_polled_at.is.null,gbp_last_polled_at.lt.${tenMinAgo}`)
@@ -83,6 +85,37 @@ export async function GET(request: NextRequest) {
         ...(becamePaid ? { gbp_paid_at: nowIso } : {}),
       })
       .eq('id', order.id);
+
+    // Branded "payment received" email on the paid transition. Best-effort
+    // (invariant 7) — a send failure must not break the cron loop. Pass the
+    // service-role client so the email_log write-through survives RLS.
+    if (becamePaid) {
+      try {
+        const { data: prof } = await admin
+          .from('profiles')
+          .select('email, full_name')
+          .eq('id', order.user_id)
+          .single();
+        if (prof?.email) {
+          const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+          await sendEmail(
+            {
+              to: prof.email,
+              kind: 'order-paid',
+              ...orderPaidEmail({
+                customerName: prof.full_name || prof.email,
+                orderNumber: order.order_number,
+                totalCents: order.total_cents,
+                ctaUrl: `${siteUrl}/portal/orders/${order.id}`,
+              }),
+            },
+            { logClient: admin },
+          );
+        }
+      } catch (e) {
+        console.warn('[cron:order-paid-email]', { orderId: order.id, err: e instanceof Error ? e.message : String(e) });
+      }
+    }
   }
 
   return NextResponse.json({

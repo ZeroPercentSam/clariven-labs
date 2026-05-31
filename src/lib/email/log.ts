@@ -1,6 +1,8 @@
 import 'server-only';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
 import { supabaseEnvConfigured } from '@/lib/supabase/env';
+import type { Database } from '@/lib/database.types';
 import type { EmailKind, EmailStatus } from './log-constants';
 
 /**
@@ -23,8 +25,14 @@ export type LogEmailEvent = {
   error?: string | null;
 };
 
-export async function logEmailEvent(event: LogEmailEvent): Promise<void> {
-  if (!supabaseEnvConfigured()) {
+export async function logEmailEvent(
+  event: LogEmailEvent,
+  // Optional pre-built client. Cron routes (no cookie session) pass the
+  // service-role admin client so the write-through row survives RLS; the
+  // default cookie client only works in an authenticated request context.
+  client?: SupabaseClient<Database>,
+): Promise<void> {
+  if (!client && !supabaseEnvConfigured()) {
     console.info('[email_log:noop]', {
       kind: event.kind,
       status: event.status,
@@ -33,7 +41,7 @@ export async function logEmailEvent(event: LogEmailEvent): Promise<void> {
     return;
   }
   try {
-    const supabase = await createClient();
+    const supabase = client ?? (await createClient());
     const { error } = await supabase.from('email_log').insert({
       to_address: event.to,
       kind: event.kind,

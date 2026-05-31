@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { adminOrderPatchSchema } from '@/lib/schemas/admin';
+import { sendEmail } from '@/lib/email/send';
+import { orderShippedEmail } from '@/lib/email/templates/order-shipped';
+import { trackingUrl } from '@/lib/tracking';
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -41,6 +44,40 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     target_id: id,
     payload: patch,
   });
+
+  // Branded "order shipped" email when an admin marks the order shipped.
+  // Best-effort (invariant 7); the admin session can read the customer profile
+  // via the is_admin() RLS clause, so no service-role client is needed.
+  if (patch.status === 'shipped' && data) {
+    try {
+      const { data: prof } = await supabase
+        .from('profiles')
+        .select('email, full_name')
+        .eq('id', data.user_id)
+        .single();
+      if (prof?.email) {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+        const link = trackingUrl(data.tracking_carrier, data.tracking_number);
+        void sendEmail({
+          to: prof.email,
+          kind: 'order-shipped',
+          ...orderShippedEmail({
+            customerName: prof.full_name || prof.email,
+            orderNumber: data.order_number,
+            carrier: data.tracking_carrier || 'Carrier',
+            trackingNumber: data.tracking_number || '',
+            trackingUrl: link?.url ?? null,
+            ctaUrl: `${siteUrl}/portal/orders/${id}`,
+          }),
+        });
+      }
+    } catch (e) {
+      console.warn('[admin:order-shipped-email]', {
+        orderId: id,
+        err: e instanceof Error ? e.message : String(e),
+      });
+    }
+  }
 
   return NextResponse.json({ ok: true, order: data });
 }
