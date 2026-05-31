@@ -288,6 +288,7 @@ export type Database = {
           product_slug: string
           quantity: number
           strength_label: string
+          unit_cost_cents: number
           unit_price_cents: number
         }
         Insert: {
@@ -299,6 +300,7 @@ export type Database = {
           product_slug: string
           quantity: number
           strength_label: string
+          unit_cost_cents?: number
           unit_price_cents: number
         }
         Update: {
@@ -310,6 +312,7 @@ export type Database = {
           product_slug?: string
           quantity?: number
           strength_label?: string
+          unit_cost_cents?: number
           unit_price_cents?: number
         }
         Relationships: [
@@ -809,9 +812,204 @@ export type Database = {
           },
         ]
       }
+      sales_reps: {
+        Row: {
+          address_city: string | null
+          address_country: string | null
+          address_line1: string | null
+          address_line2: string | null
+          address_postal_code: string | null
+          address_state: string | null
+          approved_at: string | null
+          approved_by: string | null
+          bio: string | null
+          business_type: string | null
+          created_at: string
+          headshot_url: string | null
+          id: string
+          legal_name: string | null
+          linkedin_url: string | null
+          onboarding_completed_at: string | null
+          payout_account_masked: string | null
+          payout_account_ref: string | null
+          payout_method: string | null
+          phone: string | null
+          specialty_categories: string[]
+          status: string
+          suspended_at: string | null
+          suspended_reason: string | null
+          tax_id: string | null
+          tax_id_kind: string | null
+          territory_states: string[]
+          updated_at: string
+        }
+        Insert: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postal_code?: string | null
+          address_state?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bio?: string | null
+          business_type?: string | null
+          created_at?: string
+          headshot_url?: string | null
+          id: string
+          legal_name?: string | null
+          linkedin_url?: string | null
+          onboarding_completed_at?: string | null
+          payout_account_masked?: string | null
+          payout_account_ref?: string | null
+          payout_method?: string | null
+          phone?: string | null
+          specialty_categories?: string[]
+          status?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          tax_id?: string | null
+          tax_id_kind?: string | null
+          territory_states?: string[]
+          updated_at?: string
+        }
+        Update: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postal_code?: string | null
+          address_state?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bio?: string | null
+          business_type?: string | null
+          created_at?: string
+          headshot_url?: string | null
+          id?: string
+          legal_name?: string | null
+          linkedin_url?: string | null
+          onboarding_completed_at?: string | null
+          payout_account_masked?: string | null
+          payout_account_ref?: string | null
+          payout_method?: string | null
+          phone?: string | null
+          specialty_categories?: string[]
+          status?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          tax_id?: string | null
+          tax_id_kind?: string | null
+          territory_states?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_reps_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
-      [_ in never]: never
+      sales_reps_safe: {
+        Row: {
+          address_city: string | null
+          address_country: string | null
+          address_line1: string | null
+          address_line2: string | null
+          address_postal_code: string | null
+          address_state: string | null
+          approved_at: string | null
+          approved_by: string | null
+          bio: string | null
+          business_type: string | null
+          created_at: string | null
+          headshot_url: string | null
+          id: string | null
+          legal_name: string | null
+          linkedin_url: string | null
+          onboarding_completed_at: string | null
+          payout_account_masked: string | null
+          payout_method: string | null
+          phone: string | null
+          specialty_categories: string[] | null
+          status: string | null
+          suspended_at: string | null
+          suspended_reason: string | null
+          tax_id_kind: string | null
+          territory_states: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postal_code?: string | null
+          address_state?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bio?: string | null
+          business_type?: string | null
+          created_at?: string | null
+          headshot_url?: string | null
+          id?: string | null
+          legal_name?: string | null
+          linkedin_url?: string | null
+          onboarding_completed_at?: string | null
+          payout_account_masked?: string | null
+          payout_method?: string | null
+          phone?: string | null
+          specialty_categories?: string[] | null
+          status?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          tax_id_kind?: string | null
+          territory_states?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postal_code?: string | null
+          address_state?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bio?: string | null
+          business_type?: string | null
+          created_at?: string | null
+          headshot_url?: string | null
+          id?: string | null
+          legal_name?: string | null
+          linkedin_url?: string | null
+          onboarding_completed_at?: string | null
+          payout_account_masked?: string | null
+          payout_method?: string | null
+          phone?: string | null
+          specialty_categories?: string[] | null
+          status?: string | null
+          suspended_at?: string | null
+          suspended_reason?: string | null
+          tax_id_kind?: string | null
+          territory_states?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_reps_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       accept_invitation: { Args: { p_token: string }; Returns: Json }
@@ -843,6 +1041,7 @@ export type Database = {
         }[]
       }
       get_invitation_preview: { Args: { p_token: string }; Returns: Json }
+      is_active_rep: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }
       list_public_prices: {

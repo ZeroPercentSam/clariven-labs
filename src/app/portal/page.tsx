@@ -22,7 +22,12 @@ export default async function PortalOrdersPage() {
       .eq('id', auth.user.id)
       .single();
     if (profile && profile.role !== 'admin' && !profile.organization_id) {
-      redirect('/onboarding/attest');
+      // Active reps are staff-adjacent (no customer org) — don't bounce them
+      // into customer onboarding; they live in /rep/*.
+      const { data: isRep } = await supabase.rpc('is_active_rep');
+      if (!isRep) {
+        redirect('/onboarding/attest');
+      }
     }
   }
 

@@ -82,22 +82,27 @@ export async function proxy(request: NextRequest) {
       .eq('id', user.id)
       .single();
     if (profile?.role !== 'admin') {
-      if (!profile?.organization_id) {
-        const url = request.nextUrl.clone();
-        url.pathname = '/onboarding/attest';
-        url.search = '';
-        return NextResponse.redirect(url);
-      }
-      const { data: org } = await supabase
-        .from('organizations')
-        .select('approval_status')
-        .eq('id', profile.organization_id)
-        .single();
-      if (org?.approval_status !== 'approved') {
-        const url = request.nextUrl.clone();
-        url.pathname = '/onboarding/pending';
-        url.search = '';
-        return NextResponse.redirect(url);
+      // Active reps are staff-adjacent: they have no customer org and must not
+      // be trapped in /onboarding/attest. Treat them like admins for this gate.
+      const { data: isRep } = await supabase.rpc('is_active_rep');
+      if (!isRep) {
+        if (!profile?.organization_id) {
+          const url = request.nextUrl.clone();
+          url.pathname = '/onboarding/attest';
+          url.search = '';
+          return NextResponse.redirect(url);
+        }
+        const { data: org } = await supabase
+          .from('organizations')
+          .select('approval_status')
+          .eq('id', profile.organization_id)
+          .single();
+        if (org?.approval_status !== 'approved') {
+          const url = request.nextUrl.clone();
+          url.pathname = '/onboarding/pending';
+          url.search = '';
+          return NextResponse.redirect(url);
+        }
       }
     }
   }
