@@ -15,8 +15,12 @@ const SECURITY_HEADERS = {
   'X-DNS-Prefetch-Control': 'off',
 };
 
-const PROTECTED_PREFIXES = ['/portal', '/admin', '/checkout', '/cart'] as const;
+const PROTECTED_PREFIXES = ['/portal', '/admin', '/checkout', '/cart', '/onboarding'] as const;
 const ADMIN_PREFIX = '/admin';
+// Routes that additionally require an APPROVED organization (the order
+// approval-gate's UX layer). /portal + /onboarding stay reachable so a pending
+// user can see their status and complete onboarding.
+const ORG_GATED_PREFIXES = ['/cart', '/checkout'] as const;
 const REF_COOKIE = 'cl_ref';
 const REF_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
@@ -62,6 +66,39 @@ export async function proxy(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = '/portal';
       return NextResponse.redirect(url);
+    }
+  }
+
+  // Org onboarding gate: a non-staff customer must belong to an APPROVED org to
+  // reach /cart or /checkout. No org → /onboarding/attest; an org that is not
+  // yet approved (pending/rejected/suspended) → /onboarding/pending. This is the
+  // UX layer of the approval gate — create_order_with_items is the authoritative
+  // enforcement, so this can never be the only thing standing between an
+  // unapproved org and an order. Admins (staff, NULL org) are exempt.
+  if (user && ORG_GATED_PREFIXES.some((p) => pathname.startsWith(p))) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role, organization_id')
+      .eq('id', user.id)
+      .single();
+    if (profile?.role !== 'admin') {
+      if (!profile?.organization_id) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/onboarding/attest';
+        url.search = '';
+        return NextResponse.redirect(url);
+      }
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('approval_status')
+        .eq('id', profile.organization_id)
+        .single();
+      if (org?.approval_status !== 'approved') {
+        const url = request.nextUrl.clone();
+        url.pathname = '/onboarding/pending';
+        url.search = '';
+        return NextResponse.redirect(url);
+      }
     }
   }
 
