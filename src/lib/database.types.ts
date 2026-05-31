@@ -935,6 +935,63 @@ export type Database = {
         }
         Relationships: []
       }
+      rep_org_assignments: {
+        Row: {
+          commission_enabled: boolean
+          commission_pct: number | null
+          created_at: string
+          created_by_admin_id: string | null
+          ended_at: string | null
+          ended_reason: string | null
+          id: string
+          organization_id: string
+          rep_user_id: string
+          started_at: string
+          updated_at: string
+        }
+        Insert: {
+          commission_enabled?: boolean
+          commission_pct?: number | null
+          created_at?: string
+          created_by_admin_id?: string | null
+          ended_at?: string | null
+          ended_reason?: string | null
+          id?: string
+          organization_id: string
+          rep_user_id: string
+          started_at?: string
+          updated_at?: string
+        }
+        Update: {
+          commission_enabled?: boolean
+          commission_pct?: number | null
+          created_at?: string
+          created_by_admin_id?: string | null
+          ended_at?: string | null
+          ended_reason?: string | null
+          id?: string
+          organization_id?: string
+          rep_user_id?: string
+          started_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rep_org_assignments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rep_org_assignments_rep_user_id_fkey"
+            columns: ["rep_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_reps: {
         Row: {
           address_city: string | null

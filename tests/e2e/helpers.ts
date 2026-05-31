@@ -101,10 +101,12 @@ export async function truncateTestData() {
     'e2e-onb-%',
     'e2e-orev-%',
     'e2e-inv-%',
+    'e2e-repasgn-%',
   ]) {
     const { data: orgs } = await supa.from('organizations').select('id').like('slug', prefix);
     const ids = (orgs ?? []).map((o) => o.id);
     if (ids.length) {
+      await supa.from('rep_org_assignments').delete().in('organization_id', ids);
       await supa.from('org_attestations').delete().in('organization_id', ids);
       await supa.from('org_invitations').delete().in('organization_id', ids);
       await supa.from('org_members').delete().in('organization_id', ids);
@@ -122,6 +124,7 @@ export async function truncateTestData() {
     .like('email', `%@${TEST_EMAIL_DOMAIN}`);
   const repIds = (testProfiles ?? []).map((p) => p.id);
   if (repIds.length) {
+    await supa.from('rep_org_assignments').delete().in('rep_user_id', repIds);
     await supa.from('rep_agreement_consents').delete().in('rep_user_id', repIds);
     await supa.from('sales_reps').delete().in('id', repIds);
   }
