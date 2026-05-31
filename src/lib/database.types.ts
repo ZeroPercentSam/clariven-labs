@@ -121,6 +121,39 @@ export type Database = {
         }
         Relationships: []
       }
+      email_log: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          kind: string
+          resend_message_id: string | null
+          status: string
+          subject: string | null
+          to_address: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind: string
+          resend_message_id?: string | null
+          status: string
+          subject?: string | null
+          to_address: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind?: string
+          resend_message_id?: string | null
+          status?: string
+          subject?: string | null
+          to_address?: string
+        }
+        Relationships: []
+      }
       gbp_notifications: {
         Row: {
           entry_client_id: number | null
