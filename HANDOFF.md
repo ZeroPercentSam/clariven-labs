@@ -6,25 +6,31 @@
 
 ## Where we are
 
-**Snapshot as of 2026-05-11 evening:**
+**Snapshot as of 2026-05-30 — "Bioveris-grade" production sprint · Phases 0–2 complete + deployed.**
 
-Demo-ready for a client video tonight. Spec parity with the original build + a focused port from the sibling Purity Science PR #1 (COAs, reorder, status timeline, promo banner, admin dashboard metrics).
+ClarivenLabs (RUO / research-use-only) is being raised to the backend-completeness bar of its sibling **Bioveris**, RUO-adapted. Full plan (Tier B, RUO-adapted, with the INCLUDE/ADAPT/DROP scope table + pricing analysis): **`~/.claude/plans/i-am-going-to-validated-prism.md`** — read it. Sibling refs: Bioveris `/Users/samovington/Bioveris` (gold standard, 141 migrations), Purity Science `/Users/samovington/Purityscience` (pattern library, 109 migrations). Portable fixes: `/Users/samovington/Bioveris/docs/portable-fixes-2026-05-26.md`.
 
-**Code-side status**
-- Next.js 16.2 + React 19 + Supabase (project ref `nkefzhgleymxhifpgfcn`).
-- 4 migrations applied (`0001_init` through `0004_product_coas`).
-- 7 fresh commits stacked on top of `main`, branch `main` is **7 commits ahead of origin/main**, working tree clean. Latest: `1c1bf18` (promo banner).
-- `npm run build` green · `npm run typecheck` green · 5/9 Playwright specs green (the 4 failures are pre-existing flakes/bugs, **not** regressions from tonight — details below).
-- `graphify-out/` refreshed at the end of session (208 nodes · 227 edges · 55 communities).
+**Done this sprint — 6 commits `fff9d56` → `7723831`, all deployed READY on clarivenlabs.com:**
+- **Phase 0** `fff9d56` — `src/middleware.ts` → `src/proxy.ts` (Next-16 convention); `src/lib/supabase/env.ts` (`supabaseEnvConfigured()`, invariant #8); `src/lib/format-datetime.ts` (America/Chicago) + DRY'd 11 server-rendered timestamp sites (fixed a live UTC-mislabel bug).
+- **Phase 1** `0d9b3a3` `babc221` `580f24b` — transactional email layer `src/lib/email/{client,send,log,log-constants,templates/}` + migration `0006_email_log` (live; advisors clean); RUO order emails (placed/paid/shipped) wired into `api/orders`, `poll-invoices` cron (service-role `logClient`), admin order PATCH; PKCE callback hardened (portable-fix #10) + new `/forgot-password` + `/reset-password`; `/admin/email-log` viewer; `scripts/configure-supabase-auth.mjs` (ready to run).
+- **Phase 2** `473a7ed` `7723831` — RUO compliance: purged 62 clinical lines across 12 files (4 parallel agents), retargeted audience pages to research, rewrote `/terms` + `/privacy` for **Clariven Labs LLC (Wyoming, Cheyenne venue)**, RUO labeling on PDP/cart/checkout/footer + a **required checkout acknowledgement** checkbox, and `tests/e2e/site-no-clinical.spec.ts` CI guard (12/12 routes green). Canonical RUO copy: `src/lib/compliance/ruo.ts` + `src/components/RuoDisclaimer.tsx`.
 
-**Sibling project** — Purity Science at `/Users/samovington/Purityscience` (live at purityscience.com). Same template; more mature B2B platform. Patterns mirrored from PR #1 (`claude/quizzical-cray-809438`): `lib/coas/`, `lib/reorder-lists/`, `lib/support/`, `lib/team/`. We deliberately did **not** port multi-org, ShipStation, payments, net-30, support tickets — those need schema/external creds.
+**State:** 7 migrations (`0001`–`0006`). `npm run typecheck` + `npm run build` green. Lint = **13 pre-existing errors** — do NOT regress (none are from this sprint). `graphify-out/` current (224 nodes). Git clean, pushed, deploy READY.
 
-**Pre-existing test issues (do not "fix" by mistake)**
-- `auth.spec.ts` × 2 + `admin-pricing.spec.ts`: server-action sign-in redirect races `page.goto('/admin')` so the cookie isn't always set in time. Long-standing flake.
-- `cart-and-order.spec.ts` "expired code is rejected": the test assumes the affiliate code input renders on an empty cart, but `src/app/cart/page.tsx` gates it behind `cart.lines.length > 0`. The test comment even says "affiliate input is not gated on items" — that comment is wrong. Pre-existing test bug.
+**Decisions locked (from Sam):** scope = **Tier B** (full Bioveris parity, RUO-adapted); legal entity = **Clariven Labs LLC, Wyoming**; signup email-verification ON (`mailer_autoconfirm=false`); clinical-audience pages retargeted to research.
 
-**Up next**
-The user has a list of new features queued for the next session. See the [§ Roadmap / queued work](#roadmap--queued-work) section.
+**Blocked on Sam — creds (deferred to cutover):** create a Resend project + `updates.clarivenlabs.com` DNS (SPF/DKIM/DMARC), set `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (`ClarivenLabs <noreply@updates.clarivenlabs.com>`) / `RESEND_REPLY_TO` (`support@clarivenlabs.com`) on Vercel prod+preview+dev + `.env.local`, and provide a `SUPABASE_ACCESS_TOKEN` (sbp_…, rotate after) to run `scripts/configure-supabase-auth.mjs`. The email layer no-ops cleanly until the key lands — nothing breaks.
+
+**⚠️ OPEN DECISION — pricing markup (blocks Phase 2B):** migration `0005` comment treats "300% markup" as **3×** (`cogs = price/3`). The client PDFs (`/Users/samovington/Purityscience/docs/Clariven_Labs_Internal_Pricing.pdf` + `Azoth Manufacturing Sheet.pdf`) say *"300% markup (4x)"* and every SKU is exactly **4×**. Plan is to use **4× (`price_cents = cogs_cents × 4`)**, correcting 0005 — raises retail ~33%. Real column is `product_prices.cogs_cents`. Confirm with Sam before re-seeding.
+
+**⚠️ Legal pages = counsel-review draft** — flagged in-page ("Draft — pending legal review"). Lawyer must finalize: real Wyoming registered address (placeholder in place), arbitration clause, applicable privacy regimes (CCPA/GDPR). RUO research-use framing + buyer obligations + warranty/liability disclaimers are drafted.
+
+**Pre-existing test issues (do not "fix" by mistake — slated for Phase 7):**
+- `auth.spec.ts` × 2 + `admin-pricing.spec.ts`: sign-in redirect races `page.goto('/admin')` — cookie not always set in time. Long-standing flake.
+- `cart-and-order.spec.ts` "expired code is rejected": affiliate input is gated behind `cart.lines.length > 0`; test assumes otherwise. Pre-existing test bug.
+- `cart-and-order.spec.ts` "add to cart": clicks a "5 mg" semaglutide button, but the catalog realign (commit `faed47d`) left semaglutide with `["10 mg"]` only. Stale test data, not a regression.
+
+**Up next: Phase 2B — pricing, catalog cost-visibility & client/rep resources.** Then Phase 3 (orgs/multi-tenant), 4 (rep/commissions), 5 (admin parity/impersonation/support), 6 (ops/perf), 7 (stabilize + cutover). See the plan file for the full phased roadmap.
 
 ---
 
