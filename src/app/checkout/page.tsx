@@ -6,12 +6,15 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
 import { useCart } from '@/lib/cart/store';
 import { cartSubtotalCents } from '@/lib/cart/types';
+import { RuoDisclaimer } from '@/components/RuoDisclaimer';
+import { RUO_ACKNOWLEDGEMENT } from '@/lib/compliance/ruo';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { cart, hydrated, clear } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [acknowledged, setAcknowledged] = useState(false);
 
   const subtotal = useMemo(() => cartSubtotalCents(cart), [cart]);
 
@@ -105,6 +108,21 @@ export default function CheckoutPage() {
           </div>
           <Field name="phone" label="Phone (optional)" autoComplete="tel" />
 
+          <div className="border-t border-cl-gray-200 pt-5">
+            <RuoDisclaimer variant="long" className="mb-3" />
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={acknowledged}
+                onChange={(e) => setAcknowledged(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-cl-gray-300 text-cl-teal focus:ring-cl-teal/60"
+              />
+              <span className="text-[13px] leading-snug text-cl-gray-600">
+                {RUO_ACKNOWLEDGEMENT}
+              </span>
+            </label>
+          </div>
+
           <div className="border-t border-cl-gray-200 pt-5 flex items-center justify-between">
             <div>
               <div className="text-cl-gray-500 text-xs uppercase tracking-wider">Order total</div>
@@ -117,8 +135,8 @@ export default function CheckoutPage() {
             </div>
             <button
               type="submit"
-              disabled={submitting}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition disabled:opacity-50"
+              disabled={submitting || !acknowledged}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? (
                 <>

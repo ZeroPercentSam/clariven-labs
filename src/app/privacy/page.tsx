@@ -46,7 +46,7 @@ const sections = [
   { id: 'cookies', label: 'Cookies & Tracking' },
   { id: 'data-retention', label: 'Data Retention' },
   { id: 'your-rights', label: 'Your Rights' },
-  { id: 'hipaa', label: 'HIPAA Compliance' },
+  { id: 'scope', label: 'Scope & Governing Law' },
   { id: 'children', label: 'Children\'s Privacy' },
   { id: 'changes', label: 'Policy Changes' },
   { id: 'contact', label: 'Contact Us' },
@@ -83,13 +83,13 @@ export default function PrivacyPage() {
                   Privacy Policy
                 </h1>
                 <p className="text-white/40 text-sm mt-1">
-                  Last updated: March 13, 2026 &middot; Effective immediately
+                  Last updated: May 2026 &middot; Draft — pending legal review
                 </p>
               </div>
             </div>
 
             <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-              At Clariven Labs, protecting the privacy and security of our clients&apos;
+              At Clariven Labs, protecting the privacy and security of our customers&apos;
               information is fundamental to our business. This policy describes how we collect,
               use, and safeguard your data.
             </p>
@@ -168,17 +168,20 @@ export default function PrivacyPage() {
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        Clariven Labs (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) collects information you provide
-                        directly and information generated through your use of our services. We are committed
-                        to collecting only the minimum data necessary to serve you effectively.
+                        Clariven Labs LLC, a Wyoming limited liability company (&quot;we,&quot; &quot;us,&quot; or
+                        &quot;our&quot;), collects information you provide directly and information generated through
+                        your use of our services. We are committed to collecting only the minimum data
+                        necessary to serve you effectively. We collect business and contact information about
+                        research buyers; we do not collect patient or health records, and this policy does not
+                        govern any such information.
                       </p>
                       <div>
                         <h3 className="text-sm font-semibold text-cl-navy mb-2">Information You Provide</h3>
                         <ul className="space-y-1.5 text-sm">
                           {[
                             'Contact information: name, email address, phone number, mailing address',
-                            'Professional credentials: license numbers, DEA registration, NPI numbers',
-                            'Organization details: practice name, type, size, and specialty',
+                            'Research-buyer details: institution or company name, role, and area of research',
+                            'Eligibility information you submit to confirm you are a qualified research buyer',
                             'Order information: product selections, quantities, shipping preferences',
                             'Communication records: inquiries, support tickets, feedback',
                             'Account credentials: username and encrypted password',
@@ -222,9 +225,9 @@ export default function PrivacyPage() {
                       <div className="grid sm:grid-cols-2 gap-3">
                         {[
                           { title: 'Order Fulfillment', desc: 'Processing orders, managing shipments, and providing order status updates' },
-                          { title: 'Account Management', desc: 'Creating and maintaining your account, verifying credentials, managing preferences' },
+                          { title: 'Account Management', desc: 'Creating and maintaining your account, verifying research-buyer eligibility, managing preferences' },
                           { title: 'Customer Support', desc: 'Responding to inquiries, resolving issues, providing technical product information' },
-                          { title: 'Compliance', desc: 'Verifying professional credentials, meeting regulatory requirements, maintaining audit trails' },
+                          { title: 'Compliance', desc: 'Confirming research-use eligibility, meeting legal and regulatory requirements, maintaining audit trails' },
                           { title: 'Communications', desc: 'Sending product updates, compliance notices, and relevant industry information' },
                           { title: 'Service Improvement', desc: 'Analyzing usage patterns to improve website functionality and user experience' },
                         ].map((item) => (
@@ -253,8 +256,8 @@ export default function PrivacyPage() {
                       <ul className="space-y-3 text-sm">
                         {[
                           { title: 'Service Providers', desc: 'Trusted partners who assist with shipping, payment processing, analytics, and infrastructure — bound by strict confidentiality agreements.' },
-                          { title: 'Regulatory Authorities', desc: 'When required by law, subpoena, or government investigation, or to comply with DEA, FDA, or state pharmacy board requirements.' },
-                          { title: 'Credential Verification', desc: 'Professional licensing boards and verification services to validate healthcare credentials for account eligibility.' },
+                          { title: 'Legal & Regulatory Authorities', desc: 'When required by law, subpoena, court order, or a lawful government request, or to comply with applicable regulatory requirements.' },
+                          { title: 'Eligibility Verification', desc: 'Verification services used to confirm that an account holder is a qualified research buyer for account-eligibility purposes.' },
                           { title: 'Business Transfers', desc: 'In connection with a merger, acquisition, or sale of assets — with advance notice provided to affected accounts.' },
                         ].map((item) => (
                           <li key={item.title}>
@@ -351,7 +354,7 @@ export default function PrivacyPage() {
                         {[
                           'Active account data: retained for the duration of the business relationship plus 3 years',
                           'Order and transaction records: 7 years per regulatory requirements',
-                          'Credential verification records: duration of account plus 5 years',
+                          'Eligibility verification records: duration of account plus 5 years',
                           'Analytics data: 26 months in aggregated, anonymized form',
                           'Communication records: 3 years from last interaction',
                         ].map((item) => (
@@ -405,23 +408,25 @@ export default function PrivacyPage() {
 
                 {/* Section 8 */}
                 <FadeIn>
-                  <div id="hipaa">
+                  <div id="scope">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
                       <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">8</span>
-                      HIPAA Compliance
+                      Scope &amp; Governing Law
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        As a supplier to healthcare organizations, Clariven Labs maintains practices consistent
-                        with the Health Insurance Portability and Accountability Act (HIPAA). While we do not
-                        typically receive Protected Health Information (PHI), we maintain Business Associate
-                        Agreements (BAAs) where applicable and ensure our data handling practices meet healthcare
-                        industry standards.
+                        Clariven Labs sells research-use-only materials to research professionals and
+                        institutions. We collect business and account information from research buyers; we do
+                        not collect, process, or store patient records or health information, and the
+                        information we handle is not health data. This policy governs that business and
+                        account information only.
                       </p>
                       <p>
-                        Our team receives annual HIPAA compliance training, and our systems are designed to
-                        meet the administrative, physical, and technical safeguards required under the HIPAA
-                        Security Rule.
+                        This Privacy Policy and any dispute relating to it are governed by the laws of the
+                        State of Wyoming, without regard to its conflict of law principles, and the state and
+                        federal courts located in Cheyenne, Wyoming have exclusive jurisdiction over such
+                        matters. Where other privacy laws apply to you based on your residence or location, we
+                        honor the rights those laws grant, as described in the &quot;Your Rights&quot; section above.
                       </p>
                     </div>
                   </div>
@@ -436,7 +441,7 @@ export default function PrivacyPage() {
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed">
                       <p>
-                        Our services are designed for licensed healthcare professionals and qualified research
+                        Our services are designed for qualified research professionals and research
                         institutions. We do not knowingly collect personal information from individuals under
                         the age of 18. If we become aware that we have inadvertently collected data from a
                         minor, we will promptly delete it.
@@ -480,11 +485,11 @@ export default function PrivacyPage() {
                         practices, please contact:
                       </p>
                       <div className="p-6 rounded-2xl bg-cl-gray-50 border border-cl-gray-100">
-                        <p className="font-semibold text-cl-navy mb-1">Clariven Labs — Privacy Officer</p>
+                        <p className="font-semibold text-cl-navy mb-1">Clariven Labs LLC — Privacy Officer</p>
                         <p className="text-sm space-y-1">
                           <span className="block">Email: <a href="mailto:privacy@clarivenlabs.com" className="text-cl-teal hover:text-cl-teal-light transition-colors">privacy@clarivenlabs.com</a></span>
-                          <span className="block">Phone: (480) 555-0199</span>
-                          <span className="block">Address: Clariven Labs, Attn: Privacy Officer, 8700 E Via de Ventura, Suite 200, Scottsdale, AZ 85258</span>
+                          <span className="block">Clariven Labs LLC, a Wyoming limited liability company</span>
+                          <span className="block">Address: Attn: Privacy Officer — Clariven Labs LLC, Wyoming (registered address available on request)</span>
                         </p>
                       </div>
                     </div>

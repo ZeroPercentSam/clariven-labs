@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { products, productCategories } from '@/lib/products';
 import { AddToCartControl } from '@/components/products/AddToCartControl';
+import { RuoDisclaimer } from '@/components/RuoDisclaimer';
 import { createClient } from '@/lib/supabase/client';
 
 /* ─── FadeIn ─── */
@@ -205,6 +206,10 @@ export default function ProductDetailPage() {
                     productSlug={product.slug}
                     productName={product.name}
                     strengths={product.strengths}
+                  />
+                  <RuoDisclaimer
+                    variant="long"
+                    className="mt-4 rounded-lg bg-cl-gray-50 border border-cl-gray-200 p-3"
                   />
                 </div>
 

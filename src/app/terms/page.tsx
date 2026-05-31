@@ -44,15 +44,18 @@ function FadeIn({
 
 const sections = [
   { id: 'acceptance', label: 'Acceptance of Terms' },
+  { id: 'ruo', label: 'Research Use Only' },
   { id: 'eligibility', label: 'Account Eligibility' },
+  { id: 'buyer-representations', label: 'Buyer Representations' },
   { id: 'product-use', label: 'Product Use & Restrictions' },
   { id: 'orders', label: 'Orders & Payment' },
   { id: 'shipping', label: 'Shipping & Returns' },
+  { id: 'warranty', label: 'Warranty Disclaimer' },
   { id: 'intellectual-property', label: 'Intellectual Property' },
   { id: 'prohibited', label: 'Prohibited Conduct' },
   { id: 'liability', label: 'Limitation of Liability' },
   { id: 'indemnification', label: 'Indemnification' },
-  { id: 'disputes', label: 'Dispute Resolution' },
+  { id: 'disputes', label: 'Governing Law & Disputes' },
   { id: 'regulatory', label: 'Regulatory Disclaimer' },
   { id: 'modifications', label: 'Modifications' },
   { id: 'contact', label: 'Contact' },
@@ -89,14 +92,15 @@ export default function TermsPage() {
                   Terms of Service
                 </h1>
                 <p className="text-white/40 text-sm mt-1">
-                  Last updated: March 13, 2026 &middot; Effective immediately
+                  Last updated: May 2026 &middot; Draft — pending legal review
                 </p>
               </div>
             </div>
 
             <p className="text-lg text-white/50 max-w-2xl leading-relaxed">
-              These terms govern your access to and use of the Clariven Labs website, client portal,
-              and all related services. Please review them carefully before engaging with our platform.
+              These terms govern your access to and use of the Clariven Labs website, customer portal,
+              and all related services. All products are sold strictly for laboratory research use only
+              (RUO). Please review these terms carefully before engaging with our platform.
             </p>
           </motion.div>
         </div>
@@ -148,11 +152,15 @@ export default function TermsPage() {
                   <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200/60 flex gap-4">
                     <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="text-sm font-semibold text-amber-900 mb-1">Important Notice</h4>
+                      <h4 className="text-sm font-semibold text-amber-900 mb-1">
+                        For Laboratory Research Use Only
+                      </h4>
                       <p className="text-sm text-amber-800/80 leading-relaxed">
-                        Our products are available exclusively to licensed healthcare professionals,
-                        registered compounding pharmacies, and qualified research institutions. By
-                        creating an account, you confirm that you meet these eligibility requirements.
+                        All products sold by Clariven Labs are supplied strictly FOR LABORATORY RESEARCH
+                        USE ONLY (RUO). They are not drugs, foods, cosmetics, dietary supplements, or
+                        medical devices, and are NOT for human or animal consumption. By creating an
+                        account, you confirm that you are a qualified research professional or institution
+                        and will use these materials solely for in-vitro laboratory research.
                       </p>
                     </div>
                   </div>
@@ -167,15 +175,17 @@ export default function TermsPage() {
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        By accessing or using the Clariven Labs website (&quot;clarivenlabs.com&quot;), client portal,
-                        or any services provided by Clariven Labs, LLC (&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; or
-                        &quot;our&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not
-                        agree with any part of these Terms, you must discontinue use of our services immediately.
+                        By accessing or using the Clariven Labs website (&quot;clarivenlabs.com&quot;), customer portal,
+                        or any services provided by Clariven Labs LLC, a Wyoming limited liability company
+                        (&quot;Company,&quot; &quot;Clariven Labs,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), you agree to be bound by
+                        these Terms of Service (&quot;Terms&quot;). If you do not agree with any part of these Terms,
+                        you must discontinue use of our services immediately.
                       </p>
                       <p>
                         These Terms constitute a legally binding agreement between you (or the organization
                         you represent) and Clariven Labs. By placing an order, you represent that you have the
-                        authority to bind your organization to these Terms.
+                        authority to bind your organization to these Terms and that you are acquiring all
+                        products solely for laboratory research use only (RUO).
                       </p>
                     </div>
                   </div>
@@ -183,9 +193,54 @@ export default function TermsPage() {
 
                 {/* Section 2 */}
                 <FadeIn>
-                  <div id="eligibility">
+                  <div id="ruo">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
                       <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">2</span>
+                      Research Use Only
+                    </h2>
+                    <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
+                      <div className="p-5 rounded-2xl bg-cl-navy text-white/90 border border-cl-navy">
+                        <p className="text-sm leading-relaxed font-semibold text-white mb-2">
+                          ALL PRODUCTS ARE SOLD FOR LABORATORY RESEARCH USE ONLY (RUO).
+                        </p>
+                        <p className="text-sm leading-relaxed text-white/70">
+                          The products offered by Clariven Labs are research chemicals and reference
+                          materials intended exclusively for laboratory and in-vitro scientific research
+                          conducted by qualified professionals. They are NOT drugs, foods, cosmetics,
+                          dietary supplements, or medical devices. They are NOT for human or animal
+                          consumption and are NOT intended to diagnose, treat, cure, or prevent any
+                          disease or condition.
+                        </p>
+                      </div>
+                      <p>
+                        Products are not approved or evaluated by the U.S. Food and Drug Administration for
+                        any use in humans or animals. No product offered by Clariven Labs may be used as,
+                        or in the preparation of, any article intended for human or animal use. Buyer is
+                        solely responsible for determining whether a given material is suitable and lawful
+                        for Buyer&apos;s intended research application.
+                      </p>
+                      <ul className="space-y-1.5 text-sm">
+                        {[
+                          'Products are supplied as research-grade materials for in-vitro laboratory research only.',
+                          'Products must not be administered to, ingested by, or otherwise introduced into the body of any human or animal.',
+                          'Products carry no representation of suitability for any human, therapeutic, or research-subject application.',
+                          'Any use outside controlled laboratory research is strictly prohibited and is undertaken at the user’s sole risk.',
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <ChevronRight className="w-3.5 h-3.5 text-cl-teal mt-0.5 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </FadeIn>
+
+                {/* Section 3 */}
+                <FadeIn>
+                  <div id="eligibility">
+                    <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">3</span>
                       Account Eligibility
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -195,9 +250,9 @@ export default function TermsPage() {
                       </p>
                       <ul className="space-y-1.5 text-sm">
                         {[
-                          'Hold a valid, active professional license (MD, DO, NP, PA, PharmD, RPh, or equivalent)',
-                          'Operate a licensed healthcare facility, compounding pharmacy, or accredited research institution',
-                          'Provide verifiable DEA registration (where applicable for controlled substance analogs)',
+                          'Be a qualified research professional, or an authorized representative of a research institution, laboratory, university, or commercial research organization',
+                          'Have the technical training and facilities to handle, store, and dispose of research chemicals safely and lawfully',
+                          'Acquire products solely for legitimate in-vitro laboratory research and for no other purpose',
                           'Be at least 18 years of age and legally authorized to enter into contracts',
                           'Provide accurate and complete registration information',
                         ].map((item) => (
@@ -208,33 +263,71 @@ export default function TermsPage() {
                         ))}
                       </ul>
                       <p>
-                        Clariven Labs reserves the right to verify credentials at any time and to suspend or
-                        terminate accounts that fail to meet eligibility requirements. Providing false or
-                        misleading credential information may result in immediate account termination and
-                        referral to appropriate regulatory authorities.
+                        Clariven Labs reserves the right to verify a buyer&apos;s research credentials and
+                        intended use at any time and to suspend or terminate accounts that fail to meet
+                        eligibility requirements. Providing false or misleading information, or indicating
+                        an intent to use products for any non-research purpose, may result in immediate
+                        order cancellation, account termination, and referral to appropriate authorities.
                       </p>
                     </div>
                   </div>
                 </FadeIn>
 
-                {/* Section 3 */}
+                {/* Section 4 */}
+                <FadeIn>
+                  <div id="buyer-representations">
+                    <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">4</span>
+                      Buyer Representations &amp; Obligations
+                    </h2>
+                    <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
+                      <p>
+                        By placing an order, you represent, warrant, and covenant on your own behalf and on
+                        behalf of any organization you represent that:
+                      </p>
+                      <ul className="space-y-1.5 text-sm">
+                        {[
+                          'You are a qualified research professional or institution acquiring products solely for laboratory research use only (RUO).',
+                          'You will use all products solely for in-vitro and laboratory research and for no other purpose.',
+                          'You will NOT administer, give, or apply any product to humans or animals, and will not ingest or consume any product.',
+                          'You will NOT resell, distribute, or otherwise supply any product for human or animal use, or for any consumer, food, cosmetic, or supplement application.',
+                          'You will handle, label, store, transport, and dispose of all products in accordance with all applicable federal, state, local, and international laws and with sound institutional and laboratory safety policies.',
+                          'You assume all risk and liability for the receipt, possession, handling, use, and disposal of the products, and for the results of any research conducted with them.',
+                          'You are not a consumer purchasing for personal use, and you are not acquiring products on behalf of any person who intends human or animal use.',
+                        ].map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <ChevronRight className="w-3.5 h-3.5 text-cl-teal mt-0.5 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p>
+                        These representations are a material condition of every sale. Clariven Labs relies on
+                        them in agreeing to supply products and may refuse or cancel any order if it believes,
+                        in its sole discretion, that a product may be used outside of laboratory research.
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+
+                {/* Section 5 */}
                 <FadeIn>
                   <div id="product-use">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">3</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">5</span>
                       Product Use &amp; Restrictions
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        All products sold by Clariven Labs are intended exclusively for legitimate medical,
-                        pharmaceutical compounding, or scientific research purposes:
+                        All products sold by Clariven Labs are intended exclusively for in-vitro laboratory
+                        research conducted by qualified professionals. The following use rules apply:
                       </p>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {[
-                          { title: 'Clinical Use', desc: 'Products may be prescribed and administered by licensed healthcare providers in accordance with applicable laws and clinical guidelines.' },
-                          { title: 'Compounding', desc: 'Products may be used as pharmaceutical ingredients by licensed 503A and 503B compounding facilities in compliance with USP standards.' },
-                          { title: 'Research', desc: 'Products labeled "For Research Use Only" are restricted to qualified research institutions with proper IRB oversight where applicable.' },
-                          { title: 'Resale', desc: 'Resale of Clariven Labs products requires a separate distribution agreement. Unauthorized resale is prohibited and may violate state and federal law.' },
+                          { title: 'Laboratory Research', desc: 'Products may be used only for controlled, in-vitro scientific research in an appropriately equipped laboratory by trained personnel.' },
+                          { title: 'No Living-Subject Use', desc: 'Products may NOT be administered to, ingested by, or otherwise introduced into any human or animal, and are not for any in-vivo application.' },
+                          { title: 'Handling & Disposal', desc: 'Buyer must store, handle, and dispose of products per applicable law and institutional and laboratory safety policies, treating them as hazardous research chemicals.' },
+                          { title: 'Resale', desc: 'Resale or redistribution of Clariven Labs products requires a separate written agreement. Any onward supply for human or animal use is strictly prohibited and may violate state and federal law.' },
                         ].map((item) => (
                           <div key={item.title} className="p-4 rounded-xl bg-cl-gray-50 border border-cl-gray-100">
                             <h4 className="text-sm font-semibold text-cl-navy mb-1">{item.title}</h4>
@@ -246,11 +339,11 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 4 */}
+                {/* Section 6 */}
                 <FadeIn>
                   <div id="orders">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">4</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">6</span>
                       Orders &amp; Payment
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -263,7 +356,7 @@ export default function TermsPage() {
                           'Pricing is quoted per order and subject to change without notice. Published prices are for reference only.',
                           'Payment terms are established in your account agreement (Net 30, Net 60, or prepayment as applicable).',
                           'Volume pricing and contract rates are available for qualifying accounts.',
-                          'Clariven Labs reserves the right to cancel any order if credential verification fails or payment is not received.',
+                          'Clariven Labs reserves the right to cancel any order if research-use eligibility verification fails or payment is not received.',
                           'Sales tax will be applied where required by applicable state and local laws.',
                           'Late payments may incur a 1.5% monthly finance charge and may result in account suspension.',
                         ].map((item) => (
@@ -277,11 +370,11 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 5 */}
+                {/* Section 7 */}
                 <FadeIn>
                   <div id="shipping">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">5</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">7</span>
                       Shipping &amp; Returns
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -301,7 +394,7 @@ export default function TermsPage() {
                         <div>
                           <h4 className="text-sm font-semibold text-cl-navy mb-1">Returns</h4>
                           <p className="text-sm text-cl-gray-600">
-                            Due to the pharmaceutical nature of our products, returns are restricted to
+                            Due to the research-chemical nature of our products, returns are restricted to
                             damaged, defective, or incorrectly shipped items only. All claims must be
                             reported within 48 hours of receipt with photographic documentation. Products
                             returned due to customer error may be subject to a restocking fee.
@@ -319,11 +412,40 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 6 */}
+                {/* Section 8 */}
+                <FadeIn>
+                  <div id="warranty">
+                    <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">8</span>
+                      Warranty Disclaimer
+                    </h2>
+                    <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
+                      <p>
+                        Products are supplied <strong>&quot;AS IS&quot;</strong> and <strong>&quot;WITH ALL FAULTS&quot;</strong>{' '}
+                        as research-grade materials for laboratory research use only. Except for a limited
+                        warranty, if any, that a product conforms to the specifications stated on its
+                        certificate of analysis at the time of shipment, Clariven Labs makes no warranties of
+                        any kind, whether express, implied, statutory, or otherwise.
+                      </p>
+                      <p>
+                        To the maximum extent permitted by law, Clariven Labs specifically disclaims all
+                        implied warranties of merchantability, fitness for a particular purpose, title, and
+                        non-infringement. <strong>Clariven Labs gives no warranty whatsoever that any product
+                        is safe or fit for any human, research-subject, or non-laboratory use, and no
+                        statement, document, or specification provided by Clariven Labs shall be construed as
+                        a representation of suitability for any such use.</strong> Buyer is solely responsible
+                        for confirming that each product is suitable for Buyer&apos;s intended research and for
+                        validating results obtained from its use.
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+
+                {/* Section 9 */}
                 <FadeIn>
                   <div id="intellectual-property">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">6</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">9</span>
                       Intellectual Property
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -336,26 +458,28 @@ export default function TermsPage() {
                       <p>
                         You may not reproduce, distribute, modify, create derivative works from, publicly
                         display, or otherwise exploit any content without our prior written consent. Limited
-                        use of product documentation (COAs, spec sheets) is permitted for internal clinical
-                        or research purposes.
+                        use of product documentation (COAs, spec sheets) is permitted for internal laboratory
+                        research purposes.
                       </p>
                     </div>
                   </div>
                 </FadeIn>
 
-                {/* Section 7 */}
+                {/* Section 10 */}
                 <FadeIn>
                   <div id="prohibited">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">7</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">10</span>
                       Prohibited Conduct
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>You agree not to:</p>
                       <ul className="space-y-1.5 text-sm">
                         {[
-                          'Use products for any purpose other than authorized medical, pharmaceutical, or research applications',
-                          'Provide false, misleading, or fraudulent credential information',
+                          'Use products for any purpose other than in-vitro laboratory research',
+                          'Administer, give, or apply any product to humans or animals, or ingest or consume any product',
+                          'Resell, redistribute, or supply products for human or animal use, or for any consumer, food, cosmetic, or supplement application',
+                          'Provide false, misleading, or fraudulent information about your identity, credentials, or intended use',
                           'Resell, redistribute, or transfer products without authorization',
                           'Attempt to reverse-engineer, decompile, or derive formulations from our products',
                           'Interfere with or disrupt the website, client portal, or related systems',
@@ -373,21 +497,21 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 8 */}
+                {/* Section 11 */}
                 <FadeIn>
                   <div id="liability">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">8</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">11</span>
                       Limitation of Liability
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        Clariven Labs provides all products in strict accordance with published specifications
-                        and applicable quality standards. To the maximum extent permitted by law:
+                        Clariven Labs supplies all products as research-grade materials for laboratory
+                        research use only. To the maximum extent permitted by law:
                       </p>
                       <ul className="space-y-1.5 text-sm">
                         {[
-                          'We are not liable for product misuse, improper storage, or use beyond the intended application',
+                          'We are not liable for any product misuse, improper storage, or any use of products in or on humans or animals, or any use beyond in-vitro laboratory research',
                           'Our maximum aggregate liability shall not exceed the purchase price of the specific products giving rise to the claim',
                           'We disclaim all implied warranties, including merchantability and fitness for a particular purpose, except as expressly stated in product documentation',
                           'We are not liable for indirect, incidental, consequential, or punitive damages arising from your use of our products or services',
@@ -403,43 +527,50 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 9 */}
+                {/* Section 12 */}
                 <FadeIn>
                   <div id="indemnification">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">9</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">12</span>
                       Indemnification
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed">
                       <p>
                         You agree to indemnify, defend, and hold harmless Clariven Labs, its officers,
-                        directors, employees, agents, and affiliates from and against any claims, damages,
-                        losses, liabilities, costs, and expenses (including reasonable attorneys&apos; fees)
-                        arising from or related to: (a) your use of our products or services; (b) your
-                        violation of these Terms; (c) your violation of any applicable law or regulation;
-                        or (d) your infringement of any intellectual property or other right of any third party.
+                        directors, employees, agents, and affiliates from and against any and all claims,
+                        damages, losses, liabilities, costs, and expenses (including reasonable attorneys&apos;
+                        fees) arising from or related to: (a) your use, handling, storage, or disposal of our
+                        products; (b) any misuse of products, including any administration to or use in or on
+                        any human or animal, or any use outside in-vitro laboratory research, whether by you or
+                        by any party to whom you transfer products; (c) your violation of these Terms or of any
+                        of your representations regarding research use; (d) your violation of any applicable law
+                        or regulation; or (e) your infringement of any intellectual property or other right of
+                        any third party. This obligation survives termination of your account and these Terms.
                       </p>
                     </div>
                   </div>
                 </FadeIn>
 
-                {/* Section 10 */}
+                {/* Section 13 */}
                 <FadeIn>
                   <div id="disputes">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">10</span>
-                      Dispute Resolution
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">13</span>
+                      Governing Law &amp; Dispute Resolution
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        These Terms are governed by the laws of the State of Arizona, without regard to
-                        conflict of law principles. Any dispute arising under these Terms shall be resolved as follows:
+                        These Terms are governed by the laws of the State of Wyoming, without regard to its
+                        conflict of law principles. The parties consent to the exclusive jurisdiction and
+                        venue of the state and federal courts located in Cheyenne, Wyoming for any dispute
+                        not resolved under the process below. Any dispute arising under these Terms shall be
+                        resolved as follows:
                       </p>
                       <div className="space-y-3">
                         {[
                           { step: '1', title: 'Informal Resolution', desc: 'Parties will attempt to resolve disputes through good-faith negotiations for a period of 30 days.' },
-                          { step: '2', title: 'Mediation', desc: 'If informal resolution fails, disputes will be submitted to binding mediation in Scottsdale, Arizona, under the rules of the American Arbitration Association.' },
-                          { step: '3', title: 'Arbitration', desc: 'Unresolved disputes will proceed to binding arbitration in Maricopa County, Arizona. Each party bears its own costs unless the arbitrator determines otherwise.' },
+                          { step: '2', title: 'Mediation', desc: 'If informal resolution fails, disputes will be submitted to mediation in Cheyenne, Wyoming, under the rules of the American Arbitration Association.' },
+                          { step: '3', title: 'Arbitration or Courts', desc: 'Unresolved disputes will proceed to binding arbitration in Cheyenne, Wyoming, or, where arbitration does not apply, to the state or federal courts located in Cheyenne, Wyoming. Each party bears its own costs unless the arbitrator or court determines otherwise.' },
                         ].map((item) => (
                           <div key={item.step} className="flex gap-4 p-4 rounded-xl bg-cl-gray-50 border border-cl-gray-100">
                             <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center shrink-0">
@@ -456,41 +587,44 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 11 */}
+                {/* Section 14 */}
                 <FadeIn>
                   <div id="regulatory">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">11</span>
-                      Regulatory Disclaimer
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">14</span>
+                      Regulatory Disclaimer &amp; No Advice
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <div className="p-5 rounded-2xl bg-cl-gray-50 border border-cl-gray-100">
                         <p className="text-sm leading-relaxed">
-                          The information provided on this website is for informational purposes only and
-                          does not constitute medical, pharmaceutical, or legal advice. Clariven Labs does
-                          not make therapeutic claims about its products unless specifically indicated in
-                          FDA-approved labeling.
+                          The information provided on this website is for general informational purposes only
+                          and does not constitute medical, scientific, regulatory, or legal advice. Nothing
+                          on this site is a recommendation to use any product in any human or animal, and no
+                          product is offered or sold for any such use.
                         </p>
                         <p className="text-sm leading-relaxed mt-3">
-                          Healthcare providers are solely responsible for prescribing and administering
-                          products in accordance with applicable federal and state laws, clinical guidelines,
-                          and their professional judgment. Research-use products are not intended for human
-                          use without appropriate regulatory authorization (IND, 505(b)(2), etc.).
+                          Products are research chemicals that have not been approved or evaluated by the U.S.
+                          Food and Drug Administration for safety or efficacy in humans or animals. They are
+                          not drugs, foods, cosmetics, dietary supplements, or medical devices, and are not
+                          intended to diagnose, treat, cure, or prevent any disease. Buyer is solely
+                          responsible for complying with all laws and regulations applicable to the purchase,
+                          possession, use, and disposal of research chemicals in Buyer&apos;s jurisdiction.
                         </p>
                         <p className="text-sm leading-relaxed mt-3">
                           Product descriptions, specifications, and application notes are provided for
-                          informational purposes and should not be construed as guarantees of clinical outcomes.
+                          informational purposes only and should not be construed as guarantees of research
+                          outcomes or as any representation that a product is fit for any non-laboratory use.
                         </p>
                       </div>
                     </div>
                   </div>
                 </FadeIn>
 
-                {/* Section 12 */}
+                {/* Section 15 */}
                 <FadeIn>
                   <div id="modifications">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">12</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">15</span>
                       Modifications to Terms
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -508,11 +642,11 @@ export default function TermsPage() {
                   </div>
                 </FadeIn>
 
-                {/* Section 13 */}
+                {/* Section 16 */}
                 <FadeIn>
                   <div id="contact">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
-                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">13</span>
+                      <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">16</span>
                       Contact
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
@@ -520,11 +654,11 @@ export default function TermsPage() {
                         For questions regarding these Terms of Service, please contact:
                       </p>
                       <div className="p-6 rounded-2xl bg-cl-gray-50 border border-cl-gray-100">
-                        <p className="font-semibold text-cl-navy mb-1">Clariven Labs — Legal Department</p>
+                        <p className="font-semibold text-cl-navy mb-1">Clariven Labs LLC — Legal Department</p>
                         <p className="text-sm space-y-1">
                           <span className="block">Email: <a href="mailto:legal@clarivenlabs.com" className="text-cl-teal hover:text-cl-teal-light transition-colors">legal@clarivenlabs.com</a></span>
-                          <span className="block">Phone: (480) 555-0199</span>
-                          <span className="block">Address: Clariven Labs, Attn: Legal Department, 8700 E Via de Ventura, Suite 200, Scottsdale, AZ 85258</span>
+                          <span className="block">Clariven Labs LLC, a Wyoming limited liability company</span>
+                          <span className="block">Address: Attn: Legal Department — Clariven Labs LLC, Wyoming (registered address available on request)</span>
                         </p>
                       </div>
                     </div>

@@ -7,6 +7,7 @@ import { ArrowRight, Minus, Plus, ShoppingCart, Tag, Trash2, X } from 'lucide-re
 import { createClient } from '@/lib/supabase/client';
 import { useCart } from '@/lib/cart/store';
 import { cartLineKey, cartSubtotalCents } from '@/lib/cart/types';
+import { RuoDisclaimer } from '@/components/RuoDisclaimer';
 
 type CodeState =
   | { status: 'idle' }
@@ -219,6 +220,8 @@ export default function CartPage() {
                 </span>
               </div>
             </div>
+
+            <RuoDisclaimer className="mb-5" />
 
             {/* Affiliate code */}
             <div className="mb-6">
