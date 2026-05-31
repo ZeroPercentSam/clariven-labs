@@ -19,6 +19,9 @@ export default async function PortalLayout({ children }: { children: React.React
               <Link href="/portal" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
                 Orders
               </Link>
+              <Link href="/portal/resources" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+                Resources
+              </Link>
               <Link href="/portal/account" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
                 Account
               </Link>

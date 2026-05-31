@@ -121,6 +121,51 @@ export type Database = {
         }
         Relationships: []
       }
+      client_resources: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string | null
+          file_bytes: number | null
+          file_name: string | null
+          file_path: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          file_bytes?: number | null
+          file_name?: string | null
+          file_path: string
+          id?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          file_bytes?: number | null
+          file_name?: string | null
+          file_path?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       email_log: {
         Row: {
           created_at: string
