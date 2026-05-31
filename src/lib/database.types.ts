@@ -55,30 +55,51 @@ export type Database = {
       affiliate_codes: {
         Row: {
           active: boolean
-          affiliate_id: string
+          affiliate_id: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
           code: string
           created_at: string
           discount_pct: number
           expires_at: string | null
           id: string
+          rejected_at: string | null
+          rejected_by: string | null
+          rejected_reason: string | null
+          rep_user_id: string | null
         }
         Insert: {
           active?: boolean
-          affiliate_id: string
+          affiliate_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           code: string
           created_at?: string
           discount_pct: number
           expires_at?: string | null
           id?: string
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejected_reason?: string | null
+          rep_user_id?: string | null
         }
         Update: {
           active?: boolean
-          affiliate_id?: string
+          affiliate_id?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           code?: string
           created_at?: string
           discount_pct?: number
           expires_at?: string | null
           id?: string
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejected_reason?: string | null
+          rep_user_id?: string | null
         }
         Relationships: [
           {
@@ -86,6 +107,13 @@ export type Database = {
             columns: ["affiliate_id"]
             isOneToOne: false
             referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_codes_rep_user_id_fkey"
+            columns: ["rep_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1349,6 +1377,10 @@ export type Database = {
           product_slug: string
           strength_label: string
         }[]
+      }
+      rep_my_orgs: {
+        Args: never
+        Returns: { id: string; name: string; slug: string }[]
       }
       stamp_referral: { Args: { p_code: string }; Returns: undefined }
       submit_invitation_request: {

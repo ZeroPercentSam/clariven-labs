@@ -44,8 +44,13 @@ export default async function AdminAffiliates() {
   }
 
   const affiliateName = new Map((affiliates ?? []).map((a) => [a.id, a.name] as const));
-  const codesByAffiliate = new Map<string, typeof codes>();
-  for (const c of codes ?? []) {
+  // Partner codes only — rep-minted codes (null affiliate_id, since 0019) are
+  // managed under /admin/reps, not this partner-affiliate view.
+  const partnerCodes = (codes ?? []).filter(
+    (c): c is typeof c & { affiliate_id: string } => c.affiliate_id !== null,
+  );
+  const codesByAffiliate = new Map<string, typeof partnerCodes>();
+  for (const c of partnerCodes) {
     const list = codesByAffiliate.get(c.affiliate_id) ?? [];
     list.push(c);
     codesByAffiliate.set(c.affiliate_id, list);
@@ -131,13 +136,13 @@ export default async function AdminAffiliates() {
             <div className="text-right">Gross</div>
             <div className="text-right">Discount given</div>
           </div>
-          {(codes ?? []).length === 0 ? (
+          {partnerCodes.length === 0 ? (
             <p className="px-5 py-8 text-sm text-cl-gray-500 text-center">
               No codes created yet.
             </p>
           ) : (
             <ul className="divide-y divide-cl-gray-100">
-              {(codes ?? []).map((c) => {
+              {partnerCodes.map((c) => {
                 const t = codeTotals.get(c.id) ?? { ordersCount: 0, gross: 0, discount: 0 };
                 const expired = c.expires_at && new Date(c.expires_at) < new Date();
                 const status = !c.active

@@ -124,7 +124,9 @@ export async function truncateTestData() {
     .like('email', `%@${TEST_EMAIL_DOMAIN}`);
   const repIds = (testProfiles ?? []).map((p) => p.id);
   if (repIds.length) {
+    await supa.from('rep_commissions').delete().in('rep_user_id', repIds);
     await supa.from('rep_org_assignments').delete().in('rep_user_id', repIds);
+    await supa.from('affiliate_codes').delete().in('rep_user_id', repIds); // rep-minted codes
     await supa.from('rep_agreement_consents').delete().in('rep_user_id', repIds);
     await supa.from('sales_reps').delete().in('id', repIds);
   }
