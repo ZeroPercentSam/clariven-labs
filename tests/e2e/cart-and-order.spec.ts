@@ -32,6 +32,9 @@ test('add to cart, apply affiliate code, submit order → GBP + Twilio mocks fir
   await page.getByLabel('State').fill('FL');
   await page.getByLabel(/ZIP/).fill('33101');
 
+  // RUO acknowledgement is required (Phase 2) — submit stays disabled until ticked.
+  await page.getByRole('checkbox').check();
+
   await page.getByRole('button', { name: /submit order/i }).click();
   await page.waitForURL(/\/portal\/orders\//);
 

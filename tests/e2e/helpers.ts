@@ -40,6 +40,29 @@ export async function createTestUser(email: string, role: 'customer' | 'admin' =
   return data.user;
 }
 
+// Bootstrap a customer into a personal, APPROVED org + owner membership —
+// mirrors what migration 0010 did for every real customer. Required post-0011:
+// the order RPC's approval gate refuses checkout from a no-org / unapproved
+// org. Slug prefix `e2e-std-` so truncateTestData() can reclaim it. Keep each
+// test customer in its OWN org so cross-user order isolation still holds.
+export async function createApprovedOrgFor(userId: string, name: string) {
+  const supa = admin();
+  const slug = `e2e-std-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
+  const { data, error } = await supa
+    .from('organizations')
+    .insert({ name, slug, approval_status: 'approved' })
+    .select('id')
+    .single();
+  if (error || !data) throw new Error(`createApprovedOrgFor ${name}: ${error?.message}`);
+  await supa.from('profiles').update({ organization_id: data.id }).eq('id', userId);
+  await supa
+    .from('org_members')
+    .insert({ organization_id: data.id, user_id: userId, org_role: 'owner' });
+  return data.id;
+}
+
 export async function readMockLog(kind: 'gbp' | 'twilio') {
   const file = path.resolve(process.cwd(), `.${kind}-log.jsonl`);
   try {
@@ -67,6 +90,20 @@ export async function truncateTestData() {
   await supa.from('orders').delete().gt('created_at', '1970-01-01');
   await supa.from('affiliate_codes').delete().gt('created_at', '1970-01-01');
   await supa.from('affiliates').delete().gt('created_at', '1970-01-01');
+  // Test-created orgs only (slug prefixes `e2e-std-`/`e2e-orgiso-`). The 9 real
+  // backfilled customer orgs (migration 0010) use `<emaillocal>-<hex>` slugs and
+  // are NEVER matched. Orders above are already cleared, releasing
+  // orders.organization_id (ON DELETE RESTRICT).
+  for (const prefix of ['e2e-std-%', 'e2e-orgiso-%']) {
+    const { data: orgs } = await supa.from('organizations').select('id').like('slug', prefix);
+    const ids = (orgs ?? []).map((o) => o.id);
+    if (ids.length) {
+      await supa.from('org_attestations').delete().in('organization_id', ids);
+      await supa.from('org_invitations').delete().in('organization_id', ids);
+      await supa.from('org_members').delete().in('organization_id', ids);
+      await supa.from('organizations').delete().in('id', ids);
+    }
+  }
   // NOTE: product_prices is the real 60-SKU catalog (seeded by migration 0008).
   // Do NOT truncate it here — that would wipe production pricing on every
   // `npm run test:e2e`. Specs read the real seed; price-mutating specs restore.

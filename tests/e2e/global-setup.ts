@@ -5,6 +5,7 @@ import {
   SECONDARY_CUSTOMER_EMAIL,
   admin,
   clearMockLogs,
+  createApprovedOrgFor,
   createTestUser,
   deleteTestUsers,
   truncateTestData,
@@ -15,9 +16,16 @@ export default async function globalSetup() {
   await truncateTestData();
   await clearMockLogs();
 
-  await createTestUser(CUSTOMER_EMAIL, 'customer');
-  await createTestUser(SECONDARY_CUSTOMER_EMAIL, 'customer');
+  const customer = await createTestUser(CUSTOMER_EMAIL, 'customer');
+  const secondary = await createTestUser(SECONDARY_CUSTOMER_EMAIL, 'customer');
   await createTestUser(ADMIN_EMAIL, 'admin');
+
+  // Post-0011 the approval gate requires every checkout to originate from an
+  // APPROVED org (real customers were backfilled into personal orgs by 0010).
+  // Mirror that for the test customers, in SEPARATE orgs so cross-user order
+  // isolation (rls-isolation.spec.ts) still holds. Admin (staff) gets no org.
+  await createApprovedOrgFor(customer.id, 'E2E Customer Lab');
+  await createApprovedOrgFor(secondary.id, 'E2E Secondary Lab');
 
   // product_prices is the real 60-SKU catalog seeded by migration 0008. The
   // test lifecycle no longer truncates or re-seeds it, so specs read real
