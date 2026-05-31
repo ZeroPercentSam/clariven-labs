@@ -17,18 +17,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://clarivenlabs.com"),
-  title: "Clariven Labs | Premium Peptide Supply for Healthcare & Research",
+  title: "Clariven Labs | Research-Grade Peptide Supply (For Research Use Only)",
   description:
-    "Clariven Labs delivers pharmaceutical-grade peptides with ≥98% purity to clinics, compounding pharmacies, and research institutions. cGMP certified, COA-verified, USA-made.",
+    "Clariven Labs delivers research-grade peptides with ≥98% purity to academic labs, biotech, and research institutions. cGMP-manufactured, COA-verified, USA-made. For Research Use Only — not for human consumption.",
   keywords: [
-    "peptide supply",
     "research peptides",
-    "compounding pharmacy peptides",
+    "research-use-only peptides",
+    "RUO peptides",
     "BPC-157",
-    "semaglutide",
-    "pharmaceutical grade peptides",
+    "research-grade peptides",
     "cGMP peptides",
     "peptide supplier USA",
+    "COA-verified peptides",
   ],
 };
 

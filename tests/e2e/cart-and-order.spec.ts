@@ -13,9 +13,9 @@ test('add to cart, apply affiliate code, submit order → GBP + Twilio mocks fir
   // Seed a known price + state handled in global-setup.
   await login(page);
 
-  await page.goto('/products/semaglutide');
+  await page.goto('/products/single-regulator');
   await expect(page.getByText(/Available Strengths/i)).toBeVisible();
-  await page.getByRole('button', { name: /5 mg/i }).first().click();
+  await page.getByRole('button', { name: /10 mg/i }).first().click();
   await page.getByRole('button', { name: /add to order/i }).click();
 
   await page.goto('/cart');

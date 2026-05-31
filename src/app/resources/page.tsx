@@ -36,7 +36,7 @@ function FadeIn({ children, delay = 0, className }: { children: React.ReactNode;
 const featuredArticles = [
   {
     title: 'Understanding GLP-1 Receptor Agonists: A Research Overview',
-    excerpt: 'An evidence-based review of semaglutide, tirzepatide, and emerging GLP-1 receptor agonists in metabolic research.',
+    excerpt: 'An evidence-based review of single-, dual-, and triple-pathway GLP-1 / GIP / glucagon receptor agonists in metabolic research.',
     category: 'Research Review',
     readTime: '8 min read',
     date: 'March 2026',

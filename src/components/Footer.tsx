@@ -45,9 +45,9 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'Semaglutide', href: '/products/semaglutide' },
+                { label: 'Single Regulator', href: '/products/single-regulator' },
                 { label: 'BPC-157', href: '/products/bpc-157' },
-                { label: 'CJC-1295', href: '/products/cjc-1295-dac' },
+                { label: 'CJC-1295 / Ipamorelin', href: '/products/cjc-ipamorelin-blend' },
                 { label: 'Thymosin Alpha 1', href: '/products/thymosin-alpha-1' },
                 { label: 'Epitalon', href: '/products/epitalon' },
                 { label: 'All Peptides', href: '/products' },

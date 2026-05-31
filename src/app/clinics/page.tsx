@@ -122,11 +122,11 @@ export default function ClinicsPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { name: 'Semaglutide', category: 'Metabolic Research', slug: 'semaglutide' },
+              { name: 'Single Regulator (SIA-31-C18)', category: 'Metabolic Research', slug: 'single-regulator' },
               { name: 'BPC-157', category: 'Tissue Repair Research', slug: 'bpc-157' },
-              { name: 'CJC-1295 / Ipamorelin', category: 'GH Secretagogue Research', slug: 'cjc-1295-ipamorelin' },
+              { name: 'CJC-1295 / Ipamorelin', category: 'GH Secretagogue Research', slug: 'cjc-ipamorelin-blend' },
               { name: 'NAD+', category: 'Cellular Senescence Research', slug: 'nad-plus' },
-              { name: 'Tirzepatide', category: 'Metabolic Research', slug: 'tirzepatide' },
+              { name: 'Triple Regulator (TIA-39-C20)', category: 'Metabolic Research', slug: 'triple-regulator' },
               { name: 'PT-141', category: 'Melanocortin Research', slug: 'pt-141' },
               { name: 'Thymosin Alpha-1', category: 'Immunology Research', slug: 'thymosin-alpha-1' },
               { name: 'Sermorelin', category: 'GH Secretagogue Research', slug: 'sermorelin' },
