@@ -38,12 +38,8 @@ export function ReorderButton({ orderId, variant = 'compact' }: Props) {
           return;
         }
 
-        const slugs = Array.from(new Set(items.map((i) => i.product_slug)));
-        const { data: prices } = await supabase
-          .from('product_prices')
-          .select('product_slug, strength_label, price_cents')
-          .eq('active', true)
-          .in('product_slug', slugs);
+        // Cost-safe read: list_public_prices() exposes retail only, never cogs_cents.
+        const { data: prices } = await supabase.rpc('list_public_prices');
 
         const priceMap = new Map<string, number>();
         for (const p of prices ?? []) {

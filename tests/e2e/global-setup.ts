@@ -19,15 +19,10 @@ export default async function globalSetup() {
   await createTestUser(SECONDARY_CUSTOMER_EMAIL, 'customer');
   await createTestUser(ADMIN_EMAIL, 'admin');
 
-  // Seed prices for a handful of real peptides (must match products.ts slugs).
+  // product_prices is the real 60-SKU catalog seeded by migration 0008. The
+  // test lifecycle no longer truncates or re-seeds it, so specs read real
+  // prices (e.g. single-regulator 10 mg). Price-mutating specs restore.
   const supa = admin();
-  await supa.from('product_prices').insert([
-    { product_slug: 'semaglutide', strength_label: '5 mg', price_cents: 19900 },
-    { product_slug: 'semaglutide', strength_label: '10 mg', price_cents: 34900 },
-    { product_slug: 'bpc-157', strength_label: '5 mg', price_cents: 8900 },
-    { product_slug: 'cjc-1295-dac', strength_label: '5 mg', price_cents: 9900 },
-    { product_slug: 'epitalon', strength_label: '20 mg', price_cents: 4900 },
-  ]);
 
   // Seed affiliates + codes.
   const { data: aff } = await supa

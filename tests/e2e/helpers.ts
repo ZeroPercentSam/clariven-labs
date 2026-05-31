@@ -67,7 +67,9 @@ export async function truncateTestData() {
   await supa.from('orders').delete().gt('created_at', '1970-01-01');
   await supa.from('affiliate_codes').delete().gt('created_at', '1970-01-01');
   await supa.from('affiliates').delete().gt('created_at', '1970-01-01');
-  await supa.from('product_prices').delete().gt('created_at', '1970-01-01');
+  // NOTE: product_prices is the real 60-SKU catalog (seeded by migration 0008).
+  // Do NOT truncate it here — that would wipe production pricing on every
+  // `npm run test:e2e`. Specs read the real seed; price-mutating specs restore.
   await supa.from('gbp_notifications').delete().gt('pulled_at', '1970-01-01');
   await supa.from('admin_audit_log').delete().gt('created_at', '1970-01-01');
 }

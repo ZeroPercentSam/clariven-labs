@@ -508,6 +508,15 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      list_public_prices: {
+        Args: { p_slug?: string }
+        Returns: {
+          currency: string
+          price_cents: number
+          product_slug: string
+          strength_label: string
+        }[]
+      }
       stamp_referral: { Args: { p_code: string }; Returns: undefined }
       validate_affiliate_code: {
         Args: { p_code: string }

@@ -29,12 +29,16 @@ export function AddToCartControl({
     (async () => {
       try {
         const supabase = createClient();
-        const { data } = await supabase
-          .from('product_prices')
-          .select('strength_label, price_cents')
-          .eq('product_slug', productSlug)
-          .eq('active', true);
-        if (!cancelled) setPrices(data ?? []);
+        // Cost-safe read: list_public_prices() exposes retail only, never cogs_cents.
+        const { data } = await supabase.rpc('list_public_prices', { p_slug: productSlug });
+        if (!cancelled) {
+          setPrices(
+            (data ?? []).map((r) => ({
+              strength_label: r.strength_label,
+              price_cents: r.price_cents,
+            })),
+          );
+        }
       } catch {
         if (!cancelled) setPrices([]);
       } finally {

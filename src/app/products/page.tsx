@@ -172,10 +172,8 @@ export default function ProductsPage() {
     (async () => {
       try {
         const supabase = createClient();
-        const { data } = await supabase
-          .from('product_prices')
-          .select('product_slug, price_cents')
-          .eq('active', true);
+        // Cost-safe read: list_public_prices() exposes retail only, never cogs_cents.
+        const { data } = await supabase.rpc('list_public_prices');
         if (cancelled || !data) return;
         const map = new Map<string, number>();
         for (const row of data) {
