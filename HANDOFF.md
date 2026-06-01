@@ -375,6 +375,7 @@ Every time you change the schema:
 - `tests/e2e/helpers.ts` exports `TEST_EMAIL_DOMAIN = 'clariven-e2e.test'`, `ADMIN_EMAIL`, `CUSTOMER_EMAIL`, `SECONDARY_CUSTOMER_EMAIL`, `TEST_PASSWORD`.
 - `globalSetup` truncates all users in `@clariven-e2e.test`, then creates fresh customer + admin + secondary customer. **Never** seed prod data into these emails.
 - Playwright uses port `3100` and its own dev server. If preview MCP is running on port 3000 you can run tests concurrently. If preview is on 3100, stop it first.
+- **Turbopack-crash workaround:** the `webServer` command is `npm run dev` (Turbopack, crashes this machine). Start `next start -p 3100` yourself first (`reuseExistingServer` picks it up). **Pass `CRON_SECRET=test-cron-secret`** when you start it (matches `playwright.config.ts` `webServer.env`) — otherwise `cron-poll.spec` falsely 403s and looks like a regression (it isn't; it's an env mismatch, not one of the 4 documented flakes).
 - The 4 known pre-existing failures are documented above.
 
 ---
