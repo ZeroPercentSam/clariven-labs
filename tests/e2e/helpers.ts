@@ -84,7 +84,11 @@ export async function clearMockLogs() {
 
 export async function truncateTestData() {
   const supa = admin();
-  // Order matters (FKs)
+  // Order matters (FKs). Support tickets are net-new (migration 0022) and have
+  // no production rows yet — wipe wholesale like orders/order_messages.
+  // ticket_messages → support_tickets FK order.
+  await supa.from('ticket_messages').delete().gt('created_at', '1970-01-01');
+  await supa.from('support_tickets').delete().gt('created_at', '1970-01-01');
   await supa.from('order_messages').delete().gt('created_at', '1970-01-01');
   await supa.from('order_items').delete().gt('created_at', '1970-01-01');
   await supa.from('orders').delete().gt('created_at', '1970-01-01');
@@ -106,6 +110,7 @@ export async function truncateTestData() {
     'e2e-sales-%',
     'e2e-imp-%',
     'e2e-impui-%',
+    'e2e-support-%',
   ]) {
     const { data: orgs } = await supa.from('organizations').select('id').like('slug', prefix);
     const ids = (orgs ?? []).map((o) => o.id);
