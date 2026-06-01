@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getProfile } from '@/lib/auth/roles';
+import { NavLink } from '@/components/ui/nav-link';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const profile = await getProfile();
@@ -40,13 +40,15 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <nav className="space-y-1">
               {links.map((l) => (
-                <Link
+                <NavLink
                   key={l.href}
                   href={l.href}
+                  exact={l.href === '/admin'}
                   className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm transition"
+                  activeClassName="bg-white shadow-sm font-semibold"
                 >
                   {l.label}
-                </Link>
+                </NavLink>
               ))}
             </nav>
             <form action="/logout" method="POST" className="mt-8">

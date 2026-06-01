@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { getMyRep } from '@/lib/rep/queries';
+import { NavLink } from '@/components/ui/nav-link';
 
 // Shared shell for /rep/*. Requires a sales_reps row (proxy already requires
 // auth). The portal nav shows only for ACTIVE reps; onboarding routes
@@ -38,13 +38,15 @@ export default async function RepLayout({ children }: { children: React.ReactNod
             </div>
             <nav className="space-y-1">
               {links.map((l) => (
-                <Link
+                <NavLink
                   key={l.href}
                   href={l.href}
+                  exact={l.href === '/rep/dashboard'}
                   className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm transition"
+                  activeClassName="bg-white shadow-sm font-semibold"
                 >
                   {l.label}
-                </Link>
+                </NavLink>
               ))}
             </nav>
             <form action="/logout" method="POST" className="mt-8">

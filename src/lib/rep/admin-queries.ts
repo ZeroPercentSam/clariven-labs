@@ -14,7 +14,8 @@ export async function listReps(): Promise<RepListRow[]> {
   const { data: reps } = await supabase
     .from('sales_reps_safe')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .limit(200);
   if (!reps?.length) return [];
   const ids = reps.map((r) => r.id).filter((x): x is string => !!x);
   const { data: profiles } = await supabase.from('profiles').select('id, email').in('id', ids);

@@ -1,6 +1,9 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getProfile } from '@/lib/auth/roles';
+import { NavLink } from '@/components/ui/nav-link';
+
+const NAV = 'block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm';
+const NAV_ACTIVE = 'bg-white shadow-sm font-semibold';
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const profile = await getProfile();
@@ -16,30 +19,31 @@ export default async function PortalLayout({ children }: { children: React.React
             </p>
             <p className="text-cl-navy font-semibold truncate mb-5">{profile.email}</p>
             <nav className="space-y-1">
-              <Link href="/portal" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+              <NavLink href="/portal" exact className={NAV} activeClassName={NAV_ACTIVE}>
                 Orders
-              </Link>
-              <Link href="/portal/resources" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+              </NavLink>
+              <NavLink href="/portal/resources" className={NAV} activeClassName={NAV_ACTIVE}>
                 Resources
-              </Link>
-              <Link href="/portal/support" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+              </NavLink>
+              <NavLink href="/portal/support" className={NAV} activeClassName={NAV_ACTIVE}>
                 Support
-              </Link>
-              <Link href="/portal/account" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+              </NavLink>
+              <NavLink href="/portal/account" className={NAV} activeClassName={NAV_ACTIVE}>
                 Account
-              </Link>
+              </NavLink>
               {profile.role !== 'admin' && profile.organization_id ? (
-                <Link href="/portal/team" className="block px-3 py-2 rounded-lg text-sm text-cl-navy hover:bg-white hover:shadow-sm">
+                <NavLink href="/portal/team" className={NAV} activeClassName={NAV_ACTIVE}>
                   Team
-                </Link>
+                </NavLink>
               ) : null}
               {profile.role === 'admin' ? (
-                <Link
+                <NavLink
                   href="/admin"
                   className="block px-3 py-2 rounded-lg text-sm text-cl-teal hover:bg-white hover:shadow-sm"
+                  activeClassName={NAV_ACTIVE}
                 >
                   Admin
-                </Link>
+                </NavLink>
               ) : null}
             </nav>
             <form action="/logout" method="POST" className="mt-8">

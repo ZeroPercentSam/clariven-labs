@@ -10,15 +10,21 @@ export default async function AdminAffiliates() {
   const supabase = await createClient();
 
   const [{ data: affiliates }, { data: codes }, { data: paidOrders }] = await Promise.all([
-    supabase.from('affiliates').select('*').order('created_at', { ascending: false }),
+    supabase.from('affiliates').select('*').order('created_at', { ascending: false }).limit(200),
     supabase
       .from('affiliate_codes')
       .select('id, affiliate_id, code, discount_pct, active, expires_at')
-      .order('code', { ascending: true }),
+      .order('code', { ascending: true })
+      .limit(500),
+    // Aggregation source — only affiliate-attributed paid orders contribute to
+    // the totals below, so filter to those (correct + far smaller than all
+    // orders) with a generous backstop limit.
     supabase
       .from('orders')
       .select('affiliate_id, applied_code_id, total_cents, discount_cents, status')
-      .in('status', [...PAID_STATES]),
+      .in('status', [...PAID_STATES])
+      .or('affiliate_id.not.is.null,applied_code_id.not.is.null')
+      .limit(5000),
   ]);
 
   // Per-affiliate aggregates
