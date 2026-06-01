@@ -20,6 +20,7 @@ export type Database = {
           actor_id: string
           created_at: string
           id: string
+          impersonated_user_id: string | null
           payload: Json | null
           target_id: string
           target_type: string
@@ -29,6 +30,7 @@ export type Database = {
           actor_id: string
           created_at?: string
           id?: string
+          impersonated_user_id?: string | null
           payload?: Json | null
           target_id: string
           target_type: string
@@ -38,6 +40,7 @@ export type Database = {
           actor_id?: string
           created_at?: string
           id?: string
+          impersonated_user_id?: string | null
           payload?: Json | null
           target_id?: string
           target_type?: string
@@ -46,6 +49,13 @@ export type Database = {
           {
             foreignKeyName: "admin_audit_log_actor_id_fkey"
             columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_audit_log_impersonated_user_id_fkey"
+            columns: ["impersonated_user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -253,6 +263,45 @@ export type Database = {
           processed_at?: string | null
           pulled_at?: string
           time_created?: string | null
+        }
+        Relationships: []
+      }
+      impersonation_sessions: {
+        Row: {
+          admin_user_id: string
+          created_at: string
+          ended_at: string | null
+          ended_reason: string | null
+          expires_at: string
+          id: string
+          impersonated_user_id: string
+          justification: string
+          started_at: string
+          updated_at: string
+        }
+        Insert: {
+          admin_user_id: string
+          created_at?: string
+          ended_at?: string | null
+          ended_reason?: string | null
+          expires_at: string
+          id?: string
+          impersonated_user_id: string
+          justification: string
+          started_at?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_user_id?: string
+          created_at?: string
+          ended_at?: string | null
+          ended_reason?: string | null
+          expires_at?: string
+          id?: string
+          impersonated_user_id?: string
+          justification?: string
+          started_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1364,6 +1413,20 @@ export type Database = {
           total_cents: number
         }[]
       }
+      current_impersonated_user_id: { Args: never; Returns: string }
+      effective_user_id: { Args: never; Returns: string }
+      end_impersonation: { Args: never; Returns: undefined }
+      get_impersonation_context: {
+        Args: never
+        Returns: {
+          email: string
+          expires_at: string
+          full_name: string
+          impersonated_user_id: string
+          session_id: string
+          started_at: string
+        }[]
+      }
       get_invitation_preview: { Args: { p_token: string }; Returns: Json }
       get_rep_invitation_preview: { Args: { p_token: string }; Returns: Json }
       is_active_rep: { Args: never; Returns: boolean }
@@ -1380,9 +1443,17 @@ export type Database = {
       }
       rep_my_orgs: {
         Args: never
-        Returns: { id: string; name: string; slug: string }[]
+        Returns: {
+          id: string
+          name: string
+          slug: string
+        }[]
       }
       stamp_referral: { Args: { p_code: string }; Returns: undefined }
+      start_impersonation: {
+        Args: { p_justification: string; p_target: string }
+        Returns: string
+      }
       submit_invitation_request: {
         Args: {
           p_email: string
