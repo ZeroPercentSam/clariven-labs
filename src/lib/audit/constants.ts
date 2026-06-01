@@ -17,6 +17,7 @@ export const AUDIT_TARGET_TYPES = [
   'affiliate',
   'affiliate_code',
   'product_price',
+  'product_lot',
   'support_ticket',
   'user',
 ] as const;
@@ -35,6 +36,7 @@ export const AUDIT_TARGET_LABELS: Record<string, string> = {
   affiliate: 'Affiliates',
   affiliate_code: 'Affiliate codes',
   product_price: 'Pricing',
+  product_lot: 'Lots',
   support_ticket: 'Support',
   user: 'Users / impersonation',
 };

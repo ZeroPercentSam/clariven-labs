@@ -89,6 +89,10 @@ export async function truncateTestData() {
   // ticket_messages → support_tickets FK order.
   await supa.from('ticket_messages').delete().gt('created_at', '1970-01-01');
   await supa.from('support_tickets').delete().gt('created_at', '1970-01-01');
+  // Lots are net-new (migration 0023), no prod rows yet — wipe wholesale.
+  // lot_alert_notifications → product_lots FK order.
+  await supa.from('lot_alert_notifications').delete().gt('sent_at', '1970-01-01');
+  await supa.from('product_lots').delete().gt('created_at', '1970-01-01');
   await supa.from('order_messages').delete().gt('created_at', '1970-01-01');
   await supa.from('order_items').delete().gt('created_at', '1970-01-01');
   await supa.from('orders').delete().gt('created_at', '1970-01-01');

@@ -9,6 +9,7 @@ export const EMAIL_KINDS = [
   'order-placed',
   'order-paid',
   'order-shipped',
+  'lot-expiration-warning',
 ] as const;
 
 export type EmailKind = (typeof EMAIL_KINDS)[number];
@@ -28,4 +29,5 @@ export const EMAIL_LOG_KIND_LABELS: Record<EmailKind, string> = {
   'order-placed': 'Order placed',
   'order-paid': 'Order paid',
   'order-shipped': 'Order shipped',
+  'lot-expiration-warning': 'Lot expiration warning',
 };

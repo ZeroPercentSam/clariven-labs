@@ -355,6 +355,35 @@ export type Database = {
           },
         ]
       }
+      lot_alert_notifications: {
+        Row: {
+          id: string
+          lot_id: string
+          sent_at: string
+          threshold_days: number
+        }
+        Insert: {
+          id?: string
+          lot_id: string
+          sent_at?: string
+          threshold_days: number
+        }
+        Update: {
+          id?: string
+          lot_id?: string
+          sent_at?: string
+          threshold_days?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lot_alert_notifications_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "product_lots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
@@ -783,6 +812,60 @@ export type Database = {
           file_path?: string
           id?: string
           product_slug?: string
+          strength_label?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
+      product_lots: {
+        Row: {
+          active: boolean
+          coa_file_bytes: number | null
+          coa_file_name: string | null
+          coa_file_path: string | null
+          coa_uploaded_at: string | null
+          created_at: string
+          expiration_date: string
+          id: string
+          lot_number: string
+          notes: string | null
+          product_slug: string
+          received_at: string | null
+          strength_label: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          active?: boolean
+          coa_file_bytes?: number | null
+          coa_file_name?: string | null
+          coa_file_path?: string | null
+          coa_uploaded_at?: string | null
+          created_at?: string
+          expiration_date: string
+          id?: string
+          lot_number: string
+          notes?: string | null
+          product_slug: string
+          received_at?: string | null
+          strength_label?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          active?: boolean
+          coa_file_bytes?: number | null
+          coa_file_name?: string | null
+          coa_file_path?: string | null
+          coa_uploaded_at?: string | null
+          created_at?: string
+          expiration_date?: string
+          id?: string
+          lot_number?: string
+          notes?: string | null
+          product_slug?: string
+          received_at?: string | null
           strength_label?: string
           updated_at?: string
           uploaded_by?: string | null
