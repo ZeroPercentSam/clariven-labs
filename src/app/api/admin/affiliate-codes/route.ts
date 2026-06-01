@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { affiliateCodeUpsertSchema } from '@/lib/schemas/affiliate';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
 
 async function requireAdmin() {
   const supabase = await createClient();
@@ -12,6 +13,8 @@ async function requireAdmin() {
 }
 
 export async function POST(req: Request) {
+  const limited = await rateLimit(clientIp(req), { name: 'admin', limit: 30, windowSec: 60 });
+  if (limited) return limited;
   const gate = await requireAdmin();
   if ('error' in gate) return NextResponse.json({ error: gate.error }, { status: gate.status });
 

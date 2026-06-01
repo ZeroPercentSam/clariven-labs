@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { adminOrderPatchSchema } from '@/lib/schemas/admin';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
 import { sendEmail } from '@/lib/email/send';
 import { orderShippedEmail } from '@/lib/email/templates/order-shipped';
 import { trackingUrl } from '@/lib/tracking';
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const limited = await rateLimit(clientIp(req), { name: 'admin', limit: 30, windowSec: 60 });
+  if (limited) return limited;
   const { id } = await ctx.params;
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();

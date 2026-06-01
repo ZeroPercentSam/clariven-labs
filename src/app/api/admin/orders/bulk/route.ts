@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { adminOrderBulkSchema } from '@/lib/schemas/admin';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
 
 // Bulk status change for selected orders on /admin/orders. Admin-gated (same
 // shape as the single-order PATCH). Writes one audit row for the batch.
@@ -10,6 +11,8 @@ import { adminOrderBulkSchema } from '@/lib/schemas/admin';
 // (single PATCH) is the email path. Bulk is a pure status transition (e.g.
 // processing → paid, → preparing, → cancelled).
 export async function PATCH(req: Request) {
+  const limited = await rateLimit(clientIp(req), { name: 'admin', limit: 30, windowSec: 60 });
+  if (limited) return limited;
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });

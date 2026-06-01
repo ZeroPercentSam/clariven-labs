@@ -5,11 +5,21 @@ import { createOneTimeInvoice } from '@/lib/gbp/invoices';
 import { sendKatieNewOrderSms } from '@/lib/twilio';
 import { sendEmail } from '@/lib/email/send';
 import { orderPlacedEmail } from '@/lib/email/templates/order-placed';
+import { clientIp, rateLimit } from '@/lib/ratelimit';
 
 export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+
+  // Throttle order placement (no-op until Upstash is configured) — order spam
+  // fans out to GBP invoices + ops SMS, so cap it per user.
+  const limited = await rateLimit(auth.user.id ?? clientIp(req), {
+    name: 'orders',
+    limit: 5,
+    windowSec: 60,
+  });
+  if (limited) return limited;
 
   const json = await req.json().catch(() => null);
   const parsed = orderCreateSchema.safeParse(json);
