@@ -60,12 +60,16 @@ export default function CartPage() {
     setCodeState({ status: 'checking' });
     const supabase = createClient();
     const { data, error } = await supabase.rpc('validate_affiliate_code', { p_code: clean });
-    if (error || !data || data.length === 0) {
+    // Only a genuine RPC failure is "can't check right now". The RPC filters out
+    // unknown / inactive / expired codes, so an empty result means the code isn't
+    // valid — not a system error. Conflating the two showed a misleading
+    // transient-error message for a plainly expired code.
+    if (error) {
       setCodeState({ status: 'invalid', message: 'Could not check this code right now.' });
       return;
     }
-    const row = data[0];
-    if (!row.valid) {
+    const row = data?.[0];
+    if (!row || !row.valid) {
       setCodeState({ status: 'invalid', message: 'That code isn\'t active.' });
       setAffiliateCode(null);
       return;

@@ -21,6 +21,10 @@ test('customer cannot reach /admin', async ({ page }) => {
   await page.getByLabel('Email').fill(CUSTOMER_EMAIL);
   await page.getByLabel('Password').fill(TEST_PASSWORD);
   await page.getByRole('button', { name: /sign in/i }).click();
+  // Wait for the server-action sign-in to land (Set-Cookie persisted) before
+  // navigating — otherwise the session cookie races page.goto and /admin bounces
+  // to /login. Login defaults next=/portal for every role.
+  await page.waitForURL(/\/portal/);
   await page.goto('/admin');
   await expect(page).toHaveURL(/\/portal/);
 });
@@ -30,6 +34,10 @@ test('admin signs in and reaches /admin', async ({ page }) => {
   await page.getByLabel('Email').fill(ADMIN_EMAIL);
   await page.getByLabel('Password').fill(TEST_PASSWORD);
   await page.getByRole('button', { name: /sign in/i }).click();
+  // Wait for the server-action sign-in to land (Set-Cookie persisted) before
+  // navigating — otherwise the session cookie races page.goto and /admin bounces
+  // to /login. Login defaults next=/portal for every role.
+  await page.waitForURL(/\/portal/);
   await page.goto('/admin');
   await expect(page.getByRole('heading', { name: /overview/i })).toBeVisible();
 });

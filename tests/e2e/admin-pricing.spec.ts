@@ -19,18 +19,23 @@ test('admin sets a price via the pricing page', async ({ page }) => {
     await page.getByLabel('Email').fill(ADMIN_EMAIL);
     await page.getByLabel('Password').fill(TEST_PASSWORD);
     await page.getByRole('button', { name: /sign in/i }).click();
+    // Wait for the server-action sign-in to land before navigating, else the
+    // session cookie races page.goto and /admin/pricing bounces to /login.
+    await page.waitForURL(/\/portal/);
     await page.goto('/admin/pricing');
 
-    // Filter to a known SKU; the first numeric input is its lowest strength (5 mg).
+    // Filter to a known SKU, then scope to the exact (slug, strength) row via its
+    // data-sku hook. Targeting Retail.first() raced the filter re-render (could
+    // grab an unfiltered input) and the row-scoped save+confirm avoids the weak
+    // "Saved" wait that a never-dirty sibling row satisfies immediately.
     await page.getByPlaceholder(/Filter/i).fill(SLUG);
-    const row = page.getByText(SLUG).first();
+    const row = page.locator(`[data-sku="${SLUG}::${STRENGTH}"]`);
     await expect(row).toBeVisible();
 
     // Target the Retail input specifically (the row also has a Cost input now).
-    const priceInput = page.getByLabel('Retail').first();
-    await priceInput.fill('149.00');
-    await page.getByRole('button', { name: /save/i }).first().click();
-    await expect(page.getByRole('button', { name: /^saved/i }).first()).toBeVisible({ timeout: 5000 });
+    await row.getByLabel('Retail').fill('149.00');
+    await row.getByRole('button', { name: /^save$/i }).click();
+    await expect(row.getByRole('button', { name: /^saved$/i })).toBeVisible({ timeout: 5000 });
 
     const { data } = await supa
       .from('product_prices')

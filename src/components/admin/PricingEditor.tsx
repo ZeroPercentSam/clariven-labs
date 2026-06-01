@@ -151,6 +151,7 @@ export function PricingEditor({ initialRows }: { initialRows: PricingRow[] }) {
             return (
               <div
                 key={`${row.productSlug}::${row.strengthLabel}`}
+                data-sku={`${row.productSlug}::${row.strengthLabel}`}
                 className="grid grid-cols-[minmax(0,1fr)_90px_104px_104px_116px_60px_84px] items-center gap-3 px-4 py-2.5"
               >
                 <div className="min-w-0">

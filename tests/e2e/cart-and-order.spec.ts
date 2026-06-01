@@ -58,8 +58,15 @@ test('add to cart, apply affiliate code, submit order → GBP + Twilio mocks fir
 
 test('expired code is rejected', async ({ page }) => {
   await login(page);
+
+  // The affiliate input only renders once the cart has a line (the empty-cart
+  // state early-returns before it). Seed a line first, mirroring the happy path.
+  await page.goto('/products/single-regulator');
+  await expect(page.getByText(/Available Strengths/i)).toBeVisible();
+  await page.getByRole('button', { name: /10 mg/i }).first().click();
+  await page.getByRole('button', { name: /add to order/i }).click();
+
   await page.goto('/cart');
-  // Nothing in cart if previous test cleared, but affiliate input is not gated on items
   await page.getByPlaceholder('ENTER CODE').fill('EXPIRED5');
   await page.getByRole('button', { name: /apply/i }).click();
   await expect(page.getByText(/isn't active/i)).toBeVisible();
