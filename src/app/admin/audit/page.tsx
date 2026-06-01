@@ -124,6 +124,11 @@ export default async function AdminAuditPage({
                     <span className="block text-[11px] text-cl-gray-400 break-all">
                       {e.actor_email ?? e.actor_id.slice(0, 8)}
                     </span>
+                    {e.impersonated_email ? (
+                      <span className="mt-0.5 inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
+                        acting as {e.impersonated_email}
+                      </span>
+                    ) : null}
                   </td>
                   <td className="px-3 py-2.5 max-w-[280px]">
                     <PayloadCell payload={e.payload} />

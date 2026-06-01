@@ -14,6 +14,7 @@ export type AuditEvent = {
   actor_id: string;
   actor_email: string | null;
   actor_name: string | null;
+  impersonated_email: string | null; // set when the action was taken while impersonating
   payload: Record<string, unknown> | null;
 };
 
@@ -35,6 +36,7 @@ type Row = {
   target_type: string;
   target_id: string;
   actor_id: string;
+  impersonated_user_id: string | null;
   payload: unknown;
 };
 
@@ -76,27 +78,31 @@ export async function listAuditEvents(filters: AuditFilters = {}): Promise<Audit
 
   const base = supabase
     .from('admin_audit_log')
-    .select('id, created_at, action, target_type, target_id, actor_id, payload')
+    .select('id, created_at, action, target_type, target_id, actor_id, impersonated_user_id, payload')
     .order('created_at', { ascending: false })
     .limit(limit);
   const { data, error } = await applyFilters(base, filters);
   if (error || !data) return [];
   const rows = data as Row[];
 
-  const actorIds = Array.from(new Set(rows.map((r) => r.actor_id).filter(Boolean)));
-  const actorMap = new Map<string, { email: string | null; full_name: string | null }>();
-  if (actorIds.length) {
+  // One bulk profiles lookup covering both the actor and any impersonated user.
+  const ids = Array.from(
+    new Set(rows.flatMap((r) => [r.actor_id, r.impersonated_user_id]).filter(Boolean) as string[]),
+  );
+  const profMap = new Map<string, { email: string | null; full_name: string | null }>();
+  if (ids.length) {
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, email, full_name')
-      .in('id', actorIds);
+      .in('id', ids);
     for (const p of profiles ?? []) {
-      actorMap.set(p.id, { email: p.email ?? null, full_name: p.full_name ?? null });
+      profMap.set(p.id, { email: p.email ?? null, full_name: p.full_name ?? null });
     }
   }
 
   return rows.map((r) => {
-    const actor = actorMap.get(r.actor_id);
+    const actor = profMap.get(r.actor_id);
+    const imp = r.impersonated_user_id ? profMap.get(r.impersonated_user_id) : null;
     return {
       id: r.id,
       created_at: r.created_at,
@@ -106,6 +112,7 @@ export async function listAuditEvents(filters: AuditFilters = {}): Promise<Audit
       actor_id: r.actor_id,
       actor_email: actor?.email ?? null,
       actor_name: actor?.full_name ?? null,
+      impersonated_email: imp?.email ?? null,
       payload: normalizePayload(r.payload),
     };
   });

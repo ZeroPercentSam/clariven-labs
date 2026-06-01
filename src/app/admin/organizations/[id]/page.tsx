@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Check, FileText, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { getSessionUser } from '@/lib/auth/roles';
 import { formatDateTime } from '@/lib/format-datetime';
 import { approveOrganization, rejectOrganization } from '@/lib/admin/organizations-actions';
+import { OrgMemberRow } from '@/components/admin/OrgMemberRow';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,9 +45,12 @@ export default async function AdminOrganizationDetailPage({
       .order('created_at', { ascending: false }),
   ]);
 
+  const sessionUser = await getSessionUser();
+  const currentUserId = sessionUser?.id ?? '';
+
   const memberIds = (members ?? []).map((m) => m.user_id);
   const { data: memberProfiles } = memberIds.length
-    ? await supabase.from('profiles').select('id, email, full_name').in('id', memberIds)
+    ? await supabase.from('profiles').select('id, email, full_name, role').in('id', memberIds)
     : { data: [] };
   const profileById = new Map((memberProfiles ?? []).map((p) => [p.id, p]));
 
@@ -88,6 +93,10 @@ export default async function AdminOrganizationDetailPage({
         <p className="mb-4 text-sm text-red-500 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
           A short reason is required to reject.
         </p>
+      ) : error ? (
+        <p className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+          {error}
+        </p>
       ) : null}
 
       <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -110,12 +119,18 @@ export default async function AdminOrganizationDetailPage({
             {(members ?? []).map((m) => {
               const profile = profileById.get(m.user_id);
               return (
-                <li key={m.user_id} className="flex items-center justify-between gap-2">
-                  <span className="text-cl-navy truncate">
-                    {profile?.full_name || profile?.email || m.user_id}
-                  </span>
-                  <span className="text-xs text-cl-gray-400 font-mono">{m.org_role}</span>
-                </li>
+                <OrgMemberRow
+                  key={m.user_id}
+                  member={{
+                    user_id: m.user_id,
+                    org_role: m.org_role,
+                    name: profile?.full_name || profile?.email || m.user_id,
+                    email: profile?.email ?? null,
+                    role: profile?.role ?? 'customer',
+                  }}
+                  currentUserId={currentUserId}
+                  orgId={org.id}
+                />
               );
             })}
           </ul>

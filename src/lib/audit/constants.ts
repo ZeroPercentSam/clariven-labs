@@ -17,6 +17,7 @@ export const AUDIT_TARGET_TYPES = [
   'affiliate',
   'affiliate_code',
   'product_price',
+  'user',
 ] as const;
 
 export type AuditTargetType = (typeof AUDIT_TARGET_TYPES)[number];
@@ -33,6 +34,7 @@ export const AUDIT_TARGET_LABELS: Record<string, string> = {
   affiliate: 'Affiliates',
   affiliate_code: 'Affiliate codes',
   product_price: 'Pricing',
+  user: 'Users / impersonation',
 };
 
 export function auditTargetLabel(targetType: string): string {

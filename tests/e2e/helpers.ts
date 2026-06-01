@@ -105,6 +105,7 @@ export async function truncateTestData() {
     'e2e-ordtools-%',
     'e2e-sales-%',
     'e2e-imp-%',
+    'e2e-impui-%',
   ]) {
     const { data: orgs } = await supa.from('organizations').select('id').like('slug', prefix);
     const ids = (orgs ?? []).map((o) => o.id);
