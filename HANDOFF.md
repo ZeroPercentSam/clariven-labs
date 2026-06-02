@@ -59,7 +59,13 @@ ClarivenLabs (RUO / research-use-only) is being raised to the backend-completene
 
 **Decisions locked (from Sam):** scope = **Tier B** (full Bioveris parity, RUO-adapted); legal entity = **Clariven Labs LLC, Wyoming**; signup email-verification ON (`mailer_autoconfirm=false`); clinical-audience pages retargeted to research.
 
-**Blocked on Sam — creds (deferred to cutover):** create a Resend project + `updates.clarivenlabs.com` DNS (SPF/DKIM/DMARC), set `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (`ClarivenLabs <noreply@updates.clarivenlabs.com>`) / `RESEND_REPLY_TO` (`support@clarivenlabs.com`) on Vercel prod+preview+dev + `.env.local`, and provide a `SUPABASE_ACCESS_TOKEN` (sbp_…, rotate after) to run `scripts/configure-supabase-auth.mjs`. The email layer no-ops cleanly until the key lands — nothing breaks.
+**Cutover creds — status (2026-06-02):**
+- ✅ **Resend DONE** — domain `updates.clarivenlabs.com` verified; `RESEND_API_KEY` / `RESEND_FROM_EMAIL` (`ClarivenLabs <noreply@updates.clarivenlabs.com>`) / `RESEND_REPLY_TO` (`support@clarivenlabs.com`) set on Vercel prod+preview+dev + `.env.local`; live test send OK; deploy `7918a7d` READY → prod `/api/healthz` shows `resend:"configured"`. **App transactional email layer is LIVE** (order placed/paid/shipped + lot-expiration alerts). ⚠️ The key was pasted in chat — **rotate it** and update the 3 Vercel envs + `.env.local`.
+- ⏳ **`SUPABASE_ACCESS_TOKEN`** (sbp_…, rotate after) — run `scripts/configure-supabase-auth.mjs` to set Supabase Site URL + redirect allow-list + the branded RUO recovery email (Supabase SMTP via Resend). Until then, password-reset emails are NOT branded/may not send from the Clariven domain.
+- ⏳ **`UPSTASH_REDIS_REST_URL` + `_TOKEN`** — flips rate-limiting from no-op → live 429s.
+- ⏳ **Live GBP + Twilio creds** — set on Vercel prod, then flip `GBP_MOCK`/`TWILIO_MOCK=false` (healthz still shows `gbp:"mock"` / `twilio:"mock"`).
+
+Full cutover steps: `docs/phase7-cutover-runbook.md`.
 
 **✅ RESOLVED — pricing markup (Sam confirmed 2026-05-31):** retail = **4×** COGS (cost + 300%), matching the client sheet exactly on all 60 SKUs. Migration `0008` seeds it; `0007` corrects the old 3× comment; `RUO_MARKUP_MULTIPLIER=4` in `src/lib/pricing.ts`. Sam also confirmed the GLP-1 **slug + display + redirect** rename (not display-only).
 
