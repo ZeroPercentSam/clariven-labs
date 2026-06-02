@@ -56,6 +56,9 @@ export default function ProductDetailPage() {
   const product = products.find((p) => p.slug === slug);
 
   const [coaUrl, setCoaUrl] = useState<string | null>(null);
+  const [lotCoas, setLotCoas] = useState<
+    { lotNumber: string; strengthLabel: string; expirationDate: string; url: string }[]
+  >([]);
 
   useEffect(() => {
     if (!slug) return;
@@ -76,6 +79,37 @@ export default function ProductDetailPage() {
         setCoaUrl(pub.publicUrl);
       } catch {
         /* leave button hidden */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+
+  // Lot-level COAs (public projection — active lots that have a COA). Read via
+  // the anon SECURITY DEFINER RPC list_public_lot_coas; product_lots itself
+  // stays admin-only. Files live in the public product-coas bucket.
+  useEffect(() => {
+    if (!slug) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase.rpc('list_public_lot_coas', { p_slug: slug });
+        if (cancelled || !data) return;
+        const rows = data
+          .filter((r) => r.coa_file_path)
+          .map((r) => ({
+            lotNumber: r.lot_number,
+            strengthLabel: r.strength_label,
+            expirationDate: r.expiration_date,
+            url: supabase.storage
+              .from('product-coas')
+              .getPublicUrl(r.coa_file_path as string).data.publicUrl,
+          }));
+        setLotCoas(rows);
+      } catch {
+        /* leave lot COAs empty */
       }
     })();
     return () => {
@@ -339,6 +373,45 @@ export default function ProductDetailPage() {
               ))}
             </div>
           </FadeIn>
+
+          {/* Lot-level COAs (batch-specific certificates) */}
+          {lotCoas.length > 0 && (
+            <FadeIn delay={0.5}>
+              <div className="mt-6 p-8 rounded-2xl bg-white border border-cl-gray-200">
+                <h3 className="text-lg font-semibold text-cl-navy mb-1">
+                  Certificates of Analysis by Lot
+                </h3>
+                <p className="text-cl-gray-500 text-sm mb-5">
+                  Batch-specific certificates for current lots. For Research Use Only.
+                </p>
+                <div className="divide-y divide-cl-gray-100">
+                  {lotCoas.map((lot) => (
+                    <div
+                      key={`${lot.strengthLabel}::${lot.lotNumber}`}
+                      className="flex items-center justify-between gap-4 py-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-mono text-sm text-cl-navy">Lot {lot.lotNumber}</p>
+                        <p className="text-xs text-cl-gray-400">
+                          {lot.strengthLabel ? `${lot.strengthLabel} · ` : ''}Exp{' '}
+                          {lot.expirationDate}
+                        </p>
+                      </div>
+                      <a
+                        href={lot.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-cl-teal/40 text-cl-navy text-sm font-medium hover:border-cl-teal hover:bg-cl-teal/5 transition-all shrink-0"
+                      >
+                        <Download className="w-4 h-4 text-cl-teal" />
+                        COA
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+          )}
         </div>
       </section>
 

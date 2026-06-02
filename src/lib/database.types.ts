@@ -1637,6 +1637,16 @@ export type Database = {
       is_active_rep: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }
+      list_public_lot_coas: {
+        Args: { p_slug: string }
+        Returns: {
+          coa_file_name: string
+          coa_file_path: string
+          expiration_date: string
+          lot_number: string
+          strength_label: string
+        }[]
+      }
       list_public_prices: {
         Args: { p_slug?: string }
         Returns: {
