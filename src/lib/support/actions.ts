@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getProfile, getSessionUser, requireAdmin } from '@/lib/auth/roles';
+import { requireActiveRep } from '@/lib/rep/portal-queries';
 import { supabaseEnvConfigured } from '@/lib/supabase/env';
 import { ticketCreateSchema, ticketReplySchema } from '@/lib/schemas/support';
 import { TICKET_PRIORITIES, TICKET_STATUSES } from '@/lib/support/constants';
@@ -102,6 +103,57 @@ export async function createTicket(formData: FormData): Promise<ActionResult> {
 }
 
 /**
+ * Rep-side ticket creation. A rep has no org, so the ticket is org-less
+ * (organization_id null, created_by = rep id). The 0025 tkt_ins RLS only allows
+ * this org-null insert for an active rep; requireActiveRep is defense in depth +
+ * gives us the rep id. No order link (reps don't own org orders).
+ */
+export async function createRepTicket(formData: FormData): Promise<ActionResult> {
+  if (!supabaseEnvConfigured()) {
+    return { ok: false, error: "Can't reach the data service right now. Try again shortly." };
+  }
+
+  const rep = await requireActiveRep(); // redirects if not an active rep
+
+  const parsed = ticketCreateSchema.safeParse({
+    subject: formData.get('subject')?.toString() ?? '',
+    body: formData.get('body')?.toString() ?? '',
+    category: formData.get('category')?.toString() || undefined,
+    order_id: '', // reps never link an order
+  });
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: 'Check the form for errors.',
+      fieldErrors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+    };
+  }
+
+  const supabase = await createClient();
+  const { data: inserted, error: insErr } = await supabase
+    .from('support_tickets')
+    .insert({
+      organization_id: null,
+      created_by: rep.id,
+      subject: parsed.data.subject,
+      body: parsed.data.body,
+      category: parsed.data.category ?? null,
+      order_id: null,
+      status: 'open',
+      priority: 'normal',
+    })
+    .select('id')
+    .single();
+  if (insErr || !inserted) {
+    return { ok: false, error: insErr?.message ?? 'Could not create the ticket.' };
+  }
+
+  revalidatePath('/rep/support');
+  revalidatePath('/admin/support');
+  redirect(`/rep/support/${inserted.id}`);
+}
+
+/**
  * Post a reply. Both customer + admin use this. is_internal is honored only when
  * the caller is a real admin (also enforced by the tmsg_ins RLS). The reopen +
  * updated_at re-sort are handled by the ticket_reopen_on_reply trigger.
@@ -148,8 +200,10 @@ export async function replyToTicket(ticketId: string, formData: FormData): Promi
 
   revalidatePath(`/portal/support/${ticketId}`);
   revalidatePath(`/admin/support/${ticketId}`);
+  revalidatePath(`/rep/support/${ticketId}`);
   revalidatePath('/portal/support');
   revalidatePath('/admin/support');
+  revalidatePath('/rep/support');
   return { ok: true };
 }
 

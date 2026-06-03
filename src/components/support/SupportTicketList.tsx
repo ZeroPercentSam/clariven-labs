@@ -12,13 +12,15 @@ import { TicketPriorityBadge, TicketStatusBadge } from './TicketStatusBadge';
 // server — the project's documented pattern that sidesteps the Next-16 RSC
 // freeze class. No URL sync needed (the list is small + ephemeral).
 
-type Mode = 'customer' | 'admin';
+type Mode = 'customer' | 'admin' | 'rep';
 type Chip = { value: string; label: string; match: (t: TicketSummary) => boolean };
 
 const ACTIVE = new Set(['open', 'in_progress', 'waiting_customer']);
 
 function chipsFor(mode: Mode): Chip[] {
-  if (mode === 'customer') {
+  // customer + rep share the simple All/Active/Resolved chips; admin gets the
+  // full status breakdown.
+  if (mode !== 'admin') {
     return [
       { value: 'all', label: 'All', match: () => true },
       { value: 'active', label: 'Active', match: (t) => ACTIVE.has(t.status) },
@@ -113,7 +115,7 @@ export function SupportTicketList({
                     ) : null}
                   </td>
                   {mode === 'admin' ? (
-                    <td className="px-4 py-3 align-top text-cl-gray-600">{t.organizationName ?? '—'}</td>
+                    <td className="px-4 py-3 align-top text-cl-gray-600">{t.organizationName ?? 'Rep'}</td>
                   ) : (
                     <td className="px-4 py-3 align-top text-cl-gray-600">{ticketCategoryLabel(t.category)}</td>
                   )}

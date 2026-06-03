@@ -18,7 +18,7 @@ export type TicketSummary = {
   updatedAt: string;
   resolvedAt: string | null;
   orderId: string | null;
-  organizationId: string;
+  organizationId: string | null;
   organizationName: string | null;
   createdByName: string | null;
   createdByEmail: string | null;
@@ -98,7 +98,7 @@ type RawSummaryRow = {
   updated_at: string;
   resolved_at: string | null;
   order_id: string | null;
-  organization_id: string;
+  organization_id: string | null;
   created_by: string | null;
   organizations: { name: string } | { name: string }[] | null;
   ticket_messages: { created_at: string }[] | null;
@@ -153,6 +153,23 @@ export async function listOrgTickets(): Promise<TicketSummary[]> {
     .from('support_tickets')
     .select(SUMMARY_COLUMNS)
     .eq('organization_id', profile.organization_id)
+    .order('updated_at', { ascending: false });
+  if (error || !data) return [];
+  return toSummaries(supabase, data as unknown as RawSummaryRow[]);
+}
+
+/**
+ * Rep-side list — tickets the rep authored (org-less, organization_id null). The
+ * 0025 RLS scopes reads to created_by = self for an org-less rep; we filter
+ * explicitly too (index use + clarity). Empty for a missing rep id.
+ */
+export async function listRepTickets(repUserId: string): Promise<TicketSummary[]> {
+  if (!repUserId) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('support_tickets')
+    .select(SUMMARY_COLUMNS)
+    .eq('created_by', repUserId)
     .order('updated_at', { ascending: false });
   if (error || !data) return [];
   return toSummaries(supabase, data as unknown as RawSummaryRow[]);

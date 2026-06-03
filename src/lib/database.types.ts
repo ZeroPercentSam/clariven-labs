@@ -1377,7 +1377,7 @@ export type Database = {
           created_by: string
           id: string
           order_id: string | null
-          organization_id: string
+          organization_id: string | null
           priority: string
           resolved_at: string | null
           status: string
@@ -1393,7 +1393,7 @@ export type Database = {
           created_by?: string
           id?: string
           order_id?: string | null
-          organization_id: string
+          organization_id?: string | null
           priority?: string
           resolved_at?: string | null
           status?: string
@@ -1409,7 +1409,7 @@ export type Database = {
           created_by?: string
           id?: string
           order_id?: string | null
-          organization_id?: string
+          organization_id?: string | null
           priority?: string
           resolved_at?: string | null
           status?: string

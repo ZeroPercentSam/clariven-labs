@@ -1,27 +1,35 @@
+import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import { requireActiveRep } from '@/lib/rep/portal-queries';
+import { listRepTickets } from '@/lib/support/queries';
+import { SupportTicketList } from '@/components/support/SupportTicketList';
 
 export const metadata = { title: 'Rep support — Clariven Labs' };
 export const dynamic = 'force-dynamic';
 
 export default async function RepSupportPage() {
-  await requireActiveRep();
+  const rep = await requireActiveRep();
+  const tickets = await listRepTickets(rep.id);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-cl-navy mb-6">Support</h1>
-      <div className="bg-white border border-cl-gray-200 rounded-xl p-6 space-y-3 text-sm text-cl-gray-600">
-        <p>
-          Questions about commissions, payouts, or your assigned organizations? Email the rep desk
-          and we&apos;ll get back to you.
-        </p>
-        <p>
-          <a href="mailto:reps@clarivenlabs.com" className="text-cl-teal font-semibold hover:text-cl-teal/80">
-            reps@clarivenlabs.com
-          </a>
-        </p>
-        <p className="text-xs text-cl-gray-400">
-          A full in-app ticketing surface is on the roadmap. For now, email is fastest.
-        </p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold text-cl-navy">Support</h1>
+          <p className="text-sm text-cl-gray-500 mt-1">
+            Questions about commissions, payouts, or your assigned organizations.
+          </p>
+        </div>
+        <Link
+          href="/rep/support/new"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cl-teal text-white text-sm font-semibold hover:bg-cl-teal-light"
+        >
+          <Plus className="w-4 h-4" />
+          New ticket
+        </Link>
       </div>
+
+      <SupportTicketList tickets={tickets} basePath="/rep/support" mode="rep" />
     </div>
   );
 }

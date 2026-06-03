@@ -1,15 +1,17 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { createTicket } from '@/lib/support/actions';
+import { createRepTicket, createTicket } from '@/lib/support/actions';
 import { TICKET_CATEGORIES, ticketCategoryLabel } from '@/lib/support/constants';
 
 export function TicketCreateForm({
-  linkableOrders,
+  linkableOrders = [],
   defaultOrderId,
+  repMode = false,
 }: {
-  linkableOrders: Array<{ id: string; orderNumber: number }>;
+  linkableOrders?: Array<{ id: string; orderNumber: number }>;
   defaultOrderId?: string;
+  repMode?: boolean;
 }) {
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
@@ -19,8 +21,8 @@ export function TicketCreateForm({
     setError(null);
     setFieldErrors({});
     startTransition(async () => {
-      // createTicket redirects on success; only an error result returns here.
-      const res = await createTicket(formData);
+      // create{Rep}Ticket redirects on success; only an error result returns here.
+      const res = await (repMode ? createRepTicket(formData) : createTicket(formData));
       if (res && !res.ok) {
         setError(res.error);
         setFieldErrors(res.fieldErrors ?? {});
@@ -63,23 +65,25 @@ export function TicketCreateForm({
           </select>
         </label>
 
-        <label className="block">
-          <span className="block text-[11px] font-semibold tracking-wider text-cl-gray-500 uppercase mb-1">
-            Link an order (optional)
-          </span>
-          <select
-            name="order_id"
-            defaultValue={defaultOrderId ?? ''}
-            className="w-full px-3 py-2 rounded-lg border border-cl-gray-200 text-sm bg-white text-cl-navy"
-          >
-            <option value="">— None —</option>
-            {linkableOrders.map((o) => (
-              <option key={o.id} value={o.id}>
-                Order #{o.orderNumber}
-              </option>
-            ))}
-          </select>
-        </label>
+        {!repMode ? (
+          <label className="block">
+            <span className="block text-[11px] font-semibold tracking-wider text-cl-gray-500 uppercase mb-1">
+              Link an order (optional)
+            </span>
+            <select
+              name="order_id"
+              defaultValue={defaultOrderId ?? ''}
+              className="w-full px-3 py-2 rounded-lg border border-cl-gray-200 text-sm bg-white text-cl-navy"
+            >
+              <option value="">— None —</option>
+              {linkableOrders.map((o) => (
+                <option key={o.id} value={o.id}>
+                  Order #{o.orderNumber}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
       </div>
 
       <label className="block">
