@@ -90,11 +90,24 @@ export async function createClientAccount(input: {
     };
   }
 
+  const supabase = await createClient();
+
+  // 0. Reject a duplicate email up front. The admin API may not always error on
+  //    a pre-existing email; without this guard provision_client_member would
+  //    reassign that existing user's org + membership (account hijack). Admin can
+  //    read all profiles via RLS; email is citext (case-insensitive).
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('email', email)
+    .maybeSingle();
+  if (existing) {
+    return { ok: false, error: 'An account with that email already exists.', fieldErrors: { email: ['An account with that email already exists.'] } };
+  }
+
   // 1. auth user with a generated password (service-role, gated above)
   const prov = await provisionAuthUser({ email, fullName });
   if (!prov.ok) return { ok: false, error: prov.error };
-
-  const supabase = await createClient();
 
   // 2. link profile → org + membership (definer RPC, real-admin gated)
   rpcArgs.p_user_id = prov.userId;
@@ -158,7 +171,16 @@ export async function setEngagementStatus(formData: FormData): Promise<void> {
 
   const supabase = await createClient();
   const patch: { status: string; launched_at?: string } = { status: parsed.data.status };
-  if (parsed.data.status === 'live') patch.launched_at = new Date().toISOString();
+  // Stamp launched_at only on the FIRST go-live, so a live→paused→live cycle
+  // preserves the original launch date.
+  if (parsed.data.status === 'live') {
+    const { data: cur } = await supabase
+      .from('client_onboarding')
+      .select('launched_at')
+      .eq('organization_id', parsed.data.orgId)
+      .maybeSingle();
+    if (cur && !cur.launched_at) patch.launched_at = new Date().toISOString();
+  }
   const { error } = await supabase
     .from('client_onboarding')
     .update(patch)

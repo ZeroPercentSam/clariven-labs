@@ -19,7 +19,7 @@ export function OnboardingProgressRing({
   const offset = circumference - (clamped / 100) * circumference;
 
   return (
-    <div className="inline-flex flex-col items-center">
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
         <circle
           cx={size / 2}
@@ -41,9 +41,9 @@ export function OnboardingProgressRing({
           style={{ stroke: 'var(--cl-teal, #0D9488)', transition: 'stroke-dashoffset 500ms ease' }}
         />
       </svg>
-      <div className="-mt-[88px] mb-[44px] text-center">
-        <span className="block text-2xl font-bold text-cl-navy leading-none">{clamped}%</span>
-        {caption ? <span className="block text-[11px] text-cl-gray-500 mt-1">{caption}</span> : null}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span className="text-2xl font-bold text-cl-navy leading-none">{clamped}%</span>
+        {caption ? <span className="text-[11px] text-cl-gray-500 mt-1">{caption}</span> : null}
       </div>
     </div>
   );

@@ -57,6 +57,32 @@ export function OnboardingChecklist({
     return { per, done, total };
   }, [phases, statuses]);
 
+  // Accordion open state, initialized once to the first not-yet-complete phase.
+  // Kept independent of completion so checking the last item of the phase you're
+  // working in does NOT collapse it, and manual expand/collapse persists.
+  const [openPhases, setOpenPhases] = useState<Record<number, boolean>>(() => {
+    const m: Record<number, boolean> = {};
+    let openedFirst = false;
+    for (const p of phases) {
+      let done = 0;
+      let total = 0;
+      for (const s of p.steps)
+        for (const it of s.items) {
+          if (it.status === 'na') continue;
+          total += 1;
+          if (it.status === 'done') done += 1;
+        }
+      const complete = total > 0 && done === total;
+      if (!complete && !openedFirst) {
+        m[p.phaseId] = true;
+        openedFirst = true;
+      } else {
+        m[p.phaseId] = false;
+      }
+    }
+    return m;
+  });
+
   function toggle(itemId: number) {
     const prev = statuses[itemId] ?? 'pending';
     const next: ItemStatus = prev === 'done' ? 'pending' : 'done';
@@ -81,18 +107,17 @@ export function OnboardingChecklist({
         </p>
       ) : null}
 
-      {phases.map((phase, idx) => {
+      {phases.map((phase) => {
         const c = counts.per[phase.phaseId] ?? { done: 0, total: 0 };
         const complete = c.total > 0 && c.done === c.total;
-        // Open the first not-yet-complete phase by default; collapse the rest.
-        const defaultOpen = !complete && phases.slice(0, idx).every((p) => {
-          const pc = counts.per[p.phaseId];
-          return pc && pc.total > 0 && pc.done === pc.total;
-        });
         return (
           <details
             key={phase.phaseId}
-            open={defaultOpen}
+            open={openPhases[phase.phaseId] ?? false}
+            onToggle={(e) => {
+              const isOpen = (e.currentTarget as HTMLDetailsElement).open;
+              setOpenPhases((m) => (m[phase.phaseId] === isOpen ? m : { ...m, [phase.phaseId]: isOpen }));
+            }}
             className="bg-white border border-cl-gray-200 rounded-xl overflow-hidden group"
           >
             <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer list-none select-none hover:bg-cl-gray-50">
