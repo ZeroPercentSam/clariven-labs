@@ -158,6 +158,102 @@ export type Database = {
         }
         Relationships: []
       }
+      client_item_status: {
+        Row: {
+          created_at: string
+          done_at: string | null
+          done_by: string | null
+          item_id: number
+          label_override: string | null
+          notes: string | null
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          done_at?: string | null
+          done_by?: string | null
+          item_id: number
+          label_override?: string | null
+          notes?: string | null
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          done_at?: string | null
+          done_by?: string | null
+          item_id?: number
+          label_override?: string | null
+          notes?: string | null
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_item_status_done_by_fkey"
+            columns: ["done_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_item_status_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "onboarding_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_item_status_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_onboarding: {
+        Row: {
+          created_at: string
+          launched_at: string | null
+          notes: string | null
+          organization_id: string
+          started_at: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          launched_at?: string | null
+          notes?: string | null
+          organization_id: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          launched_at?: string | null
+          notes?: string | null
+          organization_id?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_onboarding_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_resources: {
         Row: {
           active: boolean
@@ -202,6 +298,51 @@ export type Database = {
           uploaded_by?: string | null
         }
         Relationships: []
+      }
+      client_step_status: {
+        Row: {
+          created_at: string
+          flag: string | null
+          notes: string | null
+          organization_id: string
+          owner_override: string | null
+          step_id: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          flag?: string | null
+          notes?: string | null
+          organization_id: string
+          owner_override?: string | null
+          step_id: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          flag?: string | null
+          notes?: string | null
+          organization_id?: string
+          owner_override?: string | null
+          step_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_step_status_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_step_status_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "onboarding_steps"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       email_log: {
         Row: {
@@ -380,6 +521,124 @@ export type Database = {
             columns: ["lot_id"]
             isOneToOne: false
             referencedRelation: "product_lots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_items: {
+        Row: {
+          active: boolean
+          category: string | null
+          created_at: string
+          help_text: string | null
+          id: number
+          label: string
+          sort_order: number
+          step_id: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string | null
+          created_at?: string
+          help_text?: string | null
+          id?: never
+          label: string
+          sort_order: number
+          step_id: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string | null
+          created_at?: string
+          help_text?: string | null
+          id?: never
+          label?: string
+          sort_order?: number
+          step_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_items_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "onboarding_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onboarding_phases: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: number
+          sort_order: number
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id: number
+          sort_order: number
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: number
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      onboarding_steps: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          id: number
+          owner_role: string
+          phase_id: number
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id: number
+          owner_role: string
+          phase_id: number
+          sort_order: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: number
+          owner_role?: string
+          phase_id?: number
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_steps_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "onboarding_phases"
             referencedColumns: ["id"]
           },
         ]
@@ -1492,6 +1751,31 @@ export type Database = {
       }
     }
     Views: {
+      client_onboarding_progress: {
+        Row: {
+          current_phase_title: string | null
+          items_blocked: number | null
+          items_done: number | null
+          items_na: number | null
+          items_total: number | null
+          launched_at: string | null
+          organization_id: string | null
+          organization_name: string | null
+          organization_slug: string | null
+          pct_complete: number | null
+          started_at: string | null
+          status: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_onboarding_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_reps_safe: {
         Row: {
           address_city: string | null
@@ -1656,6 +1940,17 @@ export type Database = {
           strength_label: string
         }[]
       }
+      provision_client_member: {
+        Args: {
+          p_full_name?: string
+          p_legal_name?: string
+          p_name?: string
+          p_org_id?: string
+          p_org_role?: string
+          p_user_id: string
+        }
+        Returns: string
+      }
       rep_my_orgs: {
         Args: never
         Returns: {
@@ -1665,6 +1960,10 @@ export type Database = {
         }[]
       }
       stamp_referral: { Args: { p_code: string }; Returns: undefined }
+      start_client_onboarding: {
+        Args: { p_org_id: string }
+        Returns: undefined
+      }
       start_impersonation: {
         Args: { p_justification: string; p_target: string }
         Returns: string

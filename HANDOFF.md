@@ -6,6 +6,23 @@
 
 ## Where we are
 
+> **2026-06-18 — Consulting pivot, phase 1 (backend + functional UI).** ClarivenLabs is becoming a
+> consulting company that onboards client brands through a fixed **9-phase / 21-step / 127-item**
+> program (the onboarding guide). New surfaces: admin **Clients** portal (`/admin/clients`, `/new`,
+> `/[id]`) provisions a client login with a **generated password shown once** + seeds the checklist;
+> clients sign in to **`/portal/onboarding`** to see progress and check items off (anyone in the org
+> can, per Sam). Backend: migrations **`0026`–`0028`** — template `onboarding_phases/steps/items`
+> (seeded 1:1 from the guide) + thin per-org `client_item_status` / `client_step_status` /
+> `client_onboarding`; step completion **derived from items** (no drift); RLS rides
+> `is_admin()`/`user_org_id()`; RPCs `provision_client_member` + `start_client_onboarding`;
+> `client_onboarding_progress` view. Code: `src/lib/clients/*`, `src/components/clients/*`.
+> **Service-role exception (see invariant #1):** `src/lib/clients/provision.ts` is the only non-cron
+> Admin-API caller (mints the password), gated by `requireAdmin()` in `createClientAccount`. Verified:
+> typecheck / lint (12 baseline held) / build green; security advisors **0 new criticals** (two
+> expected WARNs on the self-gated definer RPCs); new `tests/e2e/client-onboarding.spec.ts` **3/3** +
+> `site-no-clinical` 12/12. **Not yet committed / deployed.** Possible fast-follows: per-step
+> blocked/N-A flags, force-password-change on first login, an admin template editor.
+
 **Snapshot as of 2026-06-03 — "Bioveris-grade" production sprint · Phases 0–2B + Phase 3 (orgs) + Phase 4 (rep / commission engine, c1–c6) complete. Phase 5 STARTED: admin power tools (c1 audit · c2 orders bulk/inline/CSV · c3 sales dashboard) + customer impersonation (d1 effective-user RLS core + d2 admin UI) + support tickets (b) + lot/COA-lite (c) COMPLETE — Phase 5 done. Phase 6 STARTED: ops/perf — healthz (6a) + mock-aware rate-limiting (6b) + nav rapid-click guards & bounded queues (6c) COMPLETE (Sentry + cacheComponents deferred). Phase 7 STARTED — track (b) flake-stabilization COMPLETE: the 4 documented E2E flakes are FIXED; track (a) cutover IN PROGRESS — **Resend app email layer + Supabase branded RUO auth email (Site URL/allow-list/recovery) are LIVE & verified on prod** (healthz `resend:"configured"`; reset email delivered with apex link); remaining cutover = Upstash (rate-limit no-op) + live GBP/Twilio (mocks still on). **No-creds fast-follows SHIPPED (2026-06-03): customer-PDP lot COAs (mig `0024`) + `/rep/support` wired to the ticket engine (mig `0025`). Full suite 98/98 green.** Runbook: `docs/phase7-cutover-runbook.md`. All deployed READY on clarivenlabs.com. c7 (team-leader splits) deferred by design.**
 
 ClarivenLabs (RUO / research-use-only) is being raised to the backend-completeness bar of its sibling **Bioveris**, RUO-adapted. Full plan (Tier B, RUO-adapted, with the INCLUDE/ADAPT/DROP scope table + pricing analysis): **`~/.claude/plans/i-am-going-to-validated-prism.md`** — read it. Sibling refs: Bioveris `/Users/samovington/Bioveris` (gold standard, 141 migrations), Purity Science `/Users/samovington/Purityscience` (pattern library, 109 migrations). Portable fixes: `/Users/samovington/Bioveris/docs/portable-fixes-2026-05-26.md`.
