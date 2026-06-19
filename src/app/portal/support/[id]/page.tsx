@@ -53,16 +53,6 @@ export default async function PortalTicketDetail({ params }: { params: Promise<{
             <Row label="Status" value={<TicketStatusBadge status={ticket.status} />} />
             <Row label="Category" value={ticketCategoryLabel(ticket.category)} />
             <Row label="Opened" value={formatDateTime(ticket.createdAt)} />
-            {ticket.orderId ? (
-              <Row
-                label="Order"
-                value={
-                  <Link href={`/portal/orders/${ticket.orderId}`} className="text-cl-teal hover:underline">
-                    #{ticket.orderNumber}
-                  </Link>
-                }
-              />
-            ) : null}
           </div>
         </aside>
       </div>
