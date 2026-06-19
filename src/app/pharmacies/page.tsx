@@ -49,24 +49,24 @@ export default function PharmaciesPage() {
               For Biotech & Contract Research
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Research-Grade Peptides for
+              RUO Product Programs,
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-                R&amp;D at Scale
+                Built for R&amp;D Teams
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-              Clariven Labs supplies biotech R&amp;D teams, pharma research groups, and CROs with
-              research-grade peptide reference material backed by complete characterization
-              documentation and batch-to-batch consistency. For laboratory research use only.
+              Clariven Labs helps biotech R&amp;D teams, pharma research groups, and CROs stand up
+              compliant research-use-only product programs — compliance, documentation, brand, and
+              operations, coordinated end to end. For laboratory research use only.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Open an R&amp;D Account
+                Talk to Our Team
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/quality" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View Quality Standards
+                Our Quality Standards
               </Link>
             </div>
           </motion.div>
@@ -79,22 +79,22 @@ export default function PharmaciesPage() {
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Built for R&amp;D</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Your Research Supply Partner, Not Just a Vendor
+              A Partner From Concept to Launch
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              We understand the unique characterization, quality, and operational demands
-              of biotech and CRO research programs — because we built our supply chain around them.
+              We understand the compliance, documentation, and operational demands of biotech and CRO
+              research programs — and we handle the groundwork so your team can stay on the science.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Scale, title: 'MTAs & Procurement Support', description: 'Material Transfer Agreements, purchase-order workflows, and vendor-onboarding paperwork handled to fit institutional and corporate procurement processes.' },
-              { icon: FileCheck, title: 'Full COA & Documentation', description: 'Batch-specific COAs with HPLC, MS, endotoxin, and sterility results plus safety data sheets, stability reports, and supplier qualification files.' },
-              { icon: Layers, title: 'Bulk Research Material', description: 'Gram-to-kilogram quantities with consistent lot sizes. Multi-lot reservations available for high-volume R&D programs.' },
-              { icon: Package, title: 'Research-Grade Packaging', description: 'Properly labeled, sealed, and stored material arrives in research-grade packaging with tamper-evident seals and temperature indicators.' },
-              { icon: Truck, title: 'Reliable Supply Chain', description: 'Multi-source manufacturing network eliminates single-point-of-failure risks. Safety stock programs available for critical research lots.' },
-              { icon: Building2, title: 'Vendor Qualification Support', description: 'We support your supplier-qualification and quality audits with characterization documentation, audit histories, and technical correspondence.' },
+              { icon: Scale, title: 'Compliance & Positioning', description: 'Research-use-only positioning, labeling, and attestations set up to withstand scrutiny from day one.' },
+              { icon: FileCheck, title: 'Documentation & COAs', description: 'Batch records, COAs, safety data, and stability reports organized into an audit-ready package.' },
+              { icon: Layers, title: 'Brand & Storefront', description: 'A credible brand identity and storefront, stood up and maintained for your research-use-only program.' },
+              { icon: Package, title: 'Fulfillment & 3PL', description: 'Labeling, packaging, and third-party logistics coordinated through vetted partners.' },
+              { icon: Truck, title: 'Operations Setup', description: 'Payments, order flow, and the operational backbone wired up and handed over running.' },
+              { icon: Building2, title: 'Vendor & Audit Readiness', description: 'Supplier-qualification files, audit histories, and technical documentation ready before buyers ask.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-lg hover:shadow-cl-teal/5 transition-all duration-300">
@@ -189,19 +189,16 @@ export default function PharmaciesPage() {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Upgrade Your Research Supply Chain
+              Ready to Launch Your RUO Program?
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Request bulk pricing, sample COAs, or schedule a call with our research
-              supply team. We&apos;ll show you why leading biotech and CRO labs choose Clariven.
+              Schedule a call with our team to scope the compliance, documentation, and operations
+              behind your research-use-only program. We&apos;ll map the path from where you are to launch.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Request Bulk Pricing
+                Request a Consultation
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="/products" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View Research Catalog
               </Link>
             </div>
           </FadeIn>

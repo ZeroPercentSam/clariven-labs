@@ -609,12 +609,6 @@ export default function QualityPage() {
                 Schedule a Quality Review
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
-                href="/products"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all duration-300"
-              >
-                Browse Our Catalog
-              </Link>
             </div>
           </FadeIn>
         </div>

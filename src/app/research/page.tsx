@@ -49,24 +49,24 @@ export default function ResearchPage() {
               For Research Institutions
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Research-Grade Peptides.
+              Stand Up Your Research Brand.
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-                Publication-Ready Data.
+                Built for Rigor.
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-              Clariven Labs supplies universities, CROs, and research institutions with
-              high-purity peptides and comprehensive analytical documentation that
-              supports reproducible, peer-reviewed research.
+              Clariven Labs helps universities, CROs, and research institutions launch and run
+              compliant research-use-only programs — with the documentation and rigor that
+              reproducible, peer-reviewed work demands.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Request Research Pricing
+                Talk to Our Team
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/products" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                Browse Catalog
+              <Link href="/quality" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
+                Our Quality Standards
               </Link>
             </div>
           </motion.div>
@@ -79,22 +79,22 @@ export default function ResearchPage() {
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Purpose-Built for Research</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Quality That Stands Up to Peer Review
+              Groundwork That Stands Up to Peer Review
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              Your research results are only as reliable as your reagents. Clariven Labs
-              provides the consistency and documentation your work demands.
+              A research-use-only program is only as credible as the compliance and documentation
+              behind it. Clariven Labs builds and maintains that foundation for you.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Award, title: '≥98% Verified Purity', description: 'Every lot is HPLC-verified at ≥98% purity with full mass spectrometry identity confirmation. Lot-to-lot consistency ensures reproducible results.' },
-              { icon: FileCheck, title: 'Complete Analytical Data', description: 'Batch-specific COAs include HPLC chromatograms, MS spectra, amino acid analysis, and endotoxin data — ready for your methods section.' },
-              { icon: Dna, title: '50+ Peptide Catalog', description: 'Comprehensive catalog covering growth factors, signaling peptides, metabolic regulators, neuropeptides, and novel research compounds.' },
-              { icon: Layers, title: 'Flexible Quantities', description: 'From milligram research-scale quantities to gram-scale for in vivo studies. No minimum order requirements for academic labs.' },
-              { icon: GraduationCap, title: 'Academic Pricing', description: 'Special pricing programs for universities, NIH-funded labs, and non-profit research institutions. PO and institutional billing accepted.' },
-              { icon: Clock, title: 'Fast Turnaround', description: 'In-stock items ship within 48 hours. Custom synthesis projects include milestone updates and expedited options for grant deadlines.' },
+              { icon: Award, title: 'Compliance, Done Right', description: 'Research-use-only positioning, labeling, and attestations set up correctly from the start — and kept that way.' },
+              { icon: FileCheck, title: 'Audit-Ready Documentation', description: 'COAs, batch records, and reference data organized into a package your methods section and reviewers can cite.' },
+              { icon: Dna, title: 'Brand & Web', description: 'A credible brand identity and storefront, designed and stood up for your research-use-only program.' },
+              { icon: Layers, title: 'Fulfillment & Operations', description: 'Third-party logistics, payments, and order flow coordinated end to end through vetted partners.' },
+              { icon: GraduationCap, title: 'Guided Onboarding', description: 'A single checklist — 9 phases, 21 steps — run by a named Clariven team so nothing slips.' },
+              { icon: Clock, title: 'Predictable Launch', description: 'Clear milestones and a dedicated specialist keep your launch on schedule against grant and program deadlines.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-lg hover:shadow-cl-teal/5 transition-all duration-300">
@@ -170,16 +170,13 @@ export default function ResearchPage() {
               Advance Your Research with Clariven Labs
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Request academic pricing, discuss custom synthesis projects, or order
-              sample quantities to evaluate our peptide quality firsthand.
+              Talk to our team about launching or running your research-use-only program — the
+              compliance, documentation, brand, and operations, handled end to end.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all">
-                Request Academic Pricing
+                Request a Consultation
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link href="/products" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View Full Catalog
               </Link>
             </div>
           </FadeIn>
