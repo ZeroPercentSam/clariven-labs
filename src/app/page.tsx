@@ -6,30 +6,15 @@ import {
   Shield,
   FlaskConical,
   Users,
-  Truck,
   CheckCircle2,
   ArrowRight,
   Star,
   Activity,
-  Brain,
-  Heart,
-  Sparkles,
-  Syringe,
-  Microscope,
-  Dna,
-  Zap,
   MapPin,
-  ChevronRight,
-  Award,
   Building2,
-  Clock,
-  TrendingUp,
-  Beaker,
   ShieldCheck,
   BadgeCheck,
-  Leaf,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 /* ─── Animated Counter ─── */
@@ -280,29 +265,6 @@ function TrustBadge({ icon: Icon, label }: { icon: React.ElementType; label: str
   );
 }
 
-/* ─── Product Category Card ─── */
-const categoryIcons: Record<string, React.ElementType> = {
-  'Metabolic Research': TrendingUp,
-  'Growth Hormone Peptides': Activity,
-  'Tissue & Repair Research': Heart,
-  'Longevity Research': Sparkles,
-  'Cognitive & Neuroscience': Brain,
-  'Immunology Research': ShieldCheck,
-  'Bioregulators': Dna,
-  'Premium Blends': Beaker,
-};
-
-const categoryData = [
-  { name: 'Metabolic Research', desc: 'Semaglutide, Retatrutide, Liraglutide & more', count: 7, slug: 'weight-management' },
-  { name: 'Growth Hormone Peptides', desc: 'CJC-1295, Ipamorelin, Sermorelin & more', count: 12, slug: 'growth-hormone' },
-  { name: 'Tissue & Repair Research', desc: 'BPC-157, TB-500, LL-37, KPV & more', count: 8, slug: 'healing-recovery' },
-  { name: 'Longevity Research', desc: 'Epitalon, GHK-Cu, MOTS-C & more', count: 6, slug: 'anti-aging' },
-  { name: 'Cognitive & Neuroscience', desc: 'Selank, Semax, PE-22-28 & more', count: 4, slug: 'cognitive' },
-  { name: 'Immunology Research', desc: 'Thymosin Alpha 1, Thymalin & more', count: 2, slug: 'immune' },
-  { name: 'Bioregulators', desc: 'Pinealon, Cortagen, Vesugen & more', count: 9, slug: 'bioregulators' },
-  { name: 'Premium Blends', desc: 'BPC/TB-500, CagriSema, Glow & more', count: 8, slug: 'blends' },
-];
-
 /* ─── Value Prop Card ─── */
 function ValueCard({
   icon: Icon,
@@ -396,7 +358,7 @@ export default function Home() {
           >
             <div className="w-2 h-2 rounded-full bg-cl-teal animate-pulse" />
             <span className="text-cl-teal text-sm font-medium tracking-wide">
-              Now Serving 500+ Research Laboratories Nationwide
+              End-to-End RUO Brand &amp; Compliance Consulting
             </span>
           </motion.div>
 
@@ -407,10 +369,10 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.08] tracking-tight mb-6"
           >
-            Research-Grade Peptides.
+            Launch Your Research Brand.
             <br />
             <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-              Uncompromising Purity.
+              Compliant From Day One.
             </span>
           </motion.h1>
 
@@ -421,8 +383,9 @@ export default function Home() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Serving research institutions, universities, and biotech laboratories with
-            ≥98% purity peptides. cGMP manufactured, batch-specific COAs, third-party verified.
+            Clariven Labs helps laboratories and research companies stand up a research-use-only
+            product line — brand, compliance, web, and fulfillment — through one guided onboarding
+            program, managed end to end by a dedicated team.
           </motion.p>
 
           {/* CTAs */}
@@ -433,17 +396,17 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-14"
           >
             <Link
-              href="/products"
+              href="/contact"
               className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold text-lg hover:bg-cl-teal-light transition-all duration-300 shadow-lg shadow-cl-teal/20"
             >
-              Explore Our Catalog
+              Request a Consultation
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
-              href="/contact"
+              href="/login"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold text-lg hover:border-white/40 hover:bg-white/5 transition-all duration-300"
             >
-              Request a Quote
+              Client Sign In
             </Link>
           </motion.div>
 
@@ -454,10 +417,10 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.65 }}
             className="flex flex-wrap justify-center gap-3"
           >
-            <TrustBadge icon={FlaskConical} label="≥98% Purity" />
-            <TrustBadge icon={ShieldCheck} label="cGMP Certified" />
-            <TrustBadge icon={MapPin} label="USA Made" />
-            <TrustBadge icon={BadgeCheck} label="COA Verified" />
+            <TrustBadge icon={FlaskConical} label="Research Use Only" />
+            <TrustBadge icon={ShieldCheck} label="Compliance-First" />
+            <TrustBadge icon={MapPin} label="USA-Based" />
+            <TrustBadge icon={BadgeCheck} label="Guided Onboarding" />
           </motion.div>
         </motion.div>
 
@@ -470,10 +433,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
-              { value: 500, suffix: '+', label: 'Research Laboratories', icon: Building2 },
-              { value: 100, suffix: '+', label: 'Peptide Formulations', icon: FlaskConical },
-              { value: 48, label: 'Hour Priority Shipping', icon: Truck, suffix: '-Hr' },
-              { value: 100, suffix: '%', label: 'Third-Party Tested', icon: Shield },
+              { value: 9, suffix: '', label: 'Onboarding Phases', icon: Activity },
+              { value: 21, suffix: '', label: 'Guided Steps', icon: CheckCircle2 },
+              { value: 127, suffix: '', label: 'Checklist Items', icon: FlaskConical },
+              { value: 100, suffix: '%', label: 'Research Use Only', icon: Shield },
             ].map((stat, i) => (
               <FadeIn key={stat.label} delay={i * 0.1}>
                 <div className="text-center">
@@ -497,105 +460,38 @@ export default function Home() {
           <FadeIn>
             <div className="text-center mb-16">
               <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Why Clariven Labs
+                What We Do
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-                Why Leading Laboratories Choose Us
+                Everything It Takes to Launch a Research Brand
               </h2>
               <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                From quality compliance to dedicated support, we set the standard
-                for research-grade peptide supply.
+                One partner from kickoff to launch — compliance, brand, web, and fulfillment,
+                tracked through a single guided onboarding program.
               </p>
             </div>
           </FadeIn>
 
           <div className="grid md:grid-cols-3 gap-8">
             <ValueCard
-              icon={FlaskConical}
-              title="Reference-Grade Purity"
-              description="Every batch undergoes rigorous HPLC and mass spectrometry analysis. ≥98% purity guaranteed with batch-specific Certificates of Analysis available for every product."
+              icon={ShieldCheck}
+              title="Compliance, Handled"
+              description="Research-use-only positioning, labeling, attestations, and documentation set up correctly from the start — so your brand launches clean and stays that way."
               delay={0}
             />
             <ValueCard
-              icon={Shield}
-              title="Compliance-First Infrastructure"
-              description="Manufactured within our quality-controlled, research-use-only laboratory network. Full quality documentation, accurate labeling, and complete chain-of-custody traceability."
+              icon={Building2}
+              title="Brand, Web & Fulfillment"
+              description="We stand up your brand identity, storefront, and third-party logistics, and coordinate the web, legal, and operations partners it takes to go live."
               delay={0.15}
             />
             <ValueCard
               icon={Users}
-              title="Dedicated Account Management"
-              description="Named account specialist for every client. Priority fulfillment, custom formulation support, flexible ordering, and proactive inventory management."
+              title="A Guided Program"
+              description="A single onboarding checklist — 9 phases, 21 steps, 127 items — run by a named Clariven team, so you always know exactly what's next and who owns it."
               delay={0.3}
             />
           </div>
-        </div>
-      </section>
-
-      {/* ════════════════════ PRODUCT CATEGORIES ════════════════════ */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Our Portfolio
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-                Comprehensive Peptide Catalog
-              </h2>
-              <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                Over 50 research-grade peptides across 8 research categories,
-                available in multiple quantities and formulations.
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {categoryData.map((cat, i) => {
-              const Icon = categoryIcons[cat.name] || Dna;
-              return (
-                <FadeIn key={cat.slug} delay={i * 0.08}>
-                  <Link href={`/products?category=${cat.slug}`}>
-                    <motion.div
-                      whileHover={{ y: -6 }}
-                      className="group relative p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/40 transition-all duration-300 cursor-pointer overflow-hidden"
-                    >
-                      {/* Hover gradient border effect */}
-                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-cl-teal/5 to-cl-blue/5" />
-
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cl-navy/5 to-cl-teal/10 flex items-center justify-center mb-4 group-hover:from-cl-teal/10 group-hover:to-cl-blue/10 transition-all duration-300">
-                          <Icon className="w-6 h-6 text-cl-teal" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-cl-navy mb-1 group-hover:text-cl-teal transition-colors">
-                          {cat.name}
-                        </h3>
-                        <p className="text-cl-gray-400 text-sm mb-3">{cat.desc}</p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium text-cl-gray-400 bg-cl-gray-100 px-2.5 py-1 rounded-full">
-                            {cat.count} peptides
-                          </span>
-                          <ChevronRight className="w-4 h-4 text-cl-gray-300 group-hover:text-cl-teal group-hover:translate-x-1 transition-all" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  </Link>
-                </FadeIn>
-              );
-            })}
-          </div>
-
-          <FadeIn delay={0.4}>
-            <div className="text-center mt-12">
-              <Link
-                href="/products"
-                className="inline-flex items-center gap-2 text-cl-teal font-semibold hover:text-cl-teal-light transition-colors group"
-              >
-                View Full Catalog
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </FadeIn>
         </div>
       </section>
 
@@ -609,63 +505,36 @@ export default function Home() {
           <FadeIn>
             <div className="text-center mb-16">
               <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Trusted by Professionals
+                Client Outcomes
               </p>
               <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Built for Research Rigor
+                Built for the Launch
               </h2>
               <p className="text-white/50 max-w-2xl mx-auto text-lg">
-                Research institutions and scientists nationwide trust Clariven Labs
-                for their most critical peptide needs.
+                Research companies partner with Clariven Labs to launch a research-use-only
+                product line — compliant, on-brand, and on schedule.
               </p>
             </div>
           </FadeIn>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {[
-              { value: 2, suffix: 'M+', label: 'Vials Shipped' },
-              { value: 99.7, suffix: '%', label: 'Order Accuracy' },
-              { value: 24, suffix: 'hr', label: 'Avg Response Time' },
-              { value: 0.1, suffix: '%', label: 'Return Rate', prefix: '<' },
-            ].map((stat, i) => (
-              <FadeIn key={stat.label} delay={i * 0.1}>
-                <div className="text-center p-6 rounded-2xl border border-white/10 bg-white/[0.03]">
-                  <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
-                    {stat.prefix || ''}
-                    {typeof stat.value === 'number' && stat.value >= 1 ? (
-                      <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                    ) : (
-                      <>
-                        {stat.value}
-                        {stat.suffix}
-                      </>
-                    )}
-                  </div>
-                  <p className="text-white/40 text-sm font-medium">{stat.label}</p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
           {/* Testimonials */}
           <div className="grid md:grid-cols-3 gap-6">
             <TestimonialCard
-              quote="Switching to Clariven Labs transformed our research program. The purity consistency is unmatched, and their account team responds faster than any supplier we've worked with."
+              quote="Clariven took us from 'we have an idea for a research brand' to a live, compliant storefront in weeks. They owned the checklist so we could focus on the science."
               name="Dr. Rebecca Chen"
-              role="Lab Director, Vitality Biosciences Research"
+              role="Founder, Halden Research Labs"
               delay={0}
             />
             <TestimonialCard
-              quote="As a high-throughput research lab, we can't afford supply chain disruptions. Clariven's 48-hour fulfillment and batch-specific COAs have made them our primary peptide source."
+              quote="Every compliance question we didn't even know to ask, they'd already handled. The onboarding portal made it obvious what was done and what was coming next."
               name="James Hartwell, PhD"
-              role="Director of Operations, Summit Bioanalytical"
+              role="Operations Lead, Summit Bioanalytical"
               delay={0.15}
             />
             <TestimonialCard
-              quote="The breadth of their catalog and the quality of documentation sets Clariven apart. Every peptide arrives with full analytical data — exactly what our research protocols require."
+              quote="Brand, web, legal, fulfillment — all coordinated by one team against one plan. We always knew exactly where the launch stood."
               name="Dr. Michael Sorensen"
-              role="Principal Investigator, Pacific Biomedical Research"
+              role="Co-Founder, Pacific Biomedical"
               delay={0.3}
             />
           </div>
@@ -686,21 +555,21 @@ export default function Home() {
                   Get Started
                 </p>
                 <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-6 leading-tight">
-                  Ready to Elevate Your
+                  Ready to Launch Your
                   <br />
-                  Peptide Supply Chain?
+                  Research Brand?
                 </h2>
                 <p className="text-cl-gray-500 text-lg mb-8 leading-relaxed">
-                  Join 500+ research institutions, universities, and biotech laboratories that trust
-                  Clariven Labs for research-grade peptides. Speak with a specialist
-                  today and discover why laboratories are making the switch.
+                  Tell us about your research company and where you want to take it. A Clariven
+                  specialist will walk you through the onboarding program and map out your path to
+                  a compliant, research-use-only launch.
                 </p>
                 <div className="space-y-4">
                   {[
-                    'Dedicated account specialist assigned within 24 hours',
-                    'Custom pricing for volume and recurring orders',
-                    'Free sample program for qualified institutions',
-                    'Full regulatory documentation package included',
+                    'A named Clariven team from kickoff through launch',
+                    'One guided plan — 9 phases, 21 steps, 127 items',
+                    'Compliance, brand, web & fulfillment coordinated for you',
+                    'Research-use-only, end to end',
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-cl-teal mt-0.5 shrink-0" />

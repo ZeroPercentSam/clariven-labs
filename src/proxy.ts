@@ -15,15 +15,13 @@ const SECURITY_HEADERS = {
   'X-DNS-Prefetch-Control': 'off',
 };
 
-const PROTECTED_PREFIXES = ['/portal', '/admin', '/checkout', '/cart', '/onboarding', '/rep'] as const;
-// /rep-invite is the anon invitation-preview surface — it starts with '/rep'
-// but must NOT require auth. Exclude it from the auth gate.
-const PUBLIC_REP_PREFIX = '/rep-invite';
+const PROTECTED_PREFIXES = ['/portal', '/admin'] as const;
 const ADMIN_PREFIX = '/admin';
-// Routes that additionally require an APPROVED organization (the order
-// approval-gate's UX layer). /portal + /onboarding stay reachable so a pending
-// user can see their status and complete onboarding.
-const ORG_GATED_PREFIXES = ['/cart', '/checkout'] as const;
+// Store + self-serve-signup surfaces were removed in the consulting pivot.
+// Redirect any lingering bookmark / external link to a live destination instead
+// of 404-ing.
+const REMOVED_TO_HOME = ['/products', '/cart', '/checkout', '/rep', '/rep-invite'] as const;
+const REMOVED_TO_LOGIN = ['/signup', '/onboarding'] as const;
 const REF_COOKIE = 'cl_ref';
 const REF_COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
@@ -49,10 +47,18 @@ export async function proxy(request: NextRequest) {
     response.headers.set(k, v);
   }
 
-  // Gate protected routes. /rep-invite is the anon exception under the /rep prefix.
-  const needsAuth =
-    PROTECTED_PREFIXES.some((p) => pathname.startsWith(p)) &&
-    !pathname.startsWith(PUBLIC_REP_PREFIX);
+  // Redirect removed store / self-serve-signup surfaces to a live destination.
+  const matches = (prefixes: readonly string[]) =>
+    prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  if (matches(REMOVED_TO_HOME) || matches(REMOVED_TO_LOGIN)) {
+    const url = request.nextUrl.clone();
+    url.pathname = matches(REMOVED_TO_HOME) ? '/' : '/login';
+    url.search = '';
+    return NextResponse.redirect(url);
+  }
+
+  // Gate protected routes (auth required).
+  const needsAuth = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
   if (needsAuth && !user) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
@@ -71,44 +77,6 @@ export async function proxy(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = '/portal';
       return NextResponse.redirect(url);
-    }
-  }
-
-  // Org onboarding gate: a non-staff customer must belong to an APPROVED org to
-  // reach /cart or /checkout. No org → /onboarding/attest; an org that is not
-  // yet approved (pending/rejected/suspended) → /onboarding/pending. This is the
-  // UX layer of the approval gate — create_order_with_items is the authoritative
-  // enforcement, so this can never be the only thing standing between an
-  // unapproved org and an order. Admins (staff, NULL org) are exempt.
-  if (user && ORG_GATED_PREFIXES.some((p) => pathname.startsWith(p))) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role, organization_id')
-      .eq('id', user.id)
-      .single();
-    if (profile?.role !== 'admin') {
-      // Active reps are staff-adjacent: they have no customer org and must not
-      // be trapped in /onboarding/attest. Treat them like admins for this gate.
-      const { data: isRep } = await supabase.rpc('is_active_rep');
-      if (!isRep) {
-        if (!profile?.organization_id) {
-          const url = request.nextUrl.clone();
-          url.pathname = '/onboarding/attest';
-          url.search = '';
-          return NextResponse.redirect(url);
-        }
-        const { data: org } = await supabase
-          .from('organizations')
-          .select('approval_status')
-          .eq('id', profile.organization_id)
-          .single();
-        if (org?.approval_status !== 'approved') {
-          const url = request.nextUrl.clone();
-          url.pathname = '/onboarding/pending';
-          url.search = '';
-          return NextResponse.redirect(url);
-        }
-      }
     }
   }
 

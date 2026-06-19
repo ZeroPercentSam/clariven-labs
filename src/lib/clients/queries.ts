@@ -15,8 +15,11 @@ export type ClientListRow = {
   status: EngagementStatus;
   itemsTotal: number;
   itemsDone: number;
+  itemsBlocked: number;
   pctComplete: number;
   currentPhaseTitle: string | null;
+  startedAt: string | null;
+  launchedAt: string | null;
 };
 
 export type OnboardingItemView = {
@@ -82,8 +85,11 @@ export async function listClients(): Promise<ClientListRow[]> {
     status: (r.status ?? 'onboarding') as EngagementStatus,
     itemsTotal: Number(r.items_total ?? 0),
     itemsDone: Number(r.items_done ?? 0),
+    itemsBlocked: Number(r.items_blocked ?? 0),
     pctComplete: Number(r.pct_complete ?? 0),
     currentPhaseTitle: r.current_phase_title ?? null,
+    startedAt: r.started_at ?? null,
+    launchedAt: r.launched_at ?? null,
   }));
 }
 

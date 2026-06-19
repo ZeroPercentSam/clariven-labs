@@ -1,165 +1,222 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
-import { ArrowRight, Clock, DollarSign, ShoppingBag, TrendingUp, Users } from 'lucide-react';
-import { formatDate, formatDateTime } from '@/lib/format-datetime';
+import { ArrowRight, CircleAlert, Rocket, Users } from 'lucide-react';
+import { requireAdmin } from '@/lib/auth/roles';
+import { listClients, type ClientListRow } from '@/lib/clients/queries';
+import { formatDate } from '@/lib/format-datetime';
+import {
+  ENGAGEMENT_STATUSES,
+  ENGAGEMENT_STATUS_LABELS,
+  ENGAGEMENT_STATUS_STYLES,
+  type EngagementStatus,
+} from '@/lib/clients/constants';
 
+export const metadata = { title: 'Overview — Admin' };
 export const dynamic = 'force-dynamic';
 
-const PAID_STATES = ['paid', 'preparing', 'shipped', 'delivered'];
-const OUTSTANDING_STATES = ['pending_payment', 'processing'];
+type AttentionTone = 'red' | 'gold' | 'gray';
+const CHIP: Record<AttentionTone, string> = {
+  red: 'bg-red-500/10 text-red-700 ring-1 ring-red-600/20',
+  gold: 'bg-cl-gold/15 text-cl-navy ring-1 ring-cl-gold/30',
+  gray: 'bg-cl-gray-200 text-cl-gray-600 ring-1 ring-cl-gray-300',
+};
 
-function daysBetween(a: Date, b: Date): number {
-  return Math.floor((b.getTime() - a.getTime()) / (1000 * 60 * 60 * 24));
+function nextStepLabel(c: ClientListRow): string {
+  if (c.currentPhaseTitle) return c.currentPhaseTitle;
+  if (c.itemsTotal > 0 && c.itemsDone >= c.itemsTotal) return 'All steps complete';
+  return 'Not started';
+}
+
+function attentionReasons(c: ClientListRow): { label: string; tone: AttentionTone }[] {
+  const out: { label: string; tone: AttentionTone }[] = [];
+  if (c.itemsBlocked > 0)
+    out.push({ label: `${c.itemsBlocked} blocked item${c.itemsBlocked === 1 ? '' : 's'}`, tone: 'red' });
+  if (c.status === 'launch_ready' || (c.pctComplete >= 100 && c.status !== 'live'))
+    out.push({ label: 'Ready to go live', tone: 'gold' });
+  if (c.status === 'paused') out.push({ label: 'Paused', tone: 'gray' });
+  return out;
 }
 
 export default async function AdminHome() {
-  const supabase = await createClient();
-  const now = new Date();
-  const sevenDaysAgoISO = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  await requireAdmin();
+  const clients = await listClients();
 
-  const [outstandingRes, oldestPendingRes, paidThisWeekRes, ordersPastWeekRes, recentRes] =
-    await Promise.all([
-      supabase
-        .from('orders')
-        .select('total_cents, status')
-        .in('status', OUTSTANDING_STATES),
-      supabase
-        .from('orders')
-        .select('created_at')
-        .eq('status', 'pending_payment')
-        .order('created_at', { ascending: true })
-        .limit(1),
-      supabase
-        .from('orders')
-        .select('total_cents, gbp_paid_at, status')
-        .in('status', PAID_STATES)
-        .gte('gbp_paid_at', sevenDaysAgoISO),
-      supabase
-        .from('orders')
-        .select('id', { count: 'exact', head: true })
-        .gte('created_at', sevenDaysAgoISO),
-      supabase
-        .from('orders')
-        .select('id, order_number, total_cents, gbp_paid_at, user_id')
-        .eq('status', 'paid')
-        .order('gbp_paid_at', { ascending: false })
-        .limit(8),
-    ]);
-
-  const outstandingCents = (outstandingRes.data ?? []).reduce(
-    (s, o) => s + o.total_cents,
-    0,
-  );
-  const outstandingCount = (outstandingRes.data ?? []).length;
-  const oldestPendingAt = oldestPendingRes.data?.[0]?.created_at
-    ? new Date(oldestPendingRes.data[0].created_at)
-    : null;
-  const oldestPendingAgeDays = oldestPendingAt ? daysBetween(oldestPendingAt, now) : null;
-  const paidThisWeekCents = (paidThisWeekRes.data ?? []).reduce(
-    (s, o) => s + o.total_cents,
-    0,
-  );
-  const paidThisWeekCount = (paidThisWeekRes.data ?? []).length;
-  const ordersPastWeek = ordersPastWeekRes.count ?? 0;
-
-  const fmtUsd = (cents: number) =>
-    `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-
-  const stats = [
-    {
-      label: 'Outstanding $',
-      value: fmtUsd(outstandingCents),
-      sub: `${outstandingCount} order${outstandingCount === 1 ? '' : 's'} awaiting payment`,
-      icon: DollarSign,
-      tone: 'amber',
-    },
-    {
-      label: 'Oldest pending',
-      value: oldestPendingAgeDays != null ? `${oldestPendingAgeDays}d` : '—',
-      sub:
-        oldestPendingAt != null
-          ? `placed ${formatDate(oldestPendingAt.toISOString())}`
-          : 'no pending orders',
-      icon: Clock,
-      tone: oldestPendingAgeDays != null && oldestPendingAgeDays >= 3 ? 'red' : 'gray',
-    },
-    {
-      label: 'Paid this week',
-      value: fmtUsd(paidThisWeekCents),
-      sub: `${paidThisWeekCount} order${paidThisWeekCount === 1 ? '' : 's'}`,
-      icon: TrendingUp,
-      tone: 'emerald',
-    },
-    {
-      label: 'New orders (7d)',
-      value: String(ordersPastWeek),
-      sub: 'placed in the last 7 days',
-      icon: ShoppingBag,
-      tone: 'teal',
-    },
-  ] as const;
-
-  const toneCls: Record<string, string> = {
-    amber: 'text-amber-700',
-    red: 'text-red-700',
-    emerald: 'text-emerald-700',
-    teal: 'text-cl-teal',
-    gray: 'text-cl-navy',
+  const counts: Record<EngagementStatus, number> = {
+    onboarding: 0,
+    launch_ready: 0,
+    live: 0,
+    paused: 0,
   };
+  for (const c of clients) counts[c.status] += 1;
 
-  const recent = recentRes;
+  const attention = clients
+    .map((c) => ({ c, reasons: attentionReasons(c) }))
+    .filter((x) => x.reasons.length > 0);
+
+  // "Where the new clients are" — everyone still working through onboarding,
+  // newest first so freshly-provisioned clients surface at the top.
+  const pipeline = clients
+    .filter((c) => c.status === 'onboarding' || c.status === 'launch_ready')
+    .sort(
+      (a, b) =>
+        (b.startedAt ?? '').localeCompare(a.startedAt ?? '') || a.name.localeCompare(b.name),
+    );
+
+  const live = clients
+    .filter((c) => c.status === 'live')
+    .sort((a, b) => (b.launchedAt ?? '').localeCompare(a.launchedAt ?? ''));
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-cl-navy mb-6">Overview</h1>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-        {stats.map(({ label, value, sub, icon: Icon, tone }) => (
-          <div key={label} className="bg-white rounded-xl border border-cl-gray-200 p-5">
-            <div className="flex items-center gap-2 text-cl-gray-500 text-[11px] uppercase tracking-[0.18em] mb-2">
-              <Icon className="w-3.5 h-3.5" /> {label}
-            </div>
-            <div className={`text-3xl font-semibold ${toneCls[tone] ?? toneCls.gray}`}>
-              {value}
-            </div>
-            <div className="text-xs text-cl-gray-500 mt-1 truncate">{sub}</div>
-          </div>
-        ))}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-cl-navy">Overview</h1>
+        <Link
+          href="/admin/clients/new"
+          className="px-4 py-2 text-[12px] font-semibold tracking-wider text-white bg-cl-teal rounded-lg hover:bg-cl-teal/90 transition uppercase"
+        >
+          Add client
+        </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-cl-gray-200 overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3 border-b border-cl-gray-200">
-          <h2 className="text-cl-navy font-semibold text-sm">Recent payments</h2>
-          <Link
-            href="/admin/orders"
-            className="text-xs text-cl-teal inline-flex items-center gap-1 hover:text-cl-teal-light"
-          >
-            All orders <ArrowRight className="w-3 h-3" />
-          </Link>
+      {clients.length === 0 ? (
+        <div className="bg-white border border-cl-gray-200 rounded-xl p-10 text-center text-cl-gray-500 text-sm">
+          No clients yet.{' '}
+          <Link href="/admin/clients/new" className="text-cl-teal hover:text-cl-teal/80 font-medium">
+            Add your first client
+          </Link>{' '}
+          to provision their portal login and seed the onboarding checklist.
         </div>
-        {(recent.data ?? []).length === 0 ? (
-          <p className="px-5 py-6 text-sm text-cl-gray-500">
-            No paid orders yet. Katie's SMS fires when a new order is placed; this list updates as
-            invoices clear.
-          </p>
-        ) : (
-          <ul className="divide-y divide-cl-gray-200">
-            {(recent.data ?? []).map((o) => (
-              <li key={o.id} className="flex items-center justify-between px-5 py-3">
-                <Link
-                  href={`/admin/orders/${o.id}`}
-                  className="text-cl-navy hover:text-cl-teal font-medium text-sm"
-                >
-                  Order #{o.order_number}
-                </Link>
-                <div className="flex items-center gap-4 text-xs text-cl-gray-500">
-                  <span>${(o.total_cents / 100).toFixed(2)}</span>
-                  <span>{formatDateTime(o.gbp_paid_at)}</span>
-                </div>
-              </li>
+      ) : (
+        <>
+          {/* Status strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+            {ENGAGEMENT_STATUSES.map((s) => (
+              <Link
+                key={s}
+                href="/admin/clients"
+                className="bg-white border border-cl-gray-200 rounded-xl p-4 hover:shadow-sm transition"
+              >
+                <p className="text-2xl font-bold text-cl-navy">{counts[s]}</p>
+                <p className="text-xs text-cl-gray-500 mt-1">{ENGAGEMENT_STATUS_LABELS[s]}</p>
+              </Link>
             ))}
-          </ul>
-        )}
-      </div>
+          </div>
+
+          {/* Needs attention */}
+          {attention.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold text-cl-navy mb-3 inline-flex items-center gap-1.5">
+                <CircleAlert className="w-4 h-4 text-amber-600" /> Needs attention
+              </h2>
+              <div className="bg-white border border-cl-gray-200 rounded-xl divide-y divide-cl-gray-100">
+                {attention.map(({ c, reasons }) => (
+                  <Link
+                    key={c.orgId}
+                    href={`/admin/clients/${c.orgId}`}
+                    className="flex items-center justify-between gap-4 px-4 py-3 hover:bg-cl-gray-50 transition"
+                  >
+                    <p className="text-sm text-cl-navy font-medium truncate">{c.name}</p>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {reasons.map((r) => (
+                        <span
+                          key={r.label}
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${CHIP[r.tone]}`}
+                        >
+                          {r.label}
+                        </span>
+                      ))}
+                      <span className="text-cl-gray-300">→</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Active onboarding pipeline */}
+          <div className="bg-white rounded-xl border border-cl-gray-200 overflow-hidden mb-8">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-cl-gray-200">
+              <h2 className="text-cl-navy font-semibold text-sm">
+                Onboarding pipeline ({pipeline.length})
+              </h2>
+              <Link
+                href="/admin/clients"
+                className="text-xs text-cl-teal inline-flex items-center gap-1 hover:text-cl-teal/80"
+              >
+                All clients <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            {pipeline.length === 0 ? (
+              <p className="px-5 py-6 text-sm text-cl-gray-500">
+                No clients are mid-onboarding. New clients appear here the moment you provision them.
+              </p>
+            ) : (
+              <ul className="divide-y divide-cl-gray-100">
+                {pipeline.map((c) => (
+                  <li key={c.orgId}>
+                    <Link
+                      href={`/admin/clients/${c.orgId}`}
+                      className="flex items-center gap-4 px-5 py-4 hover:bg-cl-gray-50 transition"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <p className="text-sm text-cl-navy font-semibold truncate">{c.name}</p>
+                          <span
+                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${ENGAGEMENT_STATUS_STYLES[c.status]}`}
+                          >
+                            {ENGAGEMENT_STATUS_LABELS[c.status]}
+                          </span>
+                          {c.itemsBlocked > 0 && (
+                            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${CHIP.red}`}>
+                              {c.itemsBlocked} blocked
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="h-1.5 flex-1 max-w-xs rounded-full bg-cl-gray-100 overflow-hidden">
+                            <div className="h-full bg-cl-teal rounded-full" style={{ width: `${c.pctComplete}%` }} />
+                          </div>
+                          <span className="text-xs text-cl-gray-500 tabular-nums whitespace-nowrap">
+                            {c.itemsDone}/{c.itemsTotal}
+                          </span>
+                        </div>
+                        <p className="text-xs text-cl-gray-400 mt-1.5 truncate">
+                          Next: {nextStepLabel(c)}
+                        </p>
+                      </div>
+                      <span className="text-cl-gray-300 text-lg shrink-0">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Recently live */}
+          {live.length > 0 && (
+            <div className="bg-white rounded-xl border border-cl-gray-200 overflow-hidden">
+              <div className="flex items-center gap-2 px-5 py-3 border-b border-cl-gray-200">
+                <Rocket className="w-4 h-4 text-emerald-600" />
+                <h2 className="text-cl-navy font-semibold text-sm">Live clients ({live.length})</h2>
+              </div>
+              <ul className="divide-y divide-cl-gray-100">
+                {live.map((c) => (
+                  <li key={c.orgId} className="flex items-center justify-between px-5 py-3">
+                    <Link
+                      href={`/admin/clients/${c.orgId}`}
+                      className="text-sm text-cl-navy hover:text-cl-teal font-medium truncate"
+                    >
+                      {c.name}
+                    </Link>
+                    <span className="text-xs text-cl-gray-500 shrink-0">
+                      {c.launchedAt ? `Live since ${formatDate(c.launchedAt)}` : 'Live'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      )}
 
       <p className="mt-8 text-xs text-cl-gray-400 inline-flex items-center gap-1">
         <Users className="w-3.5 h-3.5" /> Admin seats: sam@ovington.io, katie@puritybiolabs.com

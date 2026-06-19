@@ -13,7 +13,7 @@ export default async function NewTicketPage({
   searchParams: Promise<{ order?: string }>;
 }) {
   const profile = await getProfile();
-  if (!profile?.organization_id) redirect('/onboarding/attest');
+  if (!profile?.organization_id) redirect('/portal/onboarding');
 
   const { order } = await searchParams;
   const linkableOrders = await listLinkableOrders();

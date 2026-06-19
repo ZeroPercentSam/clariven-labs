@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PromoBanner } from "@/components/products/PromoBanner";
 import { ImpersonationBanner } from "@/components/account/ImpersonationBanner";
 import "./globals.css";
 
@@ -18,18 +17,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://clarivenlabs.com"),
-  title: "Clariven Labs | Research-Grade Peptide Supply (For Research Use Only)",
+  title: "Clariven Labs | RUO Brand & Compliance Consulting (For Research Use Only)",
   description:
-    "Clariven Labs delivers research-grade peptides with ≥98% purity to academic labs, biotech, and research institutions. cGMP-manufactured, COA-verified, USA-made. For Research Use Only — not for human consumption.",
+    "Clariven Labs helps laboratories and research companies launch compliant research-use-only product programs — brand, infrastructure, compliance, and go-to-market, end to end. For Research Use Only.",
   keywords: [
-    "research peptides",
-    "research-use-only peptides",
-    "RUO peptides",
-    "BPC-157",
-    "research-grade peptides",
-    "cGMP peptides",
-    "peptide supplier USA",
-    "COA-verified peptides",
+    "RUO consulting",
+    "research-use-only compliance",
+    "research brand consulting",
+    "RUO product launch",
+    "laboratory brand consulting",
+    "research company onboarding",
   ],
 };
 
@@ -45,7 +42,6 @@ export default function RootLayout({
       >
         <ImpersonationBanner />
         <Header />
-        <PromoBanner />
         <main>{children}</main>
         <Footer />
       </body>

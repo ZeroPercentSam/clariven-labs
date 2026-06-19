@@ -11,21 +11,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const links = [
     { href: '/admin', label: 'Overview' },
     { href: '/admin/clients', label: 'Clients' },
-    { href: '/admin/sales-dashboard', label: 'Sales dashboard' },
-    { href: '/admin/orders', label: 'Orders' },
     { href: '/admin/support', label: 'Support' },
-    { href: '/admin/organizations', label: 'Organizations' },
-    { href: '/admin/reps', label: 'Reps' },
-    { href: '/admin/commissions', label: 'Commissions' },
-    { href: '/admin/pricing', label: 'Pricing' },
-    { href: '/admin/sales-sheet', label: 'Sales Sheet' },
-    { href: '/admin/coas', label: 'COAs' },
-    { href: '/admin/lots', label: 'Lots' },
-    { href: '/admin/resources', label: 'Client Resources' },
-    { href: '/admin/affiliates', label: 'Affiliates' },
-    { href: '/admin/email-log', label: 'Email log' },
     { href: '/admin/audit', label: 'Audit log' },
-    { href: '/admin/impersonations', label: 'Impersonations' },
   ];
 
   return (

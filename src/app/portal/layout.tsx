@@ -19,17 +19,11 @@ export default async function PortalLayout({ children }: { children: React.React
             </p>
             <p className="text-cl-navy font-semibold truncate mb-5">{profile.email}</p>
             <nav className="space-y-1">
-              <NavLink href="/portal" exact className={NAV} activeClassName={NAV_ACTIVE}>
-                Orders
-              </NavLink>
-              {profile.role !== 'admin' && profile.organization_id ? (
+              {profile.role !== 'admin' ? (
                 <NavLink href="/portal/onboarding" className={NAV} activeClassName={NAV_ACTIVE}>
                   Onboarding
                 </NavLink>
               ) : null}
-              <NavLink href="/portal/resources" className={NAV} activeClassName={NAV_ACTIVE}>
-                Resources
-              </NavLink>
               <NavLink href="/portal/support" className={NAV} activeClassName={NAV_ACTIVE}>
                 Support
               </NavLink>

@@ -14,7 +14,10 @@ cross-repo work or when unsure which sibling owns a feature/ref.
 
 ## Quick facts
 
-- **Posture: RUO (Research Use Only).** Laboratory-grade research peptides; never clinical/human use.
+- **Posture: RUO (Research Use Only).** Never clinical/human use. **As of 2026-06-19 the product is an
+  RUO consulting client-onboarding portal — the e-commerce storefront was removed (see HANDOFF
+  "2026-06-19 — phase 2").** Store routes/libs were deleted; the DB + some libs are kept dormant (not
+  deleted), so the pivot is reversible.
 - Stack: Next.js 16 (App Router, Turbopack, **`src/` layout**, `src/proxy.ts` not `middleware.ts`) ·
   React 19 · TS 5.9 · Tailwind v4 · Supabase Postgres 17 · Resend (email) · Twilio (ops SMS) ·
   Green.Money (payment) · Google Business Profile (future) · Upstash Redis (rate-limit). Sentry deferred.
@@ -29,6 +32,15 @@ cross-repo work or when unsure which sibling owns a feature/ref.
 - Migration numbering is **4-digit** `NNNN_name.sql` (`0001_init` … current), its own lineage.
 
 ## Architecture invariants — don't break
+
+> **2026-06-19 — storefront removed (consulting pivot).** Invariants #4–#7 (order RPC, scalar defaults,
+> mock integrations, side-effect emails) describe the e-commerce/commission flow, now **DORMANT**: the
+> store routes/libs are deleted; the DB + some libs are kept dormant. #2 no longer applies to live crons
+> (poll-invoices/pull-notifications/lot-expiration were removed; `vercel.json` has no crons). #1 is now
+> **tighter** — the cron service-role importers are gone, so `src/lib/clients/provision.ts` is the SOLE
+> importer of `createAdminClient()`. #3 (RLS) and #8 (env-resilience) stand. Live surfaces = the
+> consulting onboarding portal (`src/lib/clients/*`, `/admin/clients`, `/portal/onboarding`) + the
+> `/admin` client pipeline overview.
 
 1. **Service-role key is CRON-ONLY — with ONE deliberate, admin-gated exception.**
    `SUPABASE_SERVICE_ROLE_KEY` / `src/lib/supabase/admin.ts` is imported only by the cron routes

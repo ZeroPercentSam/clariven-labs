@@ -100,9 +100,9 @@ export default async function LoginPage({
         </form>
 
         <p className="text-center text-white/40 text-sm mt-6">
-          No account?{' '}
-          <Link href="/signup" className="text-cl-teal hover:text-cl-teal/80">
-            Create one
+          Client access is set up by your Clariven team.{' '}
+          <Link href="/contact" className="text-cl-teal hover:text-cl-teal/80">
+            Get in touch
           </Link>
         </p>
       </div>

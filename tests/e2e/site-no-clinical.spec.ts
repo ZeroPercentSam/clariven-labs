@@ -30,7 +30,6 @@ const ROUTES = [
   '/contact',
   '/quality',
   '/resources',
-  '/products',
 ];
 
 // Clinical-marketing words. Deliberately do NOT include disclaimer words

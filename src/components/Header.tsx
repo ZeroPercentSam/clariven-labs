@@ -14,15 +14,11 @@ import {
   ArrowRight,
   Shield,
   Dna,
-  ShoppingCart,
   LogOut,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useCart } from "@/lib/cart/store";
-import { cartCount } from "@/lib/cart/types";
 
 const navItems = [
-  { label: "Products", href: "/products" },
   {
     label: "Who We Serve",
     href: "#",
@@ -67,8 +63,6 @@ export default function Header() {
 
   const [authReady, setAuthReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { cart, hydrated: cartHydrated } = useCart();
-  const count = cartHydrated ? cartCount(cart) : 0;
 
   useEffect(() => {
     const supabase = createClient();
@@ -269,20 +263,6 @@ export default function Header() {
 
             {/* Right Side Actions */}
             <div className="hidden lg:flex items-center gap-2">
-              {/* Cart badge — only after hydration + has items */}
-              {count > 0 ? (
-                <Link
-                  href="/cart"
-                  aria-label={`Cart: ${count} item${count === 1 ? '' : 's'}`}
-                  className="relative px-3 py-2 text-white/80 hover:text-white transition-colors"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                  <span className="absolute -top-0.5 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#0D9488] text-white text-[10px] font-bold flex items-center justify-center">
-                    {count > 99 ? '99+' : count}
-                  </span>
-                </Link>
-              ) : null}
-
               {isLoggedIn && authReady ? (
                 <>
                   <Link
@@ -309,12 +289,6 @@ export default function Header() {
                     className="px-3 py-2 text-[12px] font-semibold tracking-wider text-white/70 hover:text-white uppercase transition-colors"
                   >
                     Sign in
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="relative px-5 py-2 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 hover:bg-[#D4A843]/[0.06] transition-all duration-300 uppercase"
-                  >
-                    Sign up
                   </Link>
                 </>
               )}
@@ -438,21 +412,6 @@ export default function Header() {
 
               {/* Mobile CTAs */}
               <div className="px-4 pt-4 pb-8 space-y-3 border-t border-white/[0.06] mx-4">
-                {count > 0 ? (
-                  <Link
-                    href="/cart"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-between w-full px-5 py-3 text-[12px] font-semibold tracking-wider text-white border border-white/[0.15] rounded-lg uppercase"
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <ShoppingCart className="w-4 h-4" /> Cart
-                    </span>
-                    <span className="min-w-[22px] h-[22px] px-1.5 rounded-full bg-[#0D9488] text-white text-[10px] font-bold flex items-center justify-center">
-                      {count > 99 ? '99+' : count}
-                    </span>
-                  </Link>
-                ) : null}
-
                 {isLoggedIn && authReady ? (
                   <>
                     <Link
@@ -479,13 +438,6 @@ export default function Header() {
                       className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-white/80 hover:text-white uppercase transition-colors"
                     >
                       Sign in
-                    </Link>
-                    <Link
-                      href="/signup"
-                      onClick={() => setMobileOpen(false)}
-                      className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-[#D4A843] border border-[#D4A843]/30 rounded-lg hover:border-[#D4A843]/60 transition-all uppercase"
-                    >
-                      Sign up
                     </Link>
                   </>
                 )}

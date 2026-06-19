@@ -6,6 +6,43 @@
 
 ## Where we are
 
+> **2026-06-19 — Consulting pivot, phase 2 (store hidden + deleted; surfaces refocused).**
+> ClarivenLabs is now a **consulting company, not a store.** Every client/admin surface is refocused
+> on the onboarding checklist; the e-commerce surfaces are removed. **No DB/schema change** — pure
+> routing + UI + dead-code deletion.
+> - **Admin** nav trimmed to **Overview · Clients · Support · Audit log**. `/admin`
+>   (`src/app/admin/page.tsx`) is rebuilt as a **client pipeline overview**: status strip
+>   (onboarding/launch_ready/live/paused) · **Needs attention** (blocked items, ready-to-go-live) ·
+>   **Onboarding pipeline** table (current phase = next step, progress bar, blocked badge, newest-first)
+>   · **Live clients**. Driven by `listClients()` (extended with `itemsBlocked/startedAt/launchedAt`)
+>   over the `client_onboarding_progress` view — one query, no N+1.
+> - **Client portal** nav = **Onboarding · Support · Account · Team**; `/portal` is now a role
+>   redirector (admin → `/admin`, client → `/portal/onboarding`). Orders + Resources dropped.
+> - **proxy.ts**: early dead-route redirect pass (`/products /cart /checkout /rep /rep-invite → /`;
+>   `/signup /onboarding* → /login`); `PROTECTED_PREFIXES` = `['/portal','/admin']`; the whole
+>   org-approval gate block removed. **Public site**: Header/Footer de-stored (no Products link, no cart
+>   badge, no Sign-up CTA), home retheme (`src/app/page.tsx`) to RUO consulting + product-categories
+>   section deleted, `PromoBanner` removed from the root layout, login "create account" link → `/contact`.
+> - **Deleted (dead store code; DB + ALL migrations kept dormant/reversible):** `app/{products,cart,
+>   checkout,signup,onboarding,rep,rep-invite}`, `app/portal/{orders,resources}`, `app/admin/{orders,
+>   pricing,sales-sheet,sales-dashboard,coas,lots,affiliates,reps,commissions,resources,email-log}`,
+>   `api/orders`, `api/admin/{orders,prices,affiliates,affiliate-codes}`, `api/cron/{poll-invoices,
+>   pull-notifications,lot-expiration}` (+ `vercel.json` crons cleared), `components/{products,portal/*}`
+>   and the store `components/admin/*`, `lib/{cart,coas,gbp,resources,twilio.ts,tracking.ts,pricing.ts,
+>   products.ts,schemas/order.ts,schemas/price.ts,schemas/affiliate.ts}`. **Dormant but NOT deleted**
+>   (unlinked, kept for reversibility): `/admin/organizations`, `/admin/impersonations` + the
+>   impersonation DB/banner, `lib/{rep,lots,inventory,ratelimit,admin/sales-analytics,email,…}`,
+>   `schemas/{admin,support}`, `components/admin/OrgMemberRow`.
+> - **Tests**: 23 store-coupled specs removed; **28/28 kept e2e green** — `client-onboarding` (3),
+>   `auth` (4; client lands on `/portal/onboarding`, admin → `/admin`), `site-no-clinical` (11;
+>   `/products` dropped from ROUTES), `support-tickets` (5), `admin-audit` (4), `healthz` (1).
+>   typecheck + build green; **lint = 2 errors** (≤12 baseline; both pre-existing — `contact/page.tsx`
+>   impure-render + a support-spec unused-var warning). No new Supabase migration → advisors unchanged.
+> - **Decisions (Sam):** hide **and delete** dead store files this session (DB dormant); portal keeps
+>   **Team**; retheme home (de-store, RUO-clean); **remove** self-serve signup/attest. Possible
+>   follow-ups: item-level "next step" view column for the overview; trim store-route CTAs still present
+>   on the segment pages (`/clinics` etc., currently proxy-redirected); delete dormant DB/libs later.
+>
 > **2026-06-18 — Consulting pivot, phase 1 (backend + functional UI).** ClarivenLabs is becoming a
 > consulting company that onboards client brands through a fixed **9-phase / 21-step / 127-item**
 > program (the onboarding guide). New surfaces: admin **Clients** portal (`/admin/clients`, `/new`,

@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="bg-cl-navy pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -19,8 +19,8 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed mb-6">
-              Research-grade peptides and reference materials for laboratories,
-              universities, and research institutions.
+              Research-use-only brand &amp; compliance consulting — helping laboratories and research
+              companies launch compliant RUO product programs.
             </p>
             <div className="flex gap-3">
               {['LinkedIn', 'Twitter', 'Instagram'].map((social) => (
@@ -36,32 +36,6 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-          </div>
-
-          {/* Products */}
-          <div>
-            <h4 className="text-white font-semibold text-sm tracking-wider uppercase mb-4">
-              Products
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: 'Single Regulator', href: '/products/single-regulator' },
-                { label: 'BPC-157', href: '/products/bpc-157' },
-                { label: 'CJC-1295 / Ipamorelin', href: '/products/cjc-ipamorelin-blend' },
-                { label: 'Thymosin Alpha 1', href: '/products/thymosin-alpha-1' },
-                { label: 'Epitalon', href: '/products/epitalon' },
-                { label: 'All Peptides', href: '/products' },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="text-white/40 text-sm hover:text-cl-teal transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           {/* Company */}

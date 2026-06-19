@@ -17,7 +17,7 @@ export default async function PortalSupportPage() {
         <div>
           <h1 className="text-2xl font-semibold text-cl-navy">Support</h1>
           <p className="text-sm text-cl-gray-500 mt-1">
-            Questions about orders, COAs, billing, or research-use compliance.
+            Questions about your onboarding, launch, or research-use compliance.
           </p>
         </div>
         {hasOrg ? (
@@ -36,10 +36,11 @@ export default async function PortalSupportPage() {
       ) : (
         <div className="bg-white border border-cl-gray-200 rounded-xl px-4 py-10 text-center">
           <p className="text-sm text-cl-gray-600">
-            Link your account to an organization to open a support ticket.
+            Your account isn&apos;t linked to a client workspace yet. Your Clariven contact will set
+            this up — reach out to them directly in the meantime.
           </p>
-          <Link href="/onboarding/attest" className="text-sm text-cl-teal font-semibold hover:underline mt-2 inline-block">
-            Start onboarding →
+          <Link href="/portal/onboarding" className="text-sm text-cl-teal font-semibold hover:underline mt-2 inline-block">
+            Go to your checklist →
           </Link>
         </div>
       )}
