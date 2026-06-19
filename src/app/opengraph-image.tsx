@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Clariven Labs - Premium Pharmaceutical-Grade Peptides';
+export const alt = 'Clariven Labs — RUO Brand & Compliance Consulting';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -83,7 +83,7 @@ export default function OGImage() {
               lineHeight: 1.2,
             }}
           >
-            Pharmaceutical-Grade Peptides.
+            Launch Your Research Brand.
           </span>
           <span
             style={{
@@ -94,7 +94,7 @@ export default function OGImage() {
               lineHeight: 1.2,
             }}
           >
-            Uncompromising Purity.
+            Compliant From Day One.
           </span>
         </div>
 
@@ -109,12 +109,12 @@ export default function OGImage() {
             display: 'flex',
           }}
         >
-          Premium peptide supply for clinics, compounding pharmacies, and research institutions.
+          RUO brand, compliance, web &amp; fulfillment — one guided onboarding program, end to end.
         </div>
 
         {/* Trust badges */}
         <div style={{ display: 'flex', gap: 24 }}>
-          {['98%+ Purity', 'cGMP Certified', 'USA Made', 'COA Verified'].map((badge) => (
+          {['Research Use Only', 'Compliance-First', 'USA-Based', 'Guided Onboarding'].map((badge) => (
             <div
               key={badge}
               style={{
