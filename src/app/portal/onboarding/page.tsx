@@ -1,6 +1,8 @@
 import { getMyOnboarding } from '@/lib/clients/queries';
+import { getMyIntake } from '@/lib/clients/intake-queries';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
 import { OnboardingProgressRing } from '@/components/clients/OnboardingProgressRing';
+import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 
 export const metadata = { title: 'Onboarding — Clariven Labs' };
 export const dynamic = 'force-dynamic';
@@ -41,6 +43,7 @@ export default async function PortalOnboardingPage() {
   }
 
   const complete = currentPhaseNumber === 0;
+  const intake = await getMyIntake();
 
   return (
     <div className="space-y-6">
@@ -72,6 +75,8 @@ export default async function PortalOnboardingPage() {
           )}
         </div>
       </div>
+
+      <BrandResearchForm intake={intake} />
 
       <OnboardingChecklist orgId={view.org.id} phases={view.phases} />
     </div>

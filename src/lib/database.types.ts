@@ -158,6 +158,74 @@ export type Database = {
         }
         Relationships: []
       }
+      client_intake: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          city: string | null
+          competitor_checked: boolean
+          competitor_notes: string | null
+          country: string | null
+          created_at: string
+          desired_domain: string | null
+          ein: string | null
+          legal_name: string | null
+          llc_state: string | null
+          organization_id: string
+          postal_code: string | null
+          proposed_name: string | null
+          registered_agent: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          competitor_checked?: boolean
+          competitor_notes?: string | null
+          country?: string | null
+          created_at?: string
+          desired_domain?: string | null
+          ein?: string | null
+          legal_name?: string | null
+          llc_state?: string | null
+          organization_id: string
+          postal_code?: string | null
+          proposed_name?: string | null
+          registered_agent?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          competitor_checked?: boolean
+          competitor_notes?: string | null
+          country?: string | null
+          created_at?: string
+          desired_domain?: string | null
+          ein?: string | null
+          legal_name?: string | null
+          llc_state?: string | null
+          organization_id?: string
+          postal_code?: string | null
+          proposed_name?: string | null
+          registered_agent?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_intake_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_item_status: {
         Row: {
           created_at: string
@@ -770,6 +838,89 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_request_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_slug: string
+          quantity: number
+          request_id: string
+          strength_label: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_slug: string
+          quantity: number
+          request_id: string
+          strength_label: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_slug?: string
+          quantity?: number
+          request_id?: string
+          strength_label?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_request_items_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "order_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_requests: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          note: string | null
+          organization_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          note?: string | null
+          organization_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          note?: string | null
+          organization_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_requests_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -1963,6 +2114,13 @@ export type Database = {
       is_active_rep: { Args: never; Returns: boolean }
       is_admin: { Args: never; Returns: boolean }
       is_org_admin: { Args: never; Returns: boolean }
+      list_product_catalog: {
+        Args: never
+        Returns: {
+          product_slug: string
+          strength_label: string
+        }[]
+      }
       list_public_lot_coas: {
         Args: { p_slug: string }
         Returns: {
@@ -2029,6 +2187,10 @@ export type Database = {
           p_proposed_brand?: string
           p_source?: string
         }
+        Returns: string
+      }
+      submit_order_request: {
+        Args: { p_items: Json; p_kind?: string; p_note?: string }
         Returns: string
       }
       user_org_id: { Args: never; Returns: string }
