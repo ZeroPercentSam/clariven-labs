@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Building2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
-import { acceptInvitation } from '@/lib/invitations/actions';
+import { acceptInvitation, signUpFromInvite } from '@/lib/invitations/actions';
 
 export const metadata = { title: 'Team invitation — Clariven Labs' };
 export const dynamic = 'force-dynamic';
@@ -30,10 +30,10 @@ export default async function InvitePage({
   searchParams,
 }: {
   params: Promise<{ token: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; signup?: string }>;
 }) {
   const { token } = await params;
-  const { error } = await searchParams;
+  const { error, signup } = await searchParams;
   const supabase = await createClient();
 
   const { data: previewRaw } = await supabase.rpc('get_invitation_preview', { p_token: token });
@@ -89,25 +89,59 @@ export default async function InvitePage({
       ) : null}
 
       {!userEmail ? (
-        <div className="space-y-3">
-          <p className="text-sm text-cl-gray-600">
-            Sign in (or create an account) with{' '}
-            <span className="font-mono text-cl-navy">{preview.email}</span> to accept.
+        signup === 'check_email' ? (
+          <p className="text-sm text-cl-gray-600 bg-cl-gray-50 border border-cl-gray-200 rounded-lg px-4 py-3">
+            Check your inbox — we sent a confirmation link to{' '}
+            <span className="font-mono text-cl-navy">{preview.email}</span>. Click it to finish
+            setting up your account, then you&apos;ll land back here to accept.
           </p>
-          <Link
-            href={`/login?next=/invite/${token}`}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition"
-          >
-            Sign in to accept
-          </Link>
-          <p className="text-xs text-cl-gray-400">
-            No account?{' '}
-            <Link href="/signup" className="text-cl-teal hover:text-cl-teal-light">
-              Create one
-            </Link>{' '}
-            with the invited email, then reopen this link.
-          </p>
-        </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="space-y-3">
+              <p className="text-sm text-cl-gray-600">
+                Already have an account? Sign in with{' '}
+                <span className="font-mono text-cl-navy">{preview.email}</span> to accept.
+              </p>
+              <Link
+                href={`/login?next=/invite/${token}`}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition"
+              >
+                Sign in to accept
+              </Link>
+            </div>
+
+            <div className="border-t border-cl-gray-200 pt-5 text-left">
+              <p className="text-sm text-cl-gray-600 mb-3 text-center">
+                New here? Create your account with the invited email:
+              </p>
+              <form action={signUpFromInvite} className="space-y-3">
+                <input type="hidden" name="token" value={token} />
+                <input
+                  type="email"
+                  value={preview.email}
+                  readOnly
+                  disabled
+                  className="w-full rounded-lg border border-cl-gray-200 bg-cl-gray-50 px-3 py-2 text-sm font-mono text-cl-gray-500"
+                />
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  minLength={10}
+                  autoComplete="new-password"
+                  placeholder="Create a password (min 10 characters)"
+                  className="w-full rounded-lg border border-cl-gray-200 bg-white px-3 py-2 text-sm text-cl-navy focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal"
+                />
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cl-navy text-white font-semibold hover:bg-cl-navy-light transition"
+                >
+                  Create account &amp; continue
+                </button>
+              </form>
+            </div>
+          </div>
+        )
       ) : userEmail === preview.email.toLowerCase() ? (
         <form action={acceptInvitation}>
           <input type="hidden" name="token" value={token} />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useActionState, useRef, useEffect, useState } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import {
   Shield,
@@ -15,6 +15,74 @@ import {
   BadgeCheck,
 } from 'lucide-react';
 import Link from 'next/link';
+import { submitLead } from '@/lib/leads/actions';
+
+/* ─── Home consultation form ─── */
+const FIELD_CLASS =
+  'w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition';
+
+function ConsultationForm() {
+  const [state, formAction, pending] = useActionState(submitLead, { ok: false });
+
+  if (state.ok) {
+    return (
+      <div className="bg-white rounded-2xl border border-cl-gray-200 shadow-xl shadow-cl-navy/5 p-8 sm:p-10 text-center">
+        <div className="w-14 h-14 rounded-full bg-cl-success/10 flex items-center justify-center mx-auto mb-5">
+          <CheckCircle2 className="w-7 h-7 text-cl-success" />
+        </div>
+        <h3 className="text-xl font-semibold text-cl-navy mb-2">Thanks — we&apos;ll be in touch</h3>
+        <p className="text-cl-gray-500 text-sm">
+          A specialist will reach out within one business day.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl border border-cl-gray-200 shadow-xl shadow-cl-navy/5 p-8 sm:p-10">
+      <h3 className="text-xl font-semibold text-cl-navy mb-1">Schedule a Consultation</h3>
+      <p className="text-cl-gray-400 text-sm mb-6">
+        Tell us about your needs and a specialist will reach out within one business day.
+      </p>
+      <form action={formAction} className="space-y-4">
+        {/* Honeypot — hidden from users; bots that fill it are dropped. */}
+        <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input type="text" name="name" required placeholder="Full Name" className={FIELD_CLASS} />
+          <input type="email" name="email" required placeholder="Work Email" className={FIELD_CLASS} />
+        </div>
+        <input type="text" name="organization" placeholder="Organization / Laboratory Name" className={FIELD_CLASS} />
+        <input type="tel" name="phone" placeholder="Phone Number" className={FIELD_CLASS} />
+        <select name="role" defaultValue="" className={FIELD_CLASS}>
+          <option value="">I am a...</option>
+          <option value="academic">University / Academic Lab</option>
+          <option value="biotech">Biotech / CRO</option>
+          <option value="research">Research Institution</option>
+          <option value="other">Other</option>
+        </select>
+        {state.error ? (
+          <p className="text-sm text-cl-error bg-cl-error/5 border border-cl-error/20 rounded-lg px-4 py-3">
+            {state.error}
+          </p>
+        ) : null}
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full py-4 rounded-xl bg-cl-teal text-white font-semibold text-lg hover:bg-cl-teal-light transition-colors duration-300 shadow-lg shadow-cl-teal/20 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {pending ? 'Sending…' : 'Request Consultation'}
+        </button>
+        <p className="text-xs text-cl-gray-400 text-center">
+          By submitting, you agree to our{' '}
+          <Link href="/privacy" className="underline hover:text-cl-teal">
+            Privacy Policy
+          </Link>
+          . No spam, ever.
+        </p>
+      </form>
+    </div>
+  );
+}
 
 /* ─── Animated Counter ─── */
 function AnimatedCounter({
@@ -505,58 +573,7 @@ export default function Home() {
 
             {/* Right form */}
             <FadeIn delay={0.2}>
-              <div className="bg-white rounded-2xl border border-cl-gray-200 shadow-xl shadow-cl-navy/5 p-8 sm:p-10">
-                <h3 className="text-xl font-semibold text-cl-navy mb-1">
-                  Schedule a Consultation
-                </h3>
-                <p className="text-cl-gray-400 text-sm mb-6">
-                  Tell us about your needs and a specialist will reach out within one business day.
-                </p>
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Full Name"
-                      className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Work Email"
-                      className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Organization / Laboratory Name"
-                    className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                  />
-                  <select className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-cl-gray-50 text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition">
-                    <option value="">I am a...</option>
-                    <option value="clinic">University / Academic Lab</option>
-                    <option value="pharmacy">Biotech / CRO</option>
-                    <option value="research">Research Institution</option>
-                    <option value="other">Other</option>
-                  </select>
-                  <button
-                    type="submit"
-                    className="w-full py-4 rounded-xl bg-cl-teal text-white font-semibold text-lg hover:bg-cl-teal-light transition-colors duration-300 shadow-lg shadow-cl-teal/20"
-                  >
-                    Request Consultation
-                  </button>
-                  <p className="text-xs text-cl-gray-400 text-center">
-                    By submitting, you agree to our{' '}
-                    <Link href="/privacy" className="underline hover:text-cl-teal">
-                      Privacy Policy
-                    </Link>
-                    . No spam, ever.
-                  </p>
-                </form>
-              </div>
+              <ConsultationForm />
             </FadeIn>
           </div>
         </div>

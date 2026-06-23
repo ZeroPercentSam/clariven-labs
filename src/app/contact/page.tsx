@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { motion } from 'framer-motion';
+import { submitLead } from '@/lib/leads/actions';
 import {
   Mail,
   Clock,
@@ -39,6 +40,7 @@ function FadeIn({
 /* ═══════════════════════════════ CONTACT PAGE ═══════════════════════════════ */
 
 export default function ContactPage() {
+  const [state, formAction, pending] = useActionState(submitLead, { ok: false });
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -49,12 +51,6 @@ export default function ContactPage() {
     interest: '',
     message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
@@ -144,7 +140,7 @@ export default function ContactPage() {
                   one business day.
                 </p>
 
-                {submitted ? (
+                {state.ok ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -162,7 +158,16 @@ export default function ContactPage() {
                     </p>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form action={formAction} className="space-y-6">
+                    {/* Honeypot — hidden from users; bots that fill it are dropped. */}
+                    <input
+                      type="text"
+                      name="company_website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      className="hidden"
+                    />
                     {/* Name row */}
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
@@ -295,13 +300,21 @@ export default function ContactPage() {
                       />
                     </div>
 
+                    {/* Error */}
+                    {state.error ? (
+                      <p className="text-sm text-cl-error bg-cl-error/5 border border-cl-error/20 rounded-lg px-4 py-3">
+                        {state.error}
+                      </p>
+                    ) : null}
+
                     {/* Submit */}
                     <button
                       type="submit"
-                      className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all duration-300 shadow-lg shadow-cl-teal/20"
+                      disabled={pending}
+                      className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all duration-300 shadow-lg shadow-cl-teal/20 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       <Send className="w-5 h-5" />
-                      Send Message
+                      {pending ? 'Sending…' : 'Send Message'}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
 
