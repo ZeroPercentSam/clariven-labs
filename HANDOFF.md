@@ -6,6 +6,43 @@
 
 ## Where we are
 
+> **2026-06-23 — Client-lifecycle program (intake → onboarding capture → order-requests). LIVE.**
+> Built the end-to-end client journey on top of the consulting onboarding, shipped in 4 commits to
+> `main`, all deployed to **www.clarivenlabs.com**.
+> - **Phase 1 — `/apply` intake** (commit `297683d`, migration 0031): public application form →
+>   `submit_membership_request()` SECURITY DEFINER RPC writes `membership_requests` (admin-only RLS),
+>   then best-effort staff-notify + welcome + wire-instructions emails + DocuSign agreement (mock).
+>   Admin `/admin/memberships` (list/detail/status/notes + CSV export). Header CTA → `/apply`
+>   ("Become a Client"). 3 email kinds + templates in `lib/email/templates/membership-*`. DocuSign
+>   mock-seam `lib/integrations/docusign.ts` (logs `.docusign-log.jsonl`; healthz reports it).
+> - **Phase 2 — onboarding capture** (commit `b7a7809`, migration 0032): `client_intake` table
+>   (per-org, member+admin RLS); new Phase-1 step **"Brand Name & Market Research"** inserted before
+>   "Establish Legal Entity"; `BrandResearchForm` on `/portal/onboarding`; admin shows captured brand +
+>   business details on the client detail page. `lib/clients/intake-{queries,actions}`.
+> - **Phase 3 — product selection + order-requests** (commit `b7a7809`, migration 0033): `order_requests`
+>   + `order_request_items` (broker model, **NO payment**; dormant `orders`/`create_order_with_items`
+>   untouched). `submit_order_request()` + `list_product_catalog()` definer RPCs (authenticated-only;
+>   catalog = slug+strength, **no cost**). `ProductPicker` (60 SKUs by research alias) + `BusinessDetailsForm`
+>   (LLC/address) on `/portal/orders/new`; `/portal/orders` list+detail; `/admin/orders` list+detail+status.
+>   `order-request` email kind. Portal nav gains **Orders**.
+> - **Phase 4 — brokering-agreement slot** (commit `6ba45be`, migration 0034): "Sign the peptide brokering
+>   agreement" item in step 1; `templateIdFor(kind)` resolves consulting/brokering DocuSign templates —
+>   the live send is a drop-in once creds land.
+> - **Verified each phase:** typecheck + build + lint (**0 errors**) + e2e **29/29** (`/apply` added to
+>   `site-no-clinical`); advisors **no new criticals**; anon RPC insert + RLS-block confirmed by probe;
+>   catalog RPC returns 60 active SKUs.
+>
+> **⏳ TO-DO before fully live (blocks LIVE behavior, not the build):**
+> - **Sam — set Vercel env (none in repo):** `MEMBERSHIP_NOTIFY_EMAIL` (Alicia + Sam, comma list),
+>   `BOOKING_URL` (Calendly/Cal.com), `WIRE_BANK_NAME` / `WIRE_ACCOUNT_NAME` / `WIRE_ROUTING` /
+>   `WIRE_ACCOUNT` (+ `WIRE_SWIFT`), `DOCUSIGN_INTEGRATION_KEY` + `DOCUSIGN_BASE_URL` +
+>   `DOCUSIGN_CONSULTING_TEMPLATE_ID`. Until set: applications are captured + a welcome sends, but there's
+>   no booking link, no wire email, and the agreement is a mock no-op. (All names in `.env.local.example`.)
+> - **From Alletia:** the **peptide brokering agreement** (→ `DOCUSIGN_BROKERING_TEMPLATE_ID`) and the
+>   **policies** — privacy, refund, shipping/fulfillment, RUO, brokering — for the client sites.
+> - **Then build (Phase 4 remainder):** the DocuSign **live branch** in `lib/integrations/docusign.ts`
+>   (JWT OAuth → Envelopes::create from `templateIdFor(kind)`), set `DOCUSIGN_MOCK=false`, test one real send.
+
 > **2026-06-19 — Consulting pivot, phase 2 (store hidden + deleted; surfaces refocused).**
 > ClarivenLabs is now a **consulting company, not a store.** Every client/admin surface is refocused
 > on the onboarding checklist; the e-commerce surfaces are removed. **No DB/schema change** — pure
