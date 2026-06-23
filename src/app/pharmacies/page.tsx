@@ -117,23 +117,21 @@ export default function PharmaciesPage() {
             <FadeIn>
               <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Audit Ready</p>
               <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-6">
-                Documentation That Passes Vendor Qualification
+                Documentation Buyers and Partners Expect
               </h2>
               <p className="text-cl-gray-500 leading-relaxed mb-8">
-                Corporate quality systems and institutional supplier reviews require meticulous
-                documentation of your research material supply chain. Clariven Labs provides the
-                complete characterization package your R&amp;D program needs to qualify a vendor.
+                Institutional buyers and partners expect a clear, consistent paper trail. We set up
+                and organize your program&apos;s documentation — and coordinate the qualified partners
+                who produce product-specific records like COAs and safety data.
               </p>
               <div className="space-y-3">
                 {[
-                  'Batch-specific Certificates of Analysis (COAs)',
-                  'Certificate of Conformance for each lot',
-                  'Supplier qualification and audit reports',
-                  'Safety Data Sheets (SDS) for all products',
-                  'ICH-aligned stability study data',
-                  'Manufacturing facility quality documentation',
-                  'Chain of custody and traceability records',
-                  'Reference standard characterization data',
+                  'Research-use-only positioning and labeling',
+                  'Research-use attestations on file',
+                  'Privacy, terms, and consent language',
+                  'Program documentation organized for review',
+                  'Partner coordination for product records (COAs, SDS)',
+                  'A site-wide check against human-use language',
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-cl-teal shrink-0 mt-0.5" />
@@ -145,15 +143,15 @@ export default function PharmaciesPage() {
 
             <FadeIn delay={0.15}>
               <div className="bg-gradient-to-br from-cl-navy to-cl-navy-light rounded-2xl p-8">
-                <h3 className="text-white font-semibold text-xl mb-6">Quality by the Numbers</h3>
+                <h3 className="text-white font-semibold text-xl mb-6">What We Coordinate</h3>
                 <div className="grid grid-cols-2 gap-6">
                   {[
-                    { value: '≥98%', label: 'Minimum Purity' },
-                    { value: '100%', label: 'COA Coverage' },
-                    { value: '<0.5', label: 'EU/mg Endotoxin' },
-                    { value: 'USP', label: 'Testing Standards' },
-                    { value: '6-Point', label: 'Analytical Panel' },
-                    { value: 'ICH', label: 'Stability Protocol' },
+                    { value: 'RUO', label: 'Positioning & labeling' },
+                    { value: 'Docs', label: 'Attestations & records' },
+                    { value: 'Web', label: 'Brand & storefront' },
+                    { value: '3PL', label: 'Fulfillment & operations' },
+                    { value: 'Legal', label: 'Privacy, terms, consent' },
+                    { value: 'Review', label: 'Ongoing compliance checks' },
                   ].map((stat) => (
                     <div key={stat.label} className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
                       <div className="text-2xl font-bold text-cl-teal mb-1">{stat.value}</div>
@@ -164,23 +162,6 @@ export default function PharmaciesPage() {
               </div>
             </FadeIn>
           </div>
-        </div>
-      </section>
-
-      {/* ════════ TESTIMONIAL ════════ */}
-      <section className="py-20 bg-cl-navy">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;For a CRO, supplier qualification is critical. Clariven Labs provides
-              the most complete characterization package we&apos;ve seen from any research
-              peptide supplier.&rdquo;
-            </div>
-            <div>
-              <p className="text-cl-teal font-semibold">Michael Torres, PhD</p>
-              <p className="text-white/40 text-sm">Director of Quality, Contract Research Organization</p>
-            </div>
-          </FadeIn>
         </div>
       </section>
 

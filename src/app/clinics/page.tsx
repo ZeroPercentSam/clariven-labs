@@ -82,19 +82,19 @@ export default function ClinicsPage() {
               Your Research Deserves Better Than Uncertainty
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              Demand for research peptides is growing rapidly — but sourcing reliable, well-characterized
-              reference material shouldn&apos;t feel like navigating a minefield.
+              Standing up a research-use-only line means getting compliance, brand, web, and
+              fulfillment right all at once — and without a single owner, things slip.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Shield, title: 'Purity You Can Verify', description: 'Every vial ships with a batch-specific COA showing HPLC purity ≥98%, mass spec identity confirmation, and endotoxin results.' },
-              { icon: FileCheck, title: 'Documentation for Reproducibility', description: 'Full characterization package including batch records, reference standard data, and facility certifications to support reproducible in-vitro work.' },
-              { icon: Clock, title: '48-Hour Fulfillment', description: 'Priority processing ensures your lab never stalls mid-study. Same-day shipping available for time-sensitive experiments.' },
-              { icon: Headphones, title: 'Named Account Specialist', description: 'A dedicated specialist who knows your lab, anticipates reorder needs, and resolves issues before they become problems.' },
-              { icon: TrendingUp, title: 'Volume-Based Pricing', description: 'Transparent tiered pricing that scales with your grant budget. No hidden fees, no surprise surcharges, no minimum order requirements.' },
-              { icon: FlaskConical, title: 'Custom Preparations', description: 'Need a specific concentration or peptide combination for an assay? Our formulation team works directly with you to prepare custom research lots.' },
+              { icon: Shield, title: 'Compliance You Can Defend', description: 'Research-use-only positioning, labeling, and attestations set up to hold up — no human-use or treatment claims anywhere.' },
+              { icon: FileCheck, title: 'Documentation in Order', description: 'The records, references, and attestations your program needs, organized so your intent is clear and defensible.' },
+              { icon: Clock, title: 'One Guided Timeline', description: 'A single program with clear owners and milestones, so your launch doesn’t stall waiting on the next step.' },
+              { icon: Headphones, title: 'A Named Team', description: 'A dedicated specialist who knows your program and keeps every partner moving toward launch.' },
+              { icon: TrendingUp, title: 'Scales As You Grow', description: 'Add products or pages and the compliance review comes with them — nothing drifts out of line later.' },
+              { icon: FlaskConical, title: 'Built Around Your Work', description: 'We shape the program around how your lab actually operates, not a one-size-fits-all template.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-lg hover:shadow-cl-teal/5 transition-all duration-300">
@@ -135,23 +135,6 @@ export default function ClinicsPage() {
               </FadeIn>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ════════ TESTIMONIAL ════════ */}
-      <section className="py-20 bg-cl-navy">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;Switching to Clariven Labs transformed how we source materials for our
-              peptide studies. The consistency, documentation, and dedicated support are
-              exactly what an academic lab needs.&rdquo;
-            </div>
-            <div>
-              <p className="text-cl-teal font-semibold">Dr. Sarah Mitchell, PhD</p>
-              <p className="text-white/40 text-sm">Principal Investigator, University Peptide Research Lab</p>
-            </div>
-          </FadeIn>
         </div>
       </section>
 

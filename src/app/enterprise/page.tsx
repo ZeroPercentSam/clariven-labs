@@ -3,23 +3,16 @@
 import { motion } from 'framer-motion';
 import {
   Building,
-  CheckCircle2,
   ArrowRight,
   Shield,
-  Users,
   FileCheck,
-  TrendingUp,
   Globe,
   Lock,
   Package,
   BarChart3,
-  Headphones,
   Handshake,
   Settings,
-  Layers,
-  Truck,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 function FadeIn({ children, delay = 0, className }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -48,55 +41,55 @@ export default function EnterprisePage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cl-gold text-sm font-medium mb-6">
               <Building className="w-4 h-4" />
-              Institutional & Multi-Site
+              Multi-Brand &amp; At Scale
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Scale Your Research Program
+              Launch Multiple Research Brands
               <br />
               <span className="bg-gradient-to-r from-cl-gold to-cl-gold-light bg-clip-text text-transparent">
-                Across Every Site
+                Under One Standard
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-10">
-              Clariven Labs provides institutional-grade research peptide supply solutions for
-              multi-site research programs, core facility networks, and research institutions — with
-              centralized procurement, volume economics, and white-glove support. For laboratory research use only.
+              For operators and groups launching more than one research-use-only product line, Clariven
+              Labs runs the same guided program across every brand — one compliance standard, one team,
+              repeatable from launch to launch. For laboratory research use only.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-gold text-cl-navy font-semibold hover:bg-cl-gold-light transition-all">
-                Schedule Executive Briefing
+                Schedule a Briefing
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/quality" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View Quality Standards
+                Our Compliance Approach
               </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ════════ ENTERPRISE VALUE PROPS ════════ */}
+      {/* ════════ VALUE PROPS ════════ */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
-            <p className="text-cl-gold font-semibold text-sm tracking-widest uppercase mb-4">Institutional Solutions</p>
+            <p className="text-cl-gold font-semibold text-sm tracking-widest uppercase mb-4">At-Scale Consulting</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Built for Complexity. Designed for Scale.
+              Built for Complexity. Designed to Repeat.
             </h2>
             <p className="text-cl-gray-500 max-w-2xl mx-auto">
-              Managing research peptide supply across multiple sites demands more than a catalog
-              and a phone number. Clariven Labs delivers institutional procurement infrastructure.
+              Running more than one research-use-only brand multiplies the places things can drift.
+              We keep every program on the same standard.
             </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: Globe, title: 'Multi-Site Management', description: 'Centralized procurement with site-specific fulfillment, billing, and characterization documentation. One relationship, unlimited research sites.' },
-              { icon: BarChart3, title: 'Volume Economics', description: 'Institutional-tier pricing with contracted rates, volume rebates, and predictable budgeting. Custom pricing models for high-volume research programs.' },
-              { icon: Handshake, title: 'Dedicated Account Team', description: 'Named institutional account manager plus technical specialist, documentation liaison, and logistics coordinator. Quarterly program reviews included.' },
-              { icon: Settings, title: 'Custom Integration', description: 'Programmatic access for procurement-system integration, automated reordering, and inventory management. EDI and punch-out catalog options available.' },
-              { icon: Lock, title: 'Supply Assurance', description: 'Reserved inventory programs, multi-source manufacturing, and continuity planning to protect your research supply chain against disruptions.' },
-              { icon: FileCheck, title: 'Institutional Vendor Qualification', description: 'Centralized characterization documentation, vendor qualification packages, and audit support for corporate and institutional quality systems.' },
+              { icon: Globe, title: 'One Standard, Every Brand', description: 'Consistent research-use-only positioning, labeling, and compliance applied across your whole portfolio.' },
+              { icon: BarChart3, title: 'A Shared Playbook', description: 'The same guided onboarding program runs each launch, so nothing is reinvented from brand to brand.' },
+              { icon: Handshake, title: 'One Dedicated Team', description: 'A named Clariven team that knows your portfolio and carries context across every program.' },
+              { icon: Settings, title: 'Repeatable Setup', description: 'Brand, web, and fulfillment stood up the same proven way each time, then handed over running.' },
+              { icon: Lock, title: 'Compliance That Scales', description: 'One review standard applied to every brand — and re-checked each time you add a product or page.' },
+              { icon: FileCheck, title: 'Centralized Documentation', description: 'Attestations and program documentation organized across the portfolio, ready when partners ask.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>
                 <motion.div whileHover={{ y: -4 }} className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-gold/30 hover:shadow-lg hover:shadow-cl-gold/5 transition-all duration-300">
@@ -116,17 +109,15 @@ export default function EnterprisePage() {
       <section className="py-20 bg-cl-gray-50">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Institutions We Serve
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">Who This Is For</h2>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { title: 'Multi-Site Research Programs', description: 'Research organizations with 5+ laboratory sites requiring unified research peptide supply management.', icon: Building },
-              { title: 'Research Institutions', description: 'Universities and research institutes coordinating peptide studies across multiple departments and groups.', icon: Shield },
-              { title: 'Core Facility Networks', description: 'Shared core facilities needing centralized research material procurement and characterization documentation.', icon: Package },
-              { title: 'Biotech & CRO Networks', description: 'National and regional R&D networks standardizing research SOPs and reference standards.', icon: Globe },
+              { title: 'Multi-Brand Operators', description: 'Teams running more than one research-use-only brand and wanting one consistent standard.', icon: Building },
+              { title: 'Holding Groups', description: 'Groups launching several research-use-only lines that should share compliance and operations.', icon: Shield },
+              { title: 'Expanding Companies', description: 'Research companies broadening their lineup who need each addition to stay compliant.', icon: Package },
+              { title: 'Networks & Partners', description: 'Networks standardizing how they bring new research-use-only programs to market.', icon: Globe },
             ].map((client, i) => (
               <FadeIn key={client.title} delay={i * 0.06}>
                 <div className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200">
@@ -146,17 +137,15 @@ export default function EnterprisePage() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn className="text-center mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              The Enterprise Engagement Model
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">How a Portfolio Engagement Works</h2>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { step: '01', title: 'Discovery Call', description: 'Executive briefing to understand your organization, volume, research sites, and requirements.' },
-              { step: '02', title: 'Custom Proposal', description: 'Tailored pricing, supply agreement, and implementation plan for your organization.' },
-              { step: '03', title: 'Onboarding', description: 'Site-by-site setup with ordering systems, documentation packages, and lab staff training.' },
-              { step: '04', title: 'Ongoing Partnership', description: 'Quarterly program reviews, supply planning, and continuous improvement initiatives.' },
+              { step: '01', title: 'Briefing', description: 'We learn your portfolio, the brands you’re planning, and the standard you want to hold them to.' },
+              { step: '02', title: 'Plan', description: 'A shared playbook and a named team, with the guided program mapped across every brand.' },
+              { step: '03', title: 'Build', description: 'We run each launch through the same program — compliance, brand, web, and fulfillment.' },
+              { step: '04', title: 'Ongoing Partnership', description: 'Reviews as you add brands or products, keeping the whole portfolio on one standard.' },
             ].map((item, i) => (
               <FadeIn key={item.step} delay={i * 0.08}>
                 <div className="text-center">
@@ -172,41 +161,24 @@ export default function EnterprisePage() {
         </div>
       </section>
 
-      {/* ════════ TESTIMONIAL ════════ */}
-      <section className="py-20 bg-cl-navy">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;Managing research peptide supply across 12 sites was a logistics
-              nightmare until we partnered with Clariven. One account team,
-              consistent quality, simplified vendor qualification.&rdquo;
-            </div>
-            <div>
-              <p className="text-cl-gold font-semibold">Robert Chang</p>
-              <p className="text-white/40 text-sm">VP Research Operations, National Life Sciences Research Network</p>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
       {/* ════════ CTA ════════ */}
       <section className="py-20 bg-gradient-to-br from-cl-navy to-cl-navy-light">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FadeIn>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Let&apos;s Design Your Enterprise Solution
+              Let&apos;s Map Your Portfolio
             </h2>
             <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
-              Schedule a confidential executive briefing to explore how Clariven Labs
-              can streamline your multi-site research peptide supply chain.
+              Schedule a briefing to explore how Clariven Labs can launch and maintain multiple
+              research-use-only brands on one standard.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-gold text-cl-navy font-semibold hover:bg-cl-gold-light transition-all">
-                Schedule Executive Briefing
+                Schedule a Briefing
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href="/quality" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all">
-                View Quality Standards
+                Our Compliance Approach
               </Link>
             </div>
           </FadeIn>

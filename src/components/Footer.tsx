@@ -22,20 +22,6 @@ export default function Footer() {
               Research-use-only brand &amp; compliance consulting — helping laboratories and research
               companies launch compliant RUO product programs.
             </p>
-            <div className="flex gap-3">
-              {['LinkedIn', 'Twitter', 'Instagram'].map((social) => (
-                <a
-                  key={social}
-                  href="#"
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
-                >
-                  <span className="text-white/50 text-xs font-medium">
-                    {social[0]}
-                    {social[1]}
-                  </span>
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Company */}

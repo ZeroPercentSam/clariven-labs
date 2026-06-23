@@ -4,20 +4,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Mail,
-  Phone,
-  MapPin,
   Clock,
+  MapPin,
   Send,
   ArrowRight,
   CheckCircle2,
-  Building2,
-  FlaskConical,
-  Shield,
-  Users,
   MessageSquare,
-  Headphones,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 /* ─── Fade-in ─── */
@@ -63,7 +56,9 @@ export default function ContactPage() {
     setSubmitted(true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -87,15 +82,16 @@ export default function ContactPage() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Let&apos;s Build Your
+              Let&apos;s Launch Your
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-                Peptide Supply Chain
+                Research Brand
               </span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
-              Whether you&apos;re a research lab evaluating peptides, an institution scaling
-              procurement, or a research group sourcing reference compounds — we&apos;re here to help.
+              Whether you&apos;re scoping a research-use-only product line or need the compliance,
+              brand, and operations handled end to end — tell us where you want to go and we&apos;ll map
+              the path.
             </p>
           </motion.div>
         </div>
@@ -103,30 +99,32 @@ export default function ContactPage() {
 
       {/* ════════════════════ CONTACT INFO BAR ════════════════════ */}
       <section className="py-6 bg-cl-gray-50 border-b border-cl-gray-200">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
-              { icon: Phone, label: 'Sales', value: '(888) 555-0142', href: 'tel:+18885550142' },
-              { icon: Mail, label: 'Email', value: 'info@clarivenlabs.com', href: 'mailto:info@clarivenlabs.com' },
-              { icon: MapPin, label: 'Headquarters', value: 'Scottsdale, AZ', href: '#' },
-              { icon: Clock, label: 'Hours', value: 'Mon–Fri, 7AM–6PM MST', href: '#' },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="flex items-center gap-3 group"
-              >
-                <div className="w-10 h-10 rounded-lg bg-cl-teal/10 flex items-center justify-center shrink-0">
-                  <item.icon className="w-5 h-5 text-cl-teal" />
-                </div>
-                <div>
-                  <p className="text-xs text-cl-gray-400 uppercase tracking-wider">{item.label}</p>
-                  <p className="text-sm font-medium text-cl-navy group-hover:text-cl-teal transition-colors">
-                    {item.value}
-                  </p>
-                </div>
-              </a>
-            ))}
+              { icon: Mail, label: 'Email', value: 'support@clarivenlabs.com', href: 'mailto:support@clarivenlabs.com' },
+              { icon: Clock, label: 'Response', value: 'Within 1 business day', href: null },
+              { icon: MapPin, label: 'Entity', value: 'Clariven Labs LLC · Wyoming', href: null },
+            ].map((item) => {
+              const inner = (
+                <>
+                  <div className="w-10 h-10 rounded-lg bg-cl-teal/10 flex items-center justify-center shrink-0">
+                    <item.icon className="w-5 h-5 text-cl-teal" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-cl-gray-400 uppercase tracking-wider">{item.label}</p>
+                    <p className="text-sm font-medium text-cl-navy">{item.value}</p>
+                  </div>
+                </>
+              );
+              return item.href ? (
+                <a key={item.label} href={item.href} className="flex items-center gap-3 group hover:opacity-80 transition">
+                  {inner}
+                </a>
+              ) : (
+                <div key={item.label} className="flex items-center gap-3">{inner}</div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -142,8 +140,8 @@ export default function ContactPage() {
                   Request a Consultation
                 </h2>
                 <p className="text-cl-gray-500 mb-8">
-                  Tell us about your needs and a dedicated account specialist will respond
-                  within one business day.
+                  Tell us about your research company and a Clariven specialist will respond within
+                  one business day.
                 </p>
 
                 {submitted ? (
@@ -156,14 +154,11 @@ export default function ContactPage() {
                       <CheckCircle2 className="w-8 h-8 text-cl-success" />
                     </div>
                     <h3 className="text-xl font-semibold text-cl-navy mb-3">
-                      Thank You for Your Interest
+                      Thanks — We&apos;ll Be in Touch
                     </h3>
-                    <p className="text-cl-gray-500 max-w-md mx-auto mb-6">
-                      Your inquiry has been received. A dedicated account specialist will
-                      reach out within one business day to discuss your peptide supply needs.
-                    </p>
-                    <p className="text-sm text-cl-gray-400">
-                      Reference ID: CL-{Date.now().toString(36).toUpperCase()}
+                    <p className="text-cl-gray-500 max-w-md mx-auto">
+                      Your message has been received. A Clariven specialist will reach out within one
+                      business day to scope your research-use-only program.
                     </p>
                   </motion.div>
                 ) : (
@@ -181,7 +176,7 @@ export default function ContactPage() {
                           value={formData.firstName}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="John"
+                          placeholder="Jordan"
                         />
                       </div>
                       <div>
@@ -195,7 +190,7 @@ export default function ContactPage() {
                           value={formData.lastName}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="Smith"
+                          placeholder="Reyes"
                         />
                       </div>
                     </div>
@@ -213,20 +208,18 @@ export default function ContactPage() {
                           value={formData.email}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="john@lab.edu"
+                          placeholder="you@company.com"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-cl-navy mb-1.5">
-                          Phone
-                        </label>
+                        <label className="block text-sm font-medium text-cl-navy mb-1.5">Phone</label>
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="(555) 000-0000"
+                          placeholder="Optional"
                         />
                       </div>
                     </div>
@@ -235,7 +228,7 @@ export default function ContactPage() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-cl-navy mb-1.5">
-                          Organization <span className="text-cl-error">*</span>
+                          Company / Organization <span className="text-cl-error">*</span>
                         </label>
                         <input
                           type="text"
@@ -244,7 +237,7 @@ export default function ContactPage() {
                           value={formData.organization}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
-                          placeholder="Your lab or institution"
+                          placeholder="Your company or lab"
                         />
                       </div>
                       <div>
@@ -259,13 +252,11 @@ export default function ContactPage() {
                           className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
                         >
                           <option value="">Select your role</option>
+                          <option value="founder">Founder / Operator</option>
                           <option value="principal-investigator">Principal Investigator</option>
                           <option value="research-scientist">Research Scientist</option>
-                          <option value="lab-manager">Lab Manager</option>
-                          <option value="lab-director">Laboratory Director</option>
-                          <option value="researcher">Researcher / Postdoc</option>
-                          <option value="procurement">Procurement / Purchasing</option>
-                          <option value="institution-admin">Institution Administrator</option>
+                          <option value="lab-manager">Lab Manager / Director</option>
+                          <option value="operations">Operations / Procurement</option>
                           <option value="other">Other</option>
                         </select>
                       </div>
@@ -274,7 +265,7 @@ export default function ContactPage() {
                     {/* Interest */}
                     <div>
                       <label className="block text-sm font-medium text-cl-navy mb-1.5">
-                        What are you interested in?
+                        What can we help with?
                       </label>
                       <select
                         name="interest"
@@ -283,28 +274,24 @@ export default function ContactPage() {
                         className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition"
                       >
                         <option value="">Select an option</option>
-                        <option value="product-inquiry">Product Inquiry & Pricing</option>
-                        <option value="bulk-order">Bulk / Volume Orders</option>
-                        <option value="custom-formulation">Custom Formulation</option>
-                        <option value="new-account">Open a New Account</option>
-                        <option value="coa-request">COA / Documentation Request</option>
-                        <option value="partnership">Partnership Opportunity</option>
-                        <option value="general">General Question</option>
+                        <option value="launch">Launch a research-use-only brand</option>
+                        <option value="compliance">RUO compliance review</option>
+                        <option value="brand-web">Brand, web &amp; fulfillment setup</option>
+                        <option value="partnership">Partnership opportunity</option>
+                        <option value="general">General question</option>
                       </select>
                     </div>
 
                     {/* Message */}
                     <div>
-                      <label className="block text-sm font-medium text-cl-navy mb-1.5">
-                        Message
-                      </label>
+                      <label className="block text-sm font-medium text-cl-navy mb-1.5">Message</label>
                       <textarea
                         name="message"
                         rows={4}
                         value={formData.message}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition resize-none"
-                        placeholder="Tell us about your peptide supply needs, volume requirements, or any specific questions..."
+                        placeholder="Tell us about your research company, where you want to take it, and any timelines or questions…"
                       />
                     </div>
 
@@ -314,7 +301,7 @@ export default function ContactPage() {
                       className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all duration-300 shadow-lg shadow-cl-teal/20"
                     >
                       <Send className="w-5 h-5" />
-                      Submit Inquiry
+                      Send Message
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </button>
 
@@ -332,17 +319,15 @@ export default function ContactPage() {
             <div className="lg:col-span-1">
               <FadeIn delay={0.15}>
                 <div className="space-y-6 sticky top-[88px]">
-                  {/* Why contact us */}
+                  {/* What to expect */}
                   <div className="p-6 rounded-2xl bg-cl-gray-50 border border-cl-gray-200">
-                    <h3 className="text-lg font-semibold text-cl-navy mb-4">
-                      What to Expect
-                    </h3>
+                    <h3 className="text-lg font-semibold text-cl-navy mb-4">What to Expect</h3>
                     <div className="space-y-4">
                       {[
-                        { step: '1', text: 'Submit your inquiry with details about your needs' },
-                        { step: '2', text: 'A named account specialist contacts you within 24 hours' },
-                        { step: '3', text: 'Receive customized pricing and product recommendations' },
-                        { step: '4', text: 'Begin your first order with dedicated support' },
+                        { step: '1', text: 'Send your message with a bit about your company and goals' },
+                        { step: '2', text: 'A Clariven specialist reaches out within one business day' },
+                        { step: '3', text: 'We scope your program and map a guided onboarding plan' },
+                        { step: '4', text: 'A named team takes it from kickoff through launch' },
                       ].map((item) => (
                         <div key={item.step} className="flex items-start gap-3">
                           <span className="w-6 h-6 rounded-full bg-cl-teal text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
@@ -354,47 +339,19 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Benefits card */}
+                  {/* Benefits */}
                   <div className="p-6 rounded-2xl bg-gradient-to-br from-cl-navy to-cl-navy-light">
-                    <h3 className="text-white font-semibold mb-4">
-                      Why Labs Switch to Clariven
-                    </h3>
+                    <h3 className="text-white font-semibold mb-4">Why Work With Clariven</h3>
                     <div className="space-y-3">
                       {[
-                        'Named account specialist (not a call center)',
-                        'Volume-based pricing with no hidden fees',
-                        'Batch-specific COAs with every order',
-                        '48-hour priority fulfillment',
-                        'Custom formulation capabilities',
-                        'Regulatory compliance documentation',
+                        'One partner from kickoff through launch',
+                        'A single guided plan with a named team',
+                        'Compliance, brand, web & fulfillment coordinated',
+                        'Research-use-only, handled correctly',
                       ].map((benefit) => (
                         <div key={benefit} className="flex items-start gap-2">
                           <CheckCircle2 className="w-4 h-4 text-cl-teal shrink-0 mt-0.5" />
                           <span className="text-sm text-white/70">{benefit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Direct contacts */}
-                  <div className="p-6 rounded-2xl border border-cl-gray-200">
-                    <h3 className="text-lg font-semibold text-cl-navy mb-4">
-                      Direct Lines
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        { icon: Headphones, dept: 'New Accounts', contact: '(888) 555-0142 ext 1' },
-                        { icon: FlaskConical, dept: 'Technical / Quality', contact: '(888) 555-0142 ext 2' },
-                        { icon: Users, dept: 'Existing Clients', contact: '(888) 555-0142 ext 3' },
-                      ].map((line) => (
-                        <div key={line.dept} className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-cl-gray-100 flex items-center justify-center">
-                            <line.icon className="w-4 h-4 text-cl-gray-500" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-cl-navy">{line.dept}</p>
-                            <p className="text-xs text-cl-gray-400">{line.contact}</p>
-                          </div>
                         </div>
                       ))}
                     </div>
@@ -406,67 +363,8 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ════════════════════ DEPARTMENT CARDS ════════════════════ */}
-      <section className="py-16 bg-cl-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <FadeIn className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-cl-navy mb-3">
-              Reach the Right Team
-            </h2>
-            <p className="text-cl-gray-500">
-              Connect directly with the department best suited to help you.
-            </p>
-          </FadeIn>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              {
-                icon: Building2,
-                title: 'Sales & Accounts',
-                email: 'sales@clarivenlabs.com',
-                description: 'New accounts, pricing, and product catalog inquiries.',
-              },
-              {
-                icon: FlaskConical,
-                title: 'Technical Support',
-                email: 'technical@clarivenlabs.com',
-                description: 'Product specifications, stability data, and formulation questions.',
-              },
-              {
-                icon: Shield,
-                title: 'Quality & Compliance',
-                email: 'quality@clarivenlabs.com',
-                description: 'COA requests, regulatory documentation, and facility certifications.',
-              },
-              {
-                icon: Users,
-                title: 'Partnerships',
-                email: 'partners@clarivenlabs.com',
-                description: 'Strategic partnerships, distribution, and co-development opportunities.',
-              },
-            ].map((dept, i) => (
-              <FadeIn key={dept.title} delay={i * 0.08}>
-                <div className="h-full p-6 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-md transition-all duration-300">
-                  <div className="w-11 h-11 rounded-xl bg-cl-teal/10 flex items-center justify-center mb-4">
-                    <dept.icon className="w-5 h-5 text-cl-teal" />
-                  </div>
-                  <h3 className="text-base font-semibold text-cl-navy mb-1">{dept.title}</h3>
-                  <p className="text-sm text-cl-gray-500 mb-3">{dept.description}</p>
-                  <a
-                    href={`mailto:${dept.email}`}
-                    className="text-sm font-medium text-cl-teal hover:text-cl-teal-light transition-colors"
-                  >
-                    {dept.email}
-                  </a>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════ FAQ MINI ════════════════════ */}
-      <section className="py-20 bg-white">
+      {/* ════════════════════ FAQ ════════════════════ */}
+      <section className="py-20 bg-cl-gray-50">
         <div className="max-w-4xl mx-auto px-6">
           <FadeIn className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-cl-navy mb-3">
@@ -477,28 +375,28 @@ export default function ContactPage() {
           <div className="space-y-4">
             {[
               {
-                q: 'What is the minimum order quantity?',
-                a: 'We offer flexible ordering with no minimum for most products. Volume pricing is available for labs ordering 50+ units per month.',
+                q: 'What does Clariven Labs actually do?',
+                a: 'We help research companies launch and run a research-use-only product line — compliance, brand, web, and fulfillment — through one guided onboarding program run by a named team.',
               },
               {
-                q: 'How quickly can I receive my first order?',
-                a: 'Once your account is verified, first orders typically ship within 48 hours. We offer priority and same-day processing for urgent needs.',
+                q: 'Do you sell or manufacture products?',
+                a: 'No. Clariven Labs is a consultancy. We set up and coordinate your program and its partners; we do not manufacture, test, or ship product ourselves.',
               },
               {
-                q: 'Do you provide COAs with every shipment?',
-                a: 'Yes. Every order includes batch-specific Certificates of Analysis. Historical COAs are accessible anytime through our client portal.',
+                q: 'What does "research use only" mean here?',
+                a: 'Products in a research-use-only program are intended for laboratory research only — not for human or animal consumption, and not drugs, foods, or cosmetics. We keep your positioning and labeling consistent with that.',
               },
               {
-                q: 'What documentation do I need to open an account?',
-                a: 'We verify that buyers are qualified research professionals or institutions (e.g., institutional affiliation or a research-use attestation) plus basic business verification. No medical license is required because products are sold for research use only. Our team will guide you through the process.',
+                q: 'How long does it take?',
+                a: 'It depends on scope, but the program is the same every time: a guided checklist with clear owners, so you always know what is next. We map a realistic timeline on the first call.',
               },
               {
-                q: 'Can you develop custom formulations?',
-                a: 'Absolutely. Our formulation team can develop custom peptide blends, specific concentrations, and multi-peptide combinations tailored to your research protocols.',
+                q: 'How do we get started?',
+                a: 'Send the form above or email support@clarivenlabs.com. A specialist follows up within one business day to scope your program.',
               },
             ].map((faq, i) => (
               <FadeIn key={i} delay={i * 0.05}>
-                <div className="p-6 rounded-2xl border border-cl-gray-200 hover:border-cl-gray-300 transition-colors">
+                <div className="p-6 rounded-2xl border border-cl-gray-200 bg-white hover:border-cl-gray-300 transition-colors">
                   <h3 className="text-base font-semibold text-cl-navy mb-2">{faq.q}</h3>
                   <p className="text-sm text-cl-gray-500 leading-relaxed">{faq.a}</p>
                 </div>

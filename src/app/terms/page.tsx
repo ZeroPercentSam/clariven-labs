@@ -49,7 +49,7 @@ const sections = [
   { id: 'buyer-representations', label: 'Buyer Representations' },
   { id: 'product-use', label: 'Product Use & Restrictions' },
   { id: 'orders', label: 'Orders & Payment' },
-  { id: 'shipping', label: 'Shipping & Returns' },
+  { id: 'shipping', label: 'Services' },
   { id: 'warranty', label: 'Warranty Disclaimer' },
   { id: 'intellectual-property', label: 'Intellectual Property' },
   { id: 'prohibited', label: 'Prohibited Conduct' },
@@ -375,39 +375,22 @@ export default function TermsPage() {
                   <div id="shipping">
                     <h2 className="text-xl font-bold text-cl-navy mb-4 flex items-center gap-3">
                       <span className="text-sm font-semibold text-cl-teal bg-cl-teal/10 w-8 h-8 rounded-lg flex items-center justify-center">7</span>
-                      Shipping &amp; Returns
+                      Services
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        Shipping terms and return policies are governed by your account agreement and the
-                        following general provisions:
+                        Clariven Labs provides consulting and program-management services for
+                        research-use-only brands — including compliance, brand, web, and operational
+                        setup. Clariven Labs does not manufacture, sell, or ship products, and does not
+                        issue certificates of analysis or hold manufacturing certifications.
                       </p>
-                      <div className="p-6 rounded-2xl bg-cl-gray-50 border border-cl-gray-100 space-y-4">
-                        <div>
-                          <h4 className="text-sm font-semibold text-cl-navy mb-1">Shipping</h4>
-                          <p className="text-sm text-cl-gray-600">
-                            Orders placed before 2:00 PM EST on business days are processed same-day.
-                            All shipments utilize temperature-controlled packaging and are tracked from
-                            our facility to your door. Risk of loss transfers upon carrier acceptance.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-semibold text-cl-navy mb-1">Returns</h4>
-                          <p className="text-sm text-cl-gray-600">
-                            Due to the research-chemical nature of our products, returns are restricted to
-                            damaged, defective, or incorrectly shipped items only. All claims must be
-                            reported within 48 hours of receipt with photographic documentation. Products
-                            returned due to customer error may be subject to a restocking fee.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-semibold text-cl-navy mb-1">Cold Chain Guarantee</h4>
-                          <p className="text-sm text-cl-gray-600">
-                            Products requiring refrigeration are shipped with validated cold chain packaging.
-                            If temperature excursion is documented, we will replace the product at no charge.
-                          </p>
-                        </div>
-                      </div>
+                      <p>
+                        Where a client&apos;s program requires manufacturing, testing, fulfillment, or
+                        similar product services, those are performed by the client&apos;s own qualified
+                        third-party vendors, which Clariven Labs may help identify and coordinate. The
+                        scope, fees, and deliverables of any engagement are governed by the separate
+                        written agreement between Clariven Labs and the client.
+                      </p>
                     </div>
                   </div>
                 </FadeIn>
@@ -421,11 +404,10 @@ export default function TermsPage() {
                     </h2>
                     <div className="text-cl-gray-600 text-[15px] leading-relaxed space-y-4">
                       <p>
-                        Products are supplied <strong>&quot;AS IS&quot;</strong> and <strong>&quot;WITH ALL FAULTS&quot;</strong>{' '}
-                        as research-grade materials for laboratory research use only. Except for a limited
-                        warranty, if any, that a product conforms to the specifications stated on its
-                        certificate of analysis at the time of shipment, Clariven Labs makes no warranties of
-                        any kind, whether express, implied, statutory, or otherwise.
+                        Clariven Labs&apos; services and any deliverables are provided{' '}
+                        <strong>&quot;AS IS&quot;</strong> in support of research-use-only programs. Except for a
+                        limited warranty, if any, expressly stated in a written agreement, Clariven Labs
+                        makes no warranties of any kind, whether express, implied, statutory, or otherwise.
                       </p>
                       <p>
                         To the maximum extent permitted by law, Clariven Labs specifically disclaims all

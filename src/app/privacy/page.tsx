@@ -142,7 +142,7 @@ export default function PrivacyPage() {
                 <FadeIn>
                   <div className="grid sm:grid-cols-3 gap-4 pb-10 border-b border-cl-gray-100">
                     {[
-                      { icon: Lock, title: 'Encrypted', desc: 'All data transmitted via TLS 1.3 encryption' },
+                      { icon: Lock, title: 'Encrypted', desc: 'Information you send us is encrypted in transit' },
                       { icon: Eye, title: 'No Selling', desc: 'We never sell personal information to third parties' },
                       { icon: UserCheck, title: 'Your Control', desc: 'Access, correct, or delete your data anytime' },
                     ].map((item, i) => (
@@ -285,14 +285,11 @@ export default function PrivacyPage() {
                       <div className="p-6 rounded-2xl bg-cl-gray-50 border border-cl-gray-100">
                         <div className="grid sm:grid-cols-2 gap-4">
                           {[
-                            'TLS 1.3 encryption for all data in transit',
-                            'AES-256 encryption for data at rest',
-                            'Multi-factor authentication for account access',
-                            'Role-based access controls with audit logging',
-                            'Regular penetration testing and vulnerability assessments',
-                            'SOC 2 Type II compliant infrastructure',
-                            'Automated threat detection and response',
-                            'Employee security training and background checks',
+                            'Encryption in transit for information you send us',
+                            'Access limited to people who need it to do their work',
+                            'Multi-factor authentication on administrative access',
+                            'Reputable, security-conscious infrastructure providers',
+                            'Prompt review and response if an issue is reported',
                           ].map((item) => (
                             <div key={item} className="flex items-start gap-2">
                               <Shield className="w-4 h-4 text-cl-teal mt-0.5 shrink-0" />

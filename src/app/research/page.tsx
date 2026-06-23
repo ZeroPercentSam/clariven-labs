@@ -116,20 +116,23 @@ export default function ResearchPage() {
           <FadeIn className="text-center mb-14">
             <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-4">Research Applications</p>
             <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-              Peptides Across Research Domains
+              Research Domains We Support
             </h2>
+            <p className="text-cl-gray-500 max-w-2xl mx-auto">
+              We help research-use-only brands and programs launch across a range of research areas.
+            </p>
           </FadeIn>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { title: 'Metabolic Research', examples: 'GLP-1 agonists, GIP analogs, insulin sensitizers', icon: Beaker },
-              { title: 'Neuroscience', examples: 'Neuropeptides, cognitive enhancers, neuroprotective agents', icon: Dna },
-              { title: 'Immunology', examples: 'Thymic peptides, immunomodulators, cytokine analogs', icon: Shield },
-              { title: 'Wound Healing', examples: 'Growth factors, tissue repair peptides, angiogenic agents', icon: FlaskConical },
-              { title: 'Oncology', examples: 'Anti-proliferative peptides, targeted delivery conjugates', icon: Microscope },
-              { title: 'Endocrinology', examples: 'Growth hormone secretagogues, GHRH analogs', icon: Layers },
-              { title: 'Aging & Longevity', examples: 'Telomerase activators, senolytic peptides, NAD+ precursors', icon: Award },
-              { title: 'Drug Development', examples: 'Lead compounds, SAR studies, peptide-drug conjugates', icon: BookOpen },
+              { title: 'Metabolic Research', examples: 'Metabolic and energy-balance studies', icon: Beaker },
+              { title: 'Neuroscience', examples: 'Neuropeptide and cognition research', icon: Dna },
+              { title: 'Immunology', examples: 'Immune signaling and modulation', icon: Shield },
+              { title: 'Tissue Repair', examples: 'Tissue repair and recovery research', icon: FlaskConical },
+              { title: 'Cell Biology', examples: 'Cell-proliferation and targeting research', icon: Microscope },
+              { title: 'Endocrinology', examples: 'Hormone and signaling research', icon: Layers },
+              { title: 'Aging & Longevity', examples: 'Cellular-aging and longevity research', icon: Award },
+              { title: 'Early Development', examples: 'Early-stage compound and method research', icon: BookOpen },
             ].map((area, i) => (
               <FadeIn key={area.title} delay={i * 0.04}>
                 <div className="h-full p-5 rounded-xl bg-white border border-cl-gray-200">
@@ -142,23 +145,6 @@ export default function ResearchPage() {
               </FadeIn>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ════════ TESTIMONIAL ════════ */}
-      <section className="py-20 bg-cl-navy">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <FadeIn>
-            <div className="text-3xl sm:text-4xl font-bold text-white leading-relaxed mb-8">
-              &ldquo;The lot-to-lot consistency from Clariven Labs has been exceptional.
-              Having reliable analytical data with every order saves us significant
-              time in our QC workflows.&rdquo;
-            </div>
-            <div>
-              <p className="text-cl-teal font-semibold">Dr. James Whitfield, PhD</p>
-              <p className="text-white/40 text-sm">Principal Investigator, State University Peptide Research Lab</p>
-            </div>
-          </FadeIn>
         </div>
       </section>
 

@@ -1,140 +1,37 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
-  Shield,
-  FlaskConical,
-  Users,
-  Award,
   Target,
   Eye,
   Lightbulb,
+  ShieldCheck,
   Building2,
-  Globe,
-  CheckCircle2,
+  Users,
   ArrowRight,
-  Microscope,
-  HeartPulse,
-  TrendingUp,
-  Handshake,
-  GraduationCap,
-  Dna,
-  Clock,
-  MapPin,
-  Beaker,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 /* ─── Fade-in wrapper ─── */
 function FadeIn({
   children,
   delay = 0,
-  direction = 'up',
   className,
 }: {
   children: React.ReactNode;
   delay?: number;
-  direction?: 'up' | 'down' | 'left' | 'right';
   className?: string;
 }) {
-  const dirMap = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 },
-  };
   return (
     <motion.div
-      initial={{ opacity: 0, ...dirMap[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
     </motion.div>
-  );
-}
-
-/* ─── Timeline Item ─── */
-function TimelineItem({
-  year,
-  title,
-  description,
-  delay,
-}: {
-  year: string;
-  title: string;
-  description: string;
-  delay: number;
-}) {
-  return (
-    <FadeIn delay={delay}>
-      <div className="relative pl-10 pb-12 last:pb-0">
-        {/* Line */}
-        <div className="absolute left-[11px] top-2 bottom-0 w-px bg-cl-gray-200" />
-        {/* Dot */}
-        <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-white border-2 border-cl-teal flex items-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-cl-teal" />
-        </div>
-        <div className="text-cl-teal font-semibold text-sm mb-1">{year}</div>
-        <h4 className="text-lg font-semibold text-cl-navy mb-2">{title}</h4>
-        <p className="text-cl-gray-500 leading-relaxed">{description}</p>
-      </div>
-    </FadeIn>
-  );
-}
-
-/* ─── Team Member ─── */
-function TeamMember({
-  name,
-  role,
-  bio,
-  initials,
-  delay,
-}: {
-  name: string;
-  role: string;
-  bio: string;
-  initials: string;
-  delay: number;
-}) {
-  return (
-    <FadeIn delay={delay}>
-      <motion.div
-        whileHover={{ y: -6 }}
-        className="group p-8 rounded-2xl bg-white border border-cl-gray-200 hover:border-cl-teal/30 hover:shadow-xl hover:shadow-cl-teal/5 transition-all duration-300"
-      >
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cl-navy to-cl-blue flex items-center justify-center mb-5">
-          <span className="text-white font-bold text-lg">{initials}</span>
-        </div>
-        <h4 className="text-lg font-semibold text-cl-navy mb-1">{name}</h4>
-        <p className="text-cl-teal text-sm font-medium mb-3">{role}</p>
-        <p className="text-cl-gray-500 text-sm leading-relaxed">{bio}</p>
-      </motion.div>
-    </FadeIn>
-  );
-}
-
-/* ─── Stat Block ─── */
-function StatBlock({
-  value,
-  label,
-  delay,
-}: {
-  value: string;
-  label: string;
-  delay: number;
-}) {
-  return (
-    <FadeIn delay={delay}>
-      <div className="text-center">
-        <div className="text-4xl sm:text-5xl font-bold text-white mb-2">{value}</div>
-        <p className="text-white/50 text-sm font-medium">{label}</p>
-      </div>
-    </FadeIn>
   );
 }
 
@@ -145,7 +42,6 @@ export default function AboutPage() {
     <div className="pt-[72px] bg-white">
       {/* ════════════════════ HERO ════════════════════ */}
       <section className="relative py-24 sm:py-32 bg-cl-navy overflow-hidden">
-        {/* Bg effects */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cl-blue/15 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cl-teal/10 rounded-full blur-[120px]" />
 
@@ -160,22 +56,22 @@ export default function AboutPage() {
               About Clariven Labs
             </p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Raising the Standard for
+              Built to Launch Research Brands —
               <br />
               <span className="bg-gradient-to-r from-cl-teal to-cl-blue-accent bg-clip-text text-transparent">
-                Peptide Excellence
+                Compliant From Day One
               </span>
             </h1>
             <p className="text-lg text-white/55 max-w-2xl mx-auto leading-relaxed">
-              Founded by analytical chemists and life-science research veterans, Clariven Labs
-              was built to solve a fundamental problem: the research community deserves
-              a peptide supplier it can truly trust.
+              Clariven Labs is a research-use-only brand &amp; compliance consultancy. We help
+              laboratories and research companies stand up a compliant RUO product line — and stay
+              on the right side of the line as they grow.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* ════════════════════ MISSION / VISION / VALUES ════════════════════ */}
+      {/* ════════════════════ FOUNDATION ════════════════════ */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn>
@@ -183,9 +79,7 @@ export default function AboutPage() {
               <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
                 What Drives Us
               </p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy">
-                Our Foundation
-              </h2>
+              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy">Our Foundation</h2>
             </div>
           </FadeIn>
 
@@ -195,23 +89,23 @@ export default function AboutPage() {
                 icon: Target,
                 title: 'Our Mission',
                 description:
-                  'To deliver research-grade peptides with uncompromising quality, enabling laboratories and research institutions to advance experimental results with confidence in every vial.',
+                  'Make it straightforward for a research company to launch a research-use-only product line — with the compliance, brand, and operations handled correctly from the start.',
               },
               {
                 icon: Eye,
-                title: 'Our Vision',
+                title: 'Our Approach',
                 description:
-                  'To become the most trusted peptide supply partner for American research laboratories — setting the industry benchmark for purity, compliance, and client service.',
+                  'One partner from kickoff to launch. A single guided onboarding program — 9 phases, 21 steps — run by a named team, so you always know what’s next and who owns it.',
               },
               {
                 icon: Lightbulb,
-                title: 'Our Values',
+                title: 'Our Principle',
                 description:
-                  'Integrity in every batch. Transparency in every COA. Accountability in every interaction. We believe the standard of research starts with the standard of supply.',
+                  'Research use only, stated plainly and meant. We don’t overstate what a product is, and we won’t make a claim a research-use-only brand can’t stand behind.',
               },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.15}>
-                <div className="relative p-8 rounded-2xl bg-cl-gray-50 border border-cl-gray-100">
+                <div className="relative p-8 rounded-2xl bg-cl-gray-50 border border-cl-gray-100 h-full">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cl-teal/10 to-cl-blue/10 flex items-center justify-center mb-6">
                     <item.icon className="w-7 h-7 text-cl-teal" />
                   </div>
@@ -224,208 +118,79 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ════════════════════ OUR STORY ════════════════════ */}
+      {/* ════════════════════ HOW WE WORK ════════════════════ */}
       <section className="py-24 bg-cl-gray-50">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            {/* Left: narrative */}
-            <div>
-              <FadeIn>
-                <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                  Our Story
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-6">
-                  Built by Scientists,
-                  <br />
-                  Driven by Purpose
-                </h2>
-              </FadeIn>
-              <FadeIn delay={0.1}>
-                <p className="text-cl-gray-500 leading-relaxed mb-5">
-                  Clariven Labs was founded in 2019 when a group of analytical chemists
-                  and research-operations specialists recognized a critical gap in the
-                  peptide supply chain. Too many laboratories were forced to choose between
-                  affordable peptides and verifiable quality.
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.2}>
-                <p className="text-cl-gray-500 leading-relaxed mb-5">
-                  We set out to build something different — a vertically integrated peptide
-                  manufacturer with research-grade standards at every step. From raw
-                  material sourcing to final QC release, every process is designed for one
-                  outcome: peptides that researchers can trust in their studies.
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.3}>
-                <p className="text-cl-gray-500 leading-relaxed">
-                  Today, Clariven Labs serves over 500 research laboratories nationwide,
-                  from single-investigator labs to multi-site university research
-                  networks. Our team has grown, but our founding principle hasn&apos;t changed:
-                  every vial that leaves our facility must meet the standard we&apos;d want
-                  for our own benchtop.
-                </p>
-              </FadeIn>
+          <FadeIn>
+            <div className="text-center mb-16">
+              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
+                How We Work
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
+                One Guided Plan, Start to Launch
+              </h2>
+              <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
+                The same program runs every engagement, so nothing gets missed and you always know
+                where things stand.
+              </p>
             </div>
+          </FadeIn>
 
-            {/* Right: timeline */}
-            <div className="pt-4">
-              <TimelineItem
-                year="2019"
-                title="Founded in San Diego, CA"
-                description="Clariven Labs established with a mission to bring research-grade peptide supply to underserved academic and independent laboratories."
-                delay={0}
-              />
-              <TimelineItem
-                year="2020"
-                title="cGMP Certification Achieved"
-                description="Full cGMP compliance certification, establishing our quality management system to ISO-grade research manufacturing standards."
-                delay={0.1}
-              />
-              <TimelineItem
-                year="2021"
-                title="100+ Product Catalog"
-                description="Expanded to over 100 peptide formulations across research categories, serving 150+ research laboratories."
-                delay={0.2}
-              />
-              <TimelineItem
-                year="2022"
-                title="Quality-Controlled Laboratory Network"
-                description="Partnered with ISO-grade research manufacturing partners, expanding our manufacturing and distribution capabilities."
-                delay={0.3}
-              />
-              <TimelineItem
-                year="2023"
-                title="500+ Laboratory Milestone"
-                description="Crossed 500 active research laboratory accounts and 2 million vials shipped with 99.7% order accuracy."
-                delay={0.4}
-              />
-              <TimelineItem
-                year="2024"
-                title="National Expansion"
-                description="Expanded priority shipping to all 50 states with 48-hour delivery, launched dedicated enterprise accounts for large research institutions."
-                delay={0.5}
-              />
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { step: '01', title: 'Scope', desc: 'We learn your goals and map the compliance, brand, and operational groundwork your program needs.' },
+              { step: '02', title: 'Plan', desc: 'You get a guided checklist and a named team, with a clear owner for every step.' },
+              { step: '03', title: 'Build', desc: 'We coordinate compliance, brand, web, and fulfillment — and the partners it takes to go live.' },
+              { step: '04', title: 'Launch & Support', desc: 'Your program goes live with the documentation in place, and we stay on through launch.' },
+            ].map((item, i) => (
+              <FadeIn key={item.step} delay={i * 0.08}>
+                <div className="text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-cl-teal/10 flex items-center justify-center mx-auto mb-4">
+                    <span className="text-xl font-bold text-cl-teal">{item.step}</span>
+                  </div>
+                  <h3 className="text-base font-semibold text-cl-navy mb-2">{item.title}</h3>
+                  <p className="text-sm text-cl-gray-500 leading-relaxed">{item.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ════════════════════ STATS BAR ════════════════════ */}
-      <section className="py-20 bg-cl-navy relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-cl-teal/8 rounded-full blur-[100px]" />
-          <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-cl-blue/10 rounded-full blur-[100px]" />
-        </div>
-        <div className="max-w-5xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-            <StatBlock value="500+" label="Research Laboratories" delay={0} />
-            <StatBlock value="2M+" label="Vials Shipped" delay={0.1} />
-            <StatBlock value="99.7%" label="Order Accuracy" delay={0.2} />
-            <StatBlock value="50+" label="Peptide Formulations" delay={0.3} />
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════ LEADERSHIP TEAM ════════════════════ */}
+      {/* ════════════════════ WHAT WE HANDLE ════════════════════ */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn>
             <div className="text-center mb-16">
               <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Leadership
+                What We Handle
               </p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-                The Team Behind the Science
-              </h2>
-              <p className="text-cl-gray-500 max-w-2xl mx-auto text-lg">
-                Led by analytical chemists, quality engineers, and life-science
-                industry veterans with decades of combined experience.
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <TeamMember
-              name="Dr. Jonathan Mercer"
-              role="Co-Founder & CEO"
-              bio="Former VP of Peptide Development at a leading biotech firm. 20+ years in peptide chemistry and analytical method development."
-              initials="JM"
-              delay={0}
-            />
-            <TeamMember
-              name="Dr. Sarah Nakamura"
-              role="Chief Scientific Officer"
-              bio="PhD in Biochemistry from Stanford. Led peptide synthesis programs at two Fortune 500 pharma companies before joining Clariven."
-              initials="SN"
-              delay={0.1}
-            />
-            <TeamMember
-              name="Robert Kincaid"
-              role="VP of Quality & Compliance"
-              bio="15+ years in analytical quality systems. Previously QA Director at an ISO-grade research manufacturing facility. Architect of our cGMP program."
-              initials="RK"
-              delay={0.2}
-            />
-            <TeamMember
-              name="Dr. Elena Vasquez"
-              role="VP of Client Solutions"
-              bio="Research operations and analytical chemistry background. Bridges the gap between research needs and supply chain execution."
-              initials="EV"
-              delay={0.3}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════ WHY TRUST US ════════════════════ */}
-      <section className="py-24 bg-cl-gray-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Our Commitment
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy mb-4">
-                What Sets Clariven Apart
+              <h2 className="text-3xl sm:text-4xl font-bold text-cl-navy">
+                The Groundwork Behind a Launch
               </h2>
             </div>
           </FadeIn>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: FlaskConical,
-                title: 'Vertical Integration',
-                desc: 'We control every step from raw material sourcing to final QC release. No middlemen, no compromises on quality.',
+                icon: ShieldCheck,
+                title: 'Compliance',
+                desc: 'Research-use-only positioning, labeling, attestations, and documentation, set up to hold up to scrutiny.',
               },
               {
-                icon: Shield,
-                title: 'Batch-Level Traceability',
-                desc: 'Every vial is traceable to its specific production batch with full chain-of-custody documentation.',
+                icon: Building2,
+                title: 'Brand, Web & Fulfillment',
+                desc: 'Brand identity, storefront, and third-party logistics, coordinated end to end through vetted partners.',
               },
               {
-                icon: Microscope,
-                title: 'Triple-Layer Testing',
-                desc: 'HPLC purity analysis, mass spectrometry confirmation, and endotoxin testing on every production batch.',
-              },
-              {
-                icon: Award,
-                title: 'Regulatory Expertise',
-                desc: 'Our compliance team maintains active relationships with regulatory agencies and standards bodies and stays ahead of regulatory changes.',
-              },
-              {
-                icon: Handshake,
-                title: 'Named Account Specialists',
-                desc: 'Every client is assigned a dedicated specialist who understands your research program and anticipates your needs.',
-              },
-              {
-                icon: Globe,
-                title: 'Nationwide Fulfillment',
-                desc: '48-hour priority shipping to all 50 states. Temperature-controlled packaging and validated cold chain logistics.',
+                icon: Users,
+                title: 'A Named Team',
+                desc: 'A dedicated Clariven team that owns the plan with you, from the first call through launch.',
               },
             ].map((item, i) => (
-              <FadeIn key={item.title} delay={i * 0.08}>
-                <div className="flex gap-4 p-6 rounded-xl bg-white border border-cl-gray-200">
+              <FadeIn key={item.title} delay={i * 0.1}>
+                <div className="flex gap-4 p-6 rounded-xl bg-cl-gray-50 border border-cl-gray-200 h-full">
                   <div className="w-11 h-11 rounded-lg bg-cl-teal/10 flex items-center justify-center shrink-0">
                     <item.icon className="w-5 h-5 text-cl-teal" />
                   </div>
@@ -451,22 +216,22 @@ export default function AboutPage() {
                   Partner With Clariven Labs
                 </h2>
                 <p className="text-white/55 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-                  Join 500+ research laboratories who trust Clariven Labs for their
-                  most critical peptide needs. Let&apos;s build a supply chain you can count on.
+                  Tell us about your research company and where you want to take it. We&apos;ll map the
+                  path to a compliant, research-use-only launch.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
                     href="/contact"
                     className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition-all duration-300"
                   >
-                    Schedule a Consultation
+                    Start the Conversation
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <Link
                     href="/quality"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all duration-300"
                   >
-                    View Our Quality Standards
+                    Our Compliance Approach
                   </Link>
                 </div>
               </div>

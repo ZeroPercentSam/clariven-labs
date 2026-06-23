@@ -8,7 +8,6 @@ import {
   Users,
   CheckCircle2,
   ArrowRight,
-  Star,
   Activity,
   MapPin,
   Building2,
@@ -294,36 +293,6 @@ function ValueCard({
   );
 }
 
-/* ─── Testimonial Card ─── */
-function TestimonialCard({
-  quote,
-  name,
-  role,
-  delay,
-}: {
-  quote: string;
-  name: string;
-  role: string;
-  delay: number;
-}) {
-  return (
-    <FadeIn delay={delay}>
-      <div className="p-8 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm">
-        <div className="flex gap-1 mb-4">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} className="w-4 h-4 fill-cl-gold text-cl-gold" />
-          ))}
-        </div>
-        <p className="text-white/80 leading-relaxed mb-6 italic">&ldquo;{quote}&rdquo;</p>
-        <div>
-          <p className="text-white font-semibold">{name}</p>
-          <p className="text-white/50 text-sm">{role}</p>
-        </div>
-      </div>
-    </FadeIn>
-  );
-}
-
 /* ═══════════════════════════════ HOMEPAGE ═══════════════════════════════ */
 
 export default function Home() {
@@ -435,7 +404,7 @@ export default function Home() {
             {[
               { value: 9, suffix: '', label: 'Onboarding Phases', icon: Activity },
               { value: 21, suffix: '', label: 'Guided Steps', icon: CheckCircle2 },
-              { value: 127, suffix: '', label: 'Checklist Items', icon: FlaskConical },
+              { value: 120, suffix: '+', label: 'Checkpoints', icon: FlaskConical },
               { value: 100, suffix: '%', label: 'Research Use Only', icon: Shield },
             ].map((stat, i) => (
               <FadeIn key={stat.label} delay={i * 0.1}>
@@ -488,53 +457,7 @@ export default function Home() {
             <ValueCard
               icon={Users}
               title="A Guided Program"
-              description="A single onboarding checklist — 9 phases, 21 steps, 127 items — run by a named Clariven team, so you always know exactly what's next and who owns it."
-              delay={0.3}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════ SOCIAL PROOF ════════════════════ */}
-      <section className="py-24 bg-cl-navy relative overflow-hidden">
-        {/* Bg effects */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-cl-teal/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cl-blue/10 rounded-full blur-[120px]" />
-
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <FadeIn>
-            <div className="text-center mb-16">
-              <p className="text-cl-teal font-semibold text-sm tracking-widest uppercase mb-3">
-                Client Outcomes
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                Built for the Launch
-              </h2>
-              <p className="text-white/50 max-w-2xl mx-auto text-lg">
-                Research companies partner with Clariven Labs to launch a research-use-only
-                product line — compliant, on-brand, and on schedule.
-              </p>
-            </div>
-          </FadeIn>
-
-          {/* Testimonials */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <TestimonialCard
-              quote="Clariven took us from 'we have an idea for a research brand' to a live, compliant storefront in weeks. They owned the checklist so we could focus on the science."
-              name="Dr. Rebecca Chen"
-              role="Founder, Halden Research Labs"
-              delay={0}
-            />
-            <TestimonialCard
-              quote="Every compliance question we didn't even know to ask, they'd already handled. The onboarding portal made it obvious what was done and what was coming next."
-              name="James Hartwell, PhD"
-              role="Operations Lead, Summit Bioanalytical"
-              delay={0.15}
-            />
-            <TestimonialCard
-              quote="Brand, web, legal, fulfillment — all coordinated by one team against one plan. We always knew exactly where the launch stood."
-              name="Dr. Michael Sorensen"
-              role="Co-Founder, Pacific Biomedical"
+              description="A single onboarding checklist — 9 phases and 21 guided steps — run by a named Clariven team, so you always know exactly what's next and who owns it."
               delay={0.3}
             />
           </div>
@@ -567,7 +490,7 @@ export default function Home() {
                 <div className="space-y-4">
                   {[
                     'A named Clariven team from kickoff through launch',
-                    'One guided plan — 9 phases, 21 steps, 127 items',
+                    'One guided plan — 9 phases, 21 guided steps',
                     'Compliance, brand, web & fulfillment coordinated for you',
                     'Research-use-only, end to end',
                   ].map((item) => (
