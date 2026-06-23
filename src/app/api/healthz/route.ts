@@ -39,6 +39,10 @@ export async function GET() {
         process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER,
       ),
     ),
+    docusign: integrationStatus(
+      process.env.DOCUSIGN_MOCK === 'true',
+      Boolean(process.env.DOCUSIGN_INTEGRATION_KEY),
+    ),
     resend: process.env.RESEND_API_KEY ? 'configured' : 'missing',
     cron: process.env.CRON_SECRET ? 'configured' : 'missing',
   } as const;

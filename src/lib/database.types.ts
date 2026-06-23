@@ -525,6 +525,48 @@ export type Database = {
           },
         ]
       }
+      membership_requests: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          notes: string | null
+          phone: string | null
+          proposed_brand: string | null
+          source: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          notes?: string | null
+          phone?: string | null
+          proposed_brand?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          notes?: string | null
+          phone?: string | null
+          proposed_brand?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       onboarding_items: {
         Row: {
           active: boolean
@@ -1978,6 +2020,17 @@ export type Database = {
         }
         Returns: string
       }
+      submit_membership_request: {
+        Args: {
+          p_email: string
+          p_full_name: string
+          p_message?: string
+          p_phone?: string
+          p_proposed_brand?: string
+          p_source?: string
+        }
+        Returns: string
+      }
       user_org_id: { Args: never; Returns: string }
       user_org_role: { Args: never; Returns: string }
       validate_affiliate_code: {
@@ -2123,3 +2176,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

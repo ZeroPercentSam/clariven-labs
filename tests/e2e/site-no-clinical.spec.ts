@@ -28,6 +28,7 @@ const ROUTES = [
   '/privacy',
   '/about',
   '/contact',
+  '/apply',
   '/quality',
   '/resources',
 ];

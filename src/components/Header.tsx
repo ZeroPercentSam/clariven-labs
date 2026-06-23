@@ -294,11 +294,11 @@ export default function Header() {
               )}
 
               <Link
-                href="/contact"
+                href="/apply"
                 className="relative px-5 py-2 text-[12px] font-semibold tracking-wider text-white bg-[#0D9488] rounded-lg hover:bg-[#0D9488]/90 transition-all duration-300 uppercase group overflow-hidden"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Request a Quote
+                  Become a Client
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </span>
                 {/* Shimmer effect */}
@@ -443,11 +443,11 @@ export default function Header() {
                 )}
 
                 <Link
-                  href="/contact"
+                  href="/apply"
                   onClick={() => setMobileOpen(false)}
                   className="block w-full text-center px-5 py-3 text-[12px] font-semibold tracking-wider text-white bg-[#0D9488] rounded-lg hover:bg-[#0D9488]/90 transition-all uppercase"
                 >
-                  Request a Quote
+                  Become a Client
                 </Link>
               </div>
             </motion.div>

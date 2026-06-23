@@ -11,6 +11,9 @@ export const EMAIL_KINDS = [
   'order-shipped',
   'lot-expiration-warning',
   'contact-lead',
+  'membership-staff-notify',
+  'membership-welcome',
+  'membership-wire-instructions',
 ] as const;
 
 export type EmailKind = (typeof EMAIL_KINDS)[number];
@@ -32,4 +35,7 @@ export const EMAIL_LOG_KIND_LABELS: Record<EmailKind, string> = {
   'order-shipped': 'Order shipped',
   'lot-expiration-warning': 'Lot expiration warning',
   'contact-lead': 'Contact / lead',
+  'membership-staff-notify': 'Membership — staff notify',
+  'membership-welcome': 'Membership — welcome',
+  'membership-wire-instructions': 'Membership — wire instructions',
 };
