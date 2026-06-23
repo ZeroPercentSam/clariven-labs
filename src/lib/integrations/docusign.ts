@@ -29,6 +29,13 @@ export function docusignStatus(): 'mock' | 'configured' | 'missing' {
   return process.env.DOCUSIGN_INTEGRATION_KEY ? 'configured' : 'missing';
 }
 
+/** The DocuSign template id for an agreement kind (consulting vs brokering). */
+export function templateIdFor(agreement: AgreementKind): string | undefined {
+  return agreement === 'brokering'
+    ? process.env.DOCUSIGN_BROKERING_TEMPLATE_ID
+    : process.env.DOCUSIGN_CONSULTING_TEMPLATE_ID;
+}
+
 export async function sendAgreement(input: SendAgreementInput): Promise<SendAgreementResult> {
   if (mockMode()) {
     const envelopeId = `mock_${input.agreement}_${Date.now().toString(36)}`;
@@ -46,7 +53,11 @@ export async function sendAgreement(input: SendAgreementInput): Promise<SendAgre
   }
 
   // ponytail: live DocuSign eSignature send goes here once creds + template ids
-  // exist (JWT OAuth grant → Envelopes::create from a DOCUSIGN_*_TEMPLATE_ID
-  // against DOCUSIGN_BASE_URL). Until then mockMode() short-circuits above.
+  // exist (JWT OAuth grant → Envelopes::create from the template below against
+  // DOCUSIGN_BASE_URL). Until then mockMode() short-circuits above.
+  const templateId = templateIdFor(input.agreement);
+  if (!templateId) {
+    return { ok: false, error: `No DocuSign template configured for the ${input.agreement} agreement` };
+  }
   return { ok: false, error: 'DocuSign live mode not configured' };
 }
