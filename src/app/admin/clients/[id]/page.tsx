@@ -6,6 +6,7 @@ import { getClientOnboarding, getClientMembers, getClientOrg } from '@/lib/clien
 import { getClientIntake } from '@/lib/clients/intake-queries';
 import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
+import { CollapsibleCard } from '@/components/clients/CollapsibleCard';
 import { setEngagementStatus, startOnboarding } from '@/lib/clients/actions';
 import { AddClientForm } from '@/components/clients/AddClientForm';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
@@ -141,12 +142,24 @@ export default async function AdminClientDetailPage({
       )}
 
       {/* Client intake — editable by admin (writes the client's org via org_id). */}
-      <div>
-        <h2 className="text-sm font-semibold text-cl-navy mb-3">Client intake</h2>
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-cl-navy">Client intake</h2>
+        <CollapsibleCard
+          title="Brand name & market research"
+          subtitle="Proposed brand name, domain, and competitor check."
+          filled={!!intake?.proposed_name}
+          defaultOpen={!intake?.proposed_name}
+        >
           <BrandResearchForm intake={intake} orgId={org.id} />
+        </CollapsibleCard>
+        <CollapsibleCard
+          title="Business details (LLC & address)"
+          subtitle="Legal entity, EIN, registered agent, and address."
+          filled={!!intake?.legal_name}
+          defaultOpen={!intake?.legal_name}
+        >
           <BusinessDetailsForm intake={intake} orgId={org.id} />
-        </div>
+        </CollapsibleCard>
       </div>
 
       {/* Members + add member */}

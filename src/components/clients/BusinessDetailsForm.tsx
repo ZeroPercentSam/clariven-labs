@@ -22,12 +22,7 @@ export function BusinessDetailsForm({
   });
 
   return (
-    <div className="bg-white border border-cl-gray-200 rounded-xl p-6">
-      <h2 className="text-sm font-semibold text-cl-navy mb-1">Business details (LLC &amp; address)</h2>
-      <p className="text-xs text-cl-gray-500 mb-4">
-        Used to set up your site&apos;s privacy policy and other legal pages, and to broker your orders.
-      </p>
-      <form action={action} className="space-y-4">
+    <form action={action} className="space-y-4">
         {orgId ? <input type="hidden" name="org_id" value={orgId} /> : null}
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
@@ -90,7 +85,6 @@ export function BusinessDetailsForm({
           ) : null}
           {state.error ? <span className="text-sm text-cl-error">{state.error}</span> : null}
         </div>
-      </form>
-    </div>
+    </form>
   );
 }

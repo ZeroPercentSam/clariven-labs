@@ -4,6 +4,7 @@ import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
 import { OnboardingProgressRing } from '@/components/clients/OnboardingProgressRing';
 import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
+import { CollapsibleCard } from '@/components/clients/CollapsibleCard';
 
 export const metadata = { title: 'Onboarding — Clariven Labs' };
 export const dynamic = 'force-dynamic';
@@ -77,8 +78,24 @@ export default async function PortalOnboardingPage() {
         </div>
       </div>
 
-      <BrandResearchForm intake={intake} />
-      <BusinessDetailsForm intake={intake} />
+      <div className="space-y-3">
+        <CollapsibleCard
+          title="Brand name & market research"
+          subtitle="Your proposed brand name, domain, and competitor check."
+          filled={!!intake?.proposed_name}
+          defaultOpen={!intake?.proposed_name}
+        >
+          <BrandResearchForm intake={intake} />
+        </CollapsibleCard>
+        <CollapsibleCard
+          title="Business details (LLC & address)"
+          subtitle="Legal entity, EIN, registered agent, and address for your site's legal pages."
+          filled={!!intake?.legal_name}
+          defaultOpen={!intake?.legal_name}
+        >
+          <BusinessDetailsForm intake={intake} />
+        </CollapsibleCard>
+      </div>
 
       <OnboardingChecklist orgId={view.org.id} phases={view.phases} />
     </div>
