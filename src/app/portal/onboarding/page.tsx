@@ -3,6 +3,7 @@ import { getMyIntake } from '@/lib/clients/intake-queries';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
 import { OnboardingProgressRing } from '@/components/clients/OnboardingProgressRing';
 import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
+import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
 
 export const metadata = { title: 'Onboarding — Clariven Labs' };
 export const dynamic = 'force-dynamic';
@@ -77,6 +78,7 @@ export default async function PortalOnboardingPage() {
       </div>
 
       <BrandResearchForm intake={intake} />
+      <BusinessDetailsForm intake={intake} />
 
       <OnboardingChecklist orgId={view.org.id} phases={view.phases} />
     </div>

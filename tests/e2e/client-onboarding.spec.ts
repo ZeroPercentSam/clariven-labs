@@ -139,6 +139,32 @@ test.describe.serial('consulting client onboarding', () => {
       .toBeGreaterThan(0);
   });
 
+  test('admin fills client intake (LLC + brand) → persists to client_intake', async ({ page }) => {
+    await login(page, ADMIN_EMAIL);
+    await page.goto(`/admin/clients/${orgId}`);
+
+    // Business details form — admin writes the client's org via the hidden org_id.
+    await page.locator('input[name="legal_name"]').fill('E2E CliOnb Lab LLC');
+    await page.locator('input[name="llc_state"]').fill('Wyoming');
+    await page.locator('form:has(input[name="legal_name"]) button[type="submit"]').click();
+
+    // Brand research form (separate form on the same page).
+    await page.locator('input[name="proposed_name"]').fill('E2E Brand');
+    await page.locator('form:has(input[name="proposed_name"]) button[type="submit"]').click();
+
+    const supa = admin();
+    await expect
+      .poll(async () => {
+        const { data } = await supa
+          .from('client_intake')
+          .select('legal_name, llc_state, proposed_name')
+          .eq('organization_id', orgId)
+          .maybeSingle();
+        return `${data?.legal_name ?? ''}|${data?.llc_state ?? ''}|${data?.proposed_name ?? ''}`;
+      })
+      .toBe('E2E CliOnb Lab LLC|Wyoming|E2E Brand');
+  });
+
   test('provisioned client logs in → sees progress, ticks an item themselves', async ({ page }) => {
     // Reset to the known test password so we can sign in as the client (the
     // generated one is shown once and not captured here).

@@ -4,6 +4,8 @@ import { headers } from 'next/headers';
 import { requireAdmin } from '@/lib/auth/roles';
 import { getClientOnboarding, getClientMembers, getClientOrg } from '@/lib/clients/queries';
 import { getClientIntake } from '@/lib/clients/intake-queries';
+import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
+import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
 import { setEngagementStatus, startOnboarding } from '@/lib/clients/actions';
 import { AddClientForm } from '@/components/clients/AddClientForm';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
@@ -37,32 +39,6 @@ export default async function AdminClientDetailPage({
   ]);
   const org = view?.org ?? (await getClientOrg(id));
   if (!org) notFound();
-
-  const brandRows: [string, string | null][] = [
-    ['Proposed name', intake?.proposed_name ?? null],
-    ['Desired domain', intake?.desired_domain ?? null],
-    ['Competitor checked', intake ? (intake.competitor_checked ? 'Yes' : 'No') : null],
-    ['Notes', intake?.competitor_notes ?? null],
-  ];
-  const businessRows: [string, string | null][] = [
-    ['Legal name', intake?.legal_name ?? null],
-    ['LLC state', intake?.llc_state ?? null],
-    ['EIN', intake?.ein ?? null],
-    ['Registered agent', intake?.registered_agent ?? null],
-    [
-      'Address',
-      [
-        intake?.address_line1,
-        intake?.address_line2,
-        intake?.city,
-        intake?.state,
-        intake?.postal_code,
-        intake?.country,
-      ]
-        .filter(Boolean)
-        .join(', ') || null,
-    ],
-  ];
 
   const hdrs = await headers();
   const proto = hdrs.get('x-forwarded-proto') ?? 'https';
@@ -164,31 +140,14 @@ export default async function AdminClientDetailPage({
         </div>
       )}
 
-      {/* Captured client intake (brand research + business details) */}
-      {intake ? (
+      {/* Client intake — editable by admin (writes the client's org via org_id). */}
+      <div>
+        <h2 className="text-sm font-semibold text-cl-navy mb-3">Client intake</h2>
         <div className="grid lg:grid-cols-2 gap-6 items-start">
-          {(
-            [
-              ['Brand & market research', brandRows],
-              ['Business details', businessRows],
-            ] as [string, [string, string | null][]][]
-          ).map(([heading, rows]) => (
-            <div key={heading}>
-              <h2 className="text-sm font-semibold text-cl-navy mb-3">{heading}</h2>
-              <div className="bg-white border border-cl-gray-200 rounded-xl divide-y divide-cl-gray-100">
-                {rows.map(([label, value]) => (
-                  <div key={label} className="flex gap-3 px-4 py-2.5">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-cl-gray-400 w-32 shrink-0 pt-0.5">
-                      {label}
-                    </span>
-                    <span className="text-sm text-cl-navy break-words">{value || '—'}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+          <BrandResearchForm intake={intake} orgId={org.id} />
+          <BusinessDetailsForm intake={intake} orgId={org.id} />
         </div>
-      ) : null}
+      </div>
 
       {/* Members + add member */}
       <div className="grid lg:grid-cols-2 gap-6 items-start">

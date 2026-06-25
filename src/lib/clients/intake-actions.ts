@@ -5,17 +5,23 @@ import { createClient } from '@/lib/supabase/server';
 
 export type IntakeState = { ok: boolean; error?: string };
 
-// Resolve the caller's org server-side — never trust an org id from the client.
-async function resolveOrgId(
+// Resolve the org to write. A client always writes their OWN org. An admin may
+// target any org by passing a hidden `org_id` (so the operator can fill a
+// client's intake from /admin/clients/[id]); RLS (org = user_org_id() OR
+// is_admin()) double-enforces this either way.
+async function resolveTargetOrg(
   supabase: Awaited<ReturnType<typeof createClient>>,
+  formData: FormData,
 ): Promise<string | null> {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return null;
   const { data: profile } = await supabase
     .from('profiles')
-    .select('organization_id')
+    .select('organization_id, role')
     .eq('id', auth.user.id)
     .maybeSingle();
+  const requested = String(formData.get('org_id') ?? '').trim();
+  if (requested && profile?.role === 'admin') return requested;
   return profile?.organization_id ?? null;
 }
 
@@ -29,7 +35,7 @@ function str(formData: FormData, key: string, max = 200): string | null {
 // (client_intake_insert/update) enforces the org match as defense-in-depth.
 export async function saveBrandResearch(_prev: IntakeState, formData: FormData): Promise<IntakeState> {
   const supabase = await createClient();
-  const orgId = await resolveOrgId(supabase);
+  const orgId = await resolveTargetOrg(supabase, formData);
   if (!orgId) return { ok: false, error: 'No organization on your account.' };
 
   const { error } = await supabase.from('client_intake').upsert(
@@ -53,7 +59,7 @@ export async function saveBrandResearch(_prev: IntakeState, formData: FormData):
 // only the business fields — leaves brand-research values untouched.
 export async function saveBusinessDetails(_prev: IntakeState, formData: FormData): Promise<IntakeState> {
   const supabase = await createClient();
-  const orgId = await resolveOrgId(supabase);
+  const orgId = await resolveTargetOrg(supabase, formData);
   if (!orgId) return { ok: false, error: 'No organization on your account.' };
 
   const { error } = await supabase.from('client_intake').upsert(

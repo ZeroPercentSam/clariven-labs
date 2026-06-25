@@ -9,7 +9,14 @@ const FIELD =
   'w-full px-3 py-2 rounded-lg border border-cl-gray-200 bg-white text-cl-navy text-sm placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition';
 const LABEL = 'block text-sm font-medium text-cl-navy mb-1.5';
 
-export function BrandResearchForm({ intake }: { intake: ClientIntake | null }) {
+export function BrandResearchForm({
+  intake,
+  orgId,
+}: {
+  intake: ClientIntake | null;
+  /** Admin only — target a specific client org. Omit for the signed-in client. */
+  orgId?: string;
+}) {
   const [state, action, pending] = useActionState<IntakeState, FormData>(saveBrandResearch, {
     ok: false,
   });
@@ -22,6 +29,7 @@ export function BrandResearchForm({ intake }: { intake: ClientIntake | null }) {
         you form the legal entity.
       </p>
       <form action={action} className="space-y-4">
+        {orgId ? <input type="hidden" name="org_id" value={orgId} /> : null}
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label className={LABEL}>Proposed brand name</label>
