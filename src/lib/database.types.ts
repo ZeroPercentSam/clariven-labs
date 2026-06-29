@@ -496,6 +496,35 @@ export type Database = {
           },
         ]
       }
+      drip_sends: {
+        Row: {
+          drip_kind: string
+          id: number
+          organization_id: string
+          sent_at: string
+        }
+        Insert: {
+          drip_kind: string
+          id?: number
+          organization_id: string
+          sent_at?: string
+        }
+        Update: {
+          drip_kind?: string
+          id?: number
+          organization_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drip_sends_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_log: {
         Row: {
           created_at: string

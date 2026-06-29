@@ -16,6 +16,10 @@ export const EMAIL_KINDS = [
   'membership-wire-instructions',
   'membership-signed',
   'order-request',
+  'drip-sign-reminder',
+  'drip-checklist-nudge',
+  'drip-launch-ready',
+  'drip-live-checkin',
 ] as const;
 
 export type EmailKind = (typeof EMAIL_KINDS)[number];
@@ -42,4 +46,8 @@ export const EMAIL_LOG_KIND_LABELS: Record<EmailKind, string> = {
   'membership-wire-instructions': 'Membership — wire instructions',
   'membership-signed': 'Membership — agreement signed',
   'order-request': 'Order request',
+  'drip-sign-reminder': 'Drip — sign reminder',
+  'drip-checklist-nudge': 'Drip — checklist nudge',
+  'drip-launch-ready': 'Drip — launch ready',
+  'drip-live-checkin': 'Drip — live check-in',
 };
