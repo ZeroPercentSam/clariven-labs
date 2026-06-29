@@ -7,9 +7,10 @@ import { checkRateLimit } from '@/lib/ratelimit';
 import { sendEmail } from '@/lib/email/send';
 import { membershipStaffNotifyEmail } from '@/lib/email/templates/membership-staff-notify';
 import { membershipWelcomeEmail } from '@/lib/email/templates/membership-welcome';
-import { membershipWireEmail, type WireDetails } from '@/lib/email/templates/membership-wire-instructions';
+import { membershipWireEmail } from '@/lib/email/templates/membership-wire-instructions';
 import { sendAgreement } from '@/lib/integrations/docusign';
 import { INITIAL_ENGAGEMENT_FEE_CENTS } from '@/lib/memberships/constants';
+import { wireFromEnv } from '@/lib/memberships/wire';
 
 // Public "apply to become a client" handler. Trust boundary (unauthenticated):
 // honeypot + validation + rate-limit, then persist via the SECURITY DEFINER
@@ -20,22 +21,6 @@ import { INITIAL_ENGAGEMENT_FEE_CENTS } from '@/lib/memberships/constants';
 export type MembershipState = { ok: boolean; error?: string; bookingUrl?: string };
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
-function wireFromEnv(reference: string): WireDetails | null {
-  const bankName = process.env.WIRE_BANK_NAME?.trim();
-  const accountName = process.env.WIRE_ACCOUNT_NAME?.trim();
-  const routing = process.env.WIRE_ROUTING?.trim();
-  const account = process.env.WIRE_ACCOUNT?.trim();
-  if (!bankName || !accountName || !routing || !account) return null;
-  return {
-    bankName,
-    accountName,
-    routing,
-    account,
-    swift: process.env.WIRE_SWIFT?.trim() || null,
-    reference,
-  };
-}
 
 export async function submitMembershipRequest(
   _prev: MembershipState,

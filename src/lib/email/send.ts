@@ -44,12 +44,17 @@ export async function sendEmail(
   const replyTo = getReplyToAddress();
   // Outer try/catch so network throws (DNS failure, fetch abort, bad key)
   // still produce an error row in email_log.
+  // Resend needs an array for multiple recipients; allow a comma-separated `to`
+  // (e.g. MEMBERSHIP_NOTIFY_EMAIL = "a@x,b@y,c@z").
+  const recipients = input.to.includes(',')
+    ? input.to.split(',').map((s) => s.trim()).filter(Boolean)
+    : input.to;
   let data: { id?: string | null } | null = null;
   let sendError: { message: string } | null = null;
   try {
     const result = await client.emails.send({
       from: getFromAddress(),
-      to: input.to,
+      to: recipients,
       subject: input.subject,
       html: input.html,
       text: input.text,

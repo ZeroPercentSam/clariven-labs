@@ -14,6 +14,7 @@ export const EMAIL_KINDS = [
   'membership-staff-notify',
   'membership-welcome',
   'membership-wire-instructions',
+  'membership-signed',
   'order-request',
 ] as const;
 
@@ -39,5 +40,6 @@ export const EMAIL_LOG_KIND_LABELS: Record<EmailKind, string> = {
   'membership-staff-notify': 'Membership — staff notify',
   'membership-welcome': 'Membership — welcome',
   'membership-wire-instructions': 'Membership — wire instructions',
+  'membership-signed': 'Membership — agreement signed',
   'order-request': 'Order request',
 };
