@@ -7,6 +7,7 @@ import { getClientIntake } from '@/lib/clients/intake-queries';
 import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
 import { CollapsibleCard } from '@/components/clients/CollapsibleCard';
+import { getActiveAgreements, getAgreementConsents } from '@/lib/agreements/queries';
 import { setEngagementStatus, startOnboarding } from '@/lib/clients/actions';
 import { AddClientForm } from '@/components/clients/AddClientForm';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
@@ -40,6 +41,11 @@ export default async function AdminClientDetailPage({
   ]);
   const org = view?.org ?? (await getClientOrg(id));
   if (!org) notFound();
+
+  const [agreements, agreementConsents] = await Promise.all([
+    getActiveAgreements(),
+    getAgreementConsents(org.id),
+  ]);
 
   const hdrs = await headers();
   const proto = hdrs.get('x-forwarded-proto') ?? 'https';
@@ -161,6 +167,32 @@ export default async function AdminClientDetailPage({
           <BusinessDetailsForm intake={intake} orgId={org.id} />
         </CollapsibleCard>
       </div>
+
+      {/* Agreements — e-signature status (read-only; clients sign in their portal). */}
+      {agreements.length > 0 ? (
+        <div>
+          <h2 className="text-sm font-semibold text-cl-navy mb-3">Agreements</h2>
+          <div className="bg-white border border-cl-gray-200 rounded-xl divide-y divide-cl-gray-100">
+            {agreements.map((a) => {
+              const c = agreementConsents.find((x) => x.slug === a.slug);
+              return (
+                <div key={a.id} className="flex items-center gap-3 px-4 py-3">
+                  <span className="flex-1 text-sm text-cl-navy">{a.label}</span>
+                  {c ? (
+                    <span className="text-[11px] text-cl-success font-semibold">
+                      Signed by {c.signed_legal_name} · {formatDate(c.signed_at)}
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-cl-gray-400 font-semibold uppercase tracking-wider">
+                      Not signed
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
 
       {/* Members + add member */}
       <div className="grid lg:grid-cols-2 gap-6 items-start">

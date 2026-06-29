@@ -194,4 +194,26 @@ test.describe.serial('consulting client onboarding', () => {
       })
       .toBeGreaterThan(0);
   });
+
+  test('client e-signs the consulting agreement → consent recorded', async ({ page }) => {
+    const supa = admin();
+    await supa.auth.admin.updateUserById(clientUid, { password: TEST_PASSWORD });
+    await login(page, CLIENT_EMAIL);
+    await page.goto('/portal/onboarding');
+
+    // Agreements dropdown is open by default while unsigned.
+    await page.locator('input[name="signed_legal_name"]').first().fill('Jordan Client');
+    await page.locator('input[name="agree"]').first().check();
+    await page.locator('form:has(input[name="signed_legal_name"]) button[type="submit"]').first().click();
+
+    await expect
+      .poll(async () => {
+        const { count } = await supa
+          .from('client_agreement_consents')
+          .select('*', { count: 'exact', head: true })
+          .eq('organization_id', orgId);
+        return count ?? 0;
+      })
+      .toBeGreaterThan(0);
+  });
 });

@@ -5,6 +5,9 @@ import { OnboardingProgressRing } from '@/components/clients/OnboardingProgressR
 import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
 import { CollapsibleCard } from '@/components/clients/CollapsibleCard';
+import { getActiveAgreements, getAgreementConsents } from '@/lib/agreements/queries';
+import { fillAgreement } from '@/lib/agreements/fill';
+import { AgreementSign } from '@/components/clients/AgreementSign';
 
 export const metadata = { title: 'Onboarding — Clariven Labs' };
 export const dynamic = 'force-dynamic';
@@ -46,6 +49,9 @@ export default async function PortalOnboardingPage() {
 
   const complete = currentPhaseNumber === 0;
   const intake = await getMyIntake();
+  const agreements = await getActiveAgreements();
+  const consents = await getAgreementConsents(view.org.id);
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
     <div className="space-y-6">
@@ -77,6 +83,32 @@ export default async function PortalOnboardingPage() {
           )}
         </div>
       </div>
+
+      {agreements.length > 0 ? (
+        <CollapsibleCard
+          title="Agreements"
+          subtitle="Review and e-sign your Clariven Labs agreement(s)."
+          filled={consents.length >= agreements.length}
+          defaultOpen={consents.length < agreements.length}
+        >
+          <div className="space-y-6">
+            {agreements.map((a) => {
+              const c = consents.find((x) => x.slug === a.slug);
+              return (
+                <div key={a.id}>
+                  <p className="text-sm font-semibold text-cl-navy mb-2">{a.label}</p>
+                  <AgreementSign
+                    slug={a.slug}
+                    label={a.label}
+                    body={fillAgreement(a.body_md, intake, today)}
+                    signed={c ? { name: c.signed_legal_name, at: c.signed_at } : null}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </CollapsibleCard>
+      ) : null}
 
       <div className="space-y-3">
         <CollapsibleCard

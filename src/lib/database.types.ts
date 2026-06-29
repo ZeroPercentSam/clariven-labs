@@ -158,6 +158,90 @@ export type Database = {
         }
         Relationships: []
       }
+      client_agreement_consents: {
+        Row: {
+          created_at: string
+          id: string
+          ip: string | null
+          organization_id: string
+          signed_at: string
+          signed_legal_name: string
+          user_agent: string | null
+          user_id: string
+          version_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          organization_id: string
+          signed_at?: string
+          signed_legal_name: string
+          user_agent?: string | null
+          user_id: string
+          version_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip?: string | null
+          organization_id?: string
+          signed_at?: string
+          signed_legal_name?: string
+          user_agent?: string | null
+          user_id?: string
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_agreement_consents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_agreement_consents_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "client_agreements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_agreements: {
+        Row: {
+          body_md: string
+          created_at: string
+          created_by: string | null
+          effective_at: string
+          id: string
+          label: string
+          retired_at: string | null
+          slug: string
+        }
+        Insert: {
+          body_md: string
+          created_at?: string
+          created_by?: string | null
+          effective_at?: string
+          id?: string
+          label: string
+          retired_at?: string | null
+          slug: string
+        }
+        Update: {
+          body_md?: string
+          created_at?: string
+          created_by?: string | null
+          effective_at?: string
+          id?: string
+          label?: string
+          retired_at?: string | null
+          slug?: string
+        }
+        Relationships: []
+      }
       client_intake: {
         Row: {
           address_line1: string | null
@@ -2338,4 +2422,3 @@ export const Constants = {
     Enums: {},
   },
 } as const
-
