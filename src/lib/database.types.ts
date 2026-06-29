@@ -1414,9 +1414,13 @@ export type Database = {
           cogs_cents: number | null
           created_at: string
           currency: string
+          display_name: string | null
           id: string
+          label_path: string | null
+          offered: boolean
           price_cents: number
           product_slug: string
+          render_path: string | null
           strength_label: string
           updated_at: string
         }
@@ -1425,9 +1429,13 @@ export type Database = {
           cogs_cents?: number | null
           created_at?: string
           currency?: string
+          display_name?: string | null
           id?: string
+          label_path?: string | null
+          offered?: boolean
           price_cents: number
           product_slug: string
+          render_path?: string | null
           strength_label: string
           updated_at?: string
         }
@@ -1436,9 +1444,13 @@ export type Database = {
           cogs_cents?: number | null
           created_at?: string
           currency?: string
+          display_name?: string | null
           id?: string
+          label_path?: string | null
+          offered?: boolean
           price_cents?: number
           product_slug?: string
+          render_path?: string | null
           strength_label?: string
           updated_at?: string
         }
@@ -2201,7 +2213,10 @@ export type Database = {
       list_product_catalog: {
         Args: never
         Returns: {
+          display_name: string
+          label_path: string
           product_slug: string
+          render_path: string
           strength_label: string
         }[]
       }

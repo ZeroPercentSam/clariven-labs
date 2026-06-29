@@ -64,41 +64,66 @@ export function ProductPicker({ options, kind }: Props) {
       <input type="hidden" name="items" value={JSON.stringify(items)} />
 
       <div className="bg-white border border-cl-gray-200 rounded-xl divide-y divide-cl-gray-100 max-h-[480px] overflow-y-auto">
-        {groups.map(([slug, opts]) => (
-          <div key={slug} className="p-4">
-            <p className="text-sm font-semibold text-cl-navy mb-2">{prettifyProductName(slug)}</p>
-            <div className="space-y-2">
-              {opts.map((o) => {
-                const key = `${o.slug}__${o.strength}`;
-                const on = sel[key] != null;
-                return (
-                  <div key={key} className="flex items-center gap-3">
-                    <label className="flex items-center gap-2 flex-1 text-sm text-cl-gray-600 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={on}
-                        onChange={(e) => toggle(key, e.target.checked)}
-                        className="accent-cl-teal"
-                      />
-                      <span>{o.strength}</span>
-                    </label>
-                    {on ? (
-                      <input
-                        type="number"
-                        min={1}
-                        max={999}
-                        value={sel[key]}
-                        onChange={(e) => setQty(key, parseInt(e.target.value, 10))}
-                        aria-label={`Quantity for ${prettifyProductName(o.slug)} ${o.strength}`}
-                        className="w-20 px-2 py-1 rounded border border-cl-gray-200 text-sm text-cl-navy focus:outline-none focus:border-cl-teal"
-                      />
-                    ) : null}
-                  </div>
-                );
-              })}
+        {groups.map(([slug, opts]) => {
+          const first = opts[0];
+          return (
+            <div key={slug} className="p-4">
+              <div className="flex items-center gap-3 mb-2">
+                {first.renderUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={first.renderUrl}
+                    alt={first.name ?? slug}
+                    className="w-12 h-12 object-contain rounded bg-cl-gray-50 border border-cl-gray-100 shrink-0"
+                  />
+                ) : null}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-cl-navy">{first.name ?? prettifyProductName(slug)}</p>
+                  {first.labelUrl ? (
+                    <a
+                      href={first.labelUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-cl-teal hover:text-cl-teal/80"
+                    >
+                      Label PDF ↓
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+              <div className="space-y-2">
+                {opts.map((o) => {
+                  const key = `${o.slug}__${o.strength}`;
+                  const on = sel[key] != null;
+                  return (
+                    <div key={key} className="flex items-center gap-3">
+                      <label className="flex items-center gap-2 flex-1 text-sm text-cl-gray-600 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={on}
+                          onChange={(e) => toggle(key, e.target.checked)}
+                          className="accent-cl-teal"
+                        />
+                        <span>{o.strength || 'Select to add'}</span>
+                      </label>
+                      {on ? (
+                        <input
+                          type="number"
+                          min={1}
+                          max={999}
+                          value={sel[key]}
+                          onChange={(e) => setQty(key, parseInt(e.target.value, 10))}
+                          aria-label={`Quantity for ${first.name ?? prettifyProductName(o.slug)}`}
+                          className="w-20 px-2 py-1 rounded border border-cl-gray-200 text-sm text-cl-navy focus:outline-none focus:border-cl-teal"
+                        />
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div>

@@ -7,7 +7,18 @@ export type OrderRequest = Database['public']['Tables']['order_requests']['Row']
 export type OrderRequestItem = Database['public']['Tables']['order_request_items']['Row'];
 export type OrderRequestWithCount = OrderRequest & { itemCount: number };
 export type OrderRequestDetail = OrderRequest & { items: OrderRequestItem[]; orgName: string | null };
-export type ProductOption = { slug: string; strength: string };
+export type ProductOption = {
+  slug: string;
+  strength: string;
+  name: string | null;
+  renderUrl: string | null;
+  labelUrl: string | null;
+};
+
+function assetUrl(path: string | null | undefined): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return path && base ? `${base}/storage/v1/object/public/product-assets/${path}` : null;
+}
 
 async function myOrgId(supabase: Awaited<ReturnType<typeof createClient>>): Promise<string | null> {
   const { data: auth } = await supabase.auth.getUser();
@@ -20,11 +31,17 @@ async function myOrgId(supabase: Awaited<ReturnType<typeof createClient>>): Prom
   return profile?.organization_id ?? null;
 }
 
-/** Active SKUs (slug + strength only — no price/cogs) via the definer RPC. */
+/** Curated catalog (name + render + label, no price/cogs) via the definer RPC. */
 export async function listProductCatalog(): Promise<ProductOption[]> {
   const supabase = await createClient();
   const { data } = await supabase.rpc('list_product_catalog');
-  return (data ?? []).map((r) => ({ slug: r.product_slug, strength: r.strength_label }));
+  return (data ?? []).map((r) => ({
+    slug: r.product_slug,
+    strength: r.strength_label,
+    name: r.display_name ?? null,
+    renderUrl: assetUrl(r.render_path),
+    labelUrl: assetUrl(r.label_path),
+  }));
 }
 
 /** Client: my org's order requests with item counts. */
