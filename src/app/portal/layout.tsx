@@ -29,6 +29,11 @@ export default async function PortalLayout({ children }: { children: React.React
                   Orders
                 </NavLink>
               ) : null}
+              {profile.role !== 'admin' && profile.organization_id ? (
+                <NavLink href="/portal/compliance" className={NAV} activeClassName={NAV_ACTIVE}>
+                  Compliance
+                </NavLink>
+              ) : null}
               <NavLink href="/portal/support" className={NAV} activeClassName={NAV_ACTIVE}>
                 Support
               </NavLink>

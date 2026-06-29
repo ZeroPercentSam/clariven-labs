@@ -8,6 +8,9 @@ import { BrandResearchForm } from '@/components/clients/BrandResearchForm';
 import { BusinessDetailsForm } from '@/components/clients/BusinessDetailsForm';
 import { CollapsibleCard } from '@/components/clients/CollapsibleCard';
 import { getActiveAgreements, getAgreementConsents } from '@/lib/agreements/queries';
+import { COMPLIANCE_DOCS } from '@/lib/compliance/templates';
+import { fillCompany } from '@/lib/compliance/fill';
+import { ComplianceDocs } from '@/components/clients/ComplianceDocs';
 import { setEngagementStatus, startOnboarding } from '@/lib/clients/actions';
 import { AddClientForm } from '@/components/clients/AddClientForm';
 import { OnboardingChecklist } from '@/components/clients/OnboardingChecklist';
@@ -46,6 +49,26 @@ export default async function AdminClientDetailPage({
     getActiveAgreements(),
     getAgreementConsents(org.id),
   ]);
+
+  const complianceToday = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const complianceCompany = intake
+    ? {
+        legal_name: intake.legal_name,
+        address_line1: intake.address_line1,
+        address_line2: intake.address_line2,
+        city: intake.city,
+        state: intake.state,
+        postal_code: intake.postal_code,
+        country: intake.country,
+        domain: intake.desired_domain,
+      }
+    : null;
+  const complianceDocs = COMPLIANCE_DOCS.map((d) => ({
+    slug: d.slug,
+    title: d.title,
+    kind: d.kind,
+    body: d.kind === 'template' ? fillCompany(d.body, complianceCompany, complianceToday) : d.body,
+  }));
 
   const hdrs = await headers();
   const proto = hdrs.get('x-forwarded-proto') ?? 'https';
@@ -193,6 +216,12 @@ export default async function AdminClientDetailPage({
           </div>
         </div>
       ) : null}
+
+      {/* Compliance docs — per-client RUO policy pack (filled from intake) + counsel memo. */}
+      <div className="space-y-3">
+        <h2 className="text-sm font-semibold text-cl-navy">Compliance documents</h2>
+        <ComplianceDocs docs={complianceDocs} />
+      </div>
 
       {/* Members + add member */}
       <div className="grid lg:grid-cols-2 gap-6 items-start">
