@@ -1,14 +1,13 @@
 import { baseEmailHtml, escapeHtml, formatUsd, TEXT_FOOTER } from './layout';
+import { requestCallMailto, ALLETIA_EMAIL } from '../request-call';
 
 export type MembershipWelcomeInput = {
   name: string;
-  /** Booking link (Calendly/Cal.com). Empty string → CTA + url line omitted. */
-  bookingUrl: string;
   initialFeeCents: number;
 };
 
 /** "Welcome to Clariven Labs — here's what happens next" applicant email. */
-export function membershipWelcomeEmail({ name, bookingUrl, initialFeeCents }: MembershipWelcomeInput) {
+export function membershipWelcomeEmail({ name, initialFeeCents }: MembershipWelcomeInput) {
   const subject = 'Welcome to Clariven Labs — here’s what happens next';
   const fee = formatUsd(initialFeeCents);
 
@@ -21,7 +20,7 @@ export function membershipWelcomeEmail({ name, bookingUrl, initialFeeCents }: Me
     'Here’s what happens next:',
     '1. Sign your consulting agreement — check your inbox for a separate email to review and e-sign.',
     `2. Submit your initial engagement fee of ${fee} — wire instructions are in a separate email.`,
-    bookingUrl ? `3. Book your onboarding call: ${bookingUrl}` : '3. Book your onboarding call — we’ll send a link shortly.',
+    `3. Request your onboarding call — email ${ALLETIA_EMAIL} with a few times that work.`,
     '4. We provision your private client portal and guided onboarding checklist.',
     '',
     'Questions any time: support@clarivenlabs.com',
@@ -36,7 +35,7 @@ export function membershipWelcomeEmail({ name, bookingUrl, initialFeeCents }: Me
     <ol style="margin:0 0 20px;padding-left:20px;color:#334155;font-size:15px;line-height:1.6;">
       ${item('Sign your consulting agreement — check your inbox for a separate email to review and e-sign.')}
       ${item(`Submit your initial engagement fee of <strong>${escapeHtml(fee)}</strong> — wire instructions are in a separate email.`)}
-      ${item(bookingUrl ? 'Book your onboarding call using the button below.' : 'Book your onboarding call — we’ll send a link shortly.')}
+      ${item('Request your onboarding call using the button below — it opens a pre-filled email; just add a few times that work for you.')}
       ${item('We provision your private client portal and guided onboarding checklist.')}
     </ol>`;
 
@@ -45,7 +44,8 @@ export function membershipWelcomeEmail({ name, bookingUrl, initialFeeCents }: Me
     eyebrow: 'Welcome',
     heading: 'Welcome to Clariven Labs',
     bodyHtml,
-    ...(bookingUrl ? { ctaLabel: 'Book your onboarding call', ctaUrl: bookingUrl } : {}),
+    ctaLabel: 'Request an onboarding call',
+    ctaUrl: requestCallMailto(name),
   });
 
   return { subject, html, text };

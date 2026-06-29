@@ -18,7 +18,7 @@ import { wireFromEnv } from '@/lib/memberships/wire';
 // best-effort follow-ups (staff notify, welcome, wire instructions, agreement).
 // Follow-ups never roll back the captured request (invariant #6).
 
-export type MembershipState = { ok: boolean; error?: string; bookingUrl?: string };
+export type MembershipState = { ok: boolean; error?: string };
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -26,10 +26,8 @@ export async function submitMembershipRequest(
   _prev: MembershipState,
   formData: FormData,
 ): Promise<MembershipState> {
-  const bookingUrl = process.env.BOOKING_URL?.trim() || '';
-
   // Honeypot: bots fill the hidden field → silent success, send nothing.
-  if (String(formData.get('company_website') ?? '').trim()) return { ok: true, bookingUrl };
+  if (String(formData.get('company_website') ?? '').trim()) return { ok: true };
 
   const get = (k: string) => String(formData.get(k) ?? '').trim().slice(0, 2000);
   const name = get('name');
@@ -82,7 +80,7 @@ export async function submitMembershipRequest(
   }
 
   try {
-    const t = membershipWelcomeEmail({ name, bookingUrl, initialFeeCents: INITIAL_ENGAGEMENT_FEE_CENTS });
+    const t = membershipWelcomeEmail({ name, initialFeeCents: INITIAL_ENGAGEMENT_FEE_CENTS });
     await sendEmail({ to: email, subject: t.subject, html: t.html, text: t.text, kind: 'membership-welcome' });
   } catch (e) {
     console.warn('[membership] welcome failed', e);
@@ -104,5 +102,5 @@ export async function submitMembershipRequest(
     console.warn('[membership] agreement send failed', e);
   }
 
-  return { ok: true, bookingUrl };
+  return { ok: true };
 }

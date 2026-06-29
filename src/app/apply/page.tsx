@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
 } from 'lucide-react';
 import { submitMembershipRequest } from '@/lib/memberships/actions';
+import { requestCallMailto } from '@/lib/email/request-call';
 
 const FIELD =
   'w-full px-4 py-3 rounded-xl border border-cl-gray-200 bg-white text-cl-navy placeholder:text-cl-gray-400 focus:outline-none focus:ring-2 focus:ring-cl-teal/30 focus:border-cl-teal transition';
@@ -21,7 +22,7 @@ const FIELD =
 const NEXT_STEPS = [
   { icon: FileSignature, text: 'Check your email to review and e-sign your consulting agreement.' },
   { icon: CreditCard, text: 'Submit your initial engagement fee — wire instructions are in a separate email.' },
-  { icon: CalendarCheck, text: 'Book your onboarding call so we can map your plan.' },
+  { icon: CalendarCheck, text: 'Request your onboarding call so we can map your plan.' },
   { icon: LayoutDashboard, text: 'We provision your private client portal and guided onboarding.' },
 ];
 
@@ -53,7 +54,7 @@ export default function ApplyPage() {
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed">
               Tell us about your research company. Once you apply, we send your agreement, your
-              onboarding next steps, and a link to book your kickoff call.
+              onboarding next steps, and how to request your kickoff call.
             </p>
           </motion.div>
         </div>
@@ -87,19 +88,15 @@ export default function ApplyPage() {
                   </li>
                 ))}
               </ol>
-              {state.bookingUrl ? (
-                <div className="text-center mt-8">
-                  <a
-                    href={state.bookingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition shadow-lg shadow-cl-teal/20"
-                  >
-                    <CalendarCheck className="w-5 h-5" />
-                    Book your onboarding call
-                  </a>
-                </div>
-              ) : null}
+              <div className="text-center mt-8">
+                <a
+                  href={requestCallMailto()}
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-cl-teal text-white font-semibold hover:bg-cl-teal-light transition shadow-lg shadow-cl-teal/20"
+                >
+                  <CalendarCheck className="w-5 h-5" />
+                  Request an onboarding call
+                </a>
+              </div>
             </motion.div>
           ) : (
             <div className="rounded-2xl border border-cl-gray-200 shadow-xl shadow-cl-navy/5 p-8 sm:p-10 bg-white">
