@@ -93,7 +93,7 @@ export default function ResearchPage() {
               { icon: FileCheck, title: 'Audit-Ready Documentation', description: 'COAs, batch records, and reference data organized into a package your methods section and reviewers can cite.' },
               { icon: Dna, title: 'Brand & Web', description: 'A credible brand identity and storefront, designed and stood up for your research-use-only program.' },
               { icon: Layers, title: 'Fulfillment & Operations', description: 'Third-party logistics, payments, and order flow coordinated end to end through vetted partners.' },
-              { icon: GraduationCap, title: 'Guided Onboarding', description: 'A single checklist — 9 phases, 21 steps — run by a named Clariven team so nothing slips.' },
+              { icon: GraduationCap, title: 'Guided Onboarding', description: 'A single checklist — 9 phases, 22 steps — run by a named Clariven team so nothing slips.' },
               { icon: Clock, title: 'Predictable Launch', description: 'Clear milestones and a dedicated specialist keep your launch on schedule against grant and program deadlines.' },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.06}>

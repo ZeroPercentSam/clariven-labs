@@ -525,7 +525,7 @@ export default function Home() {
             <ValueCard
               icon={Users}
               title="A Guided Program"
-              description="A single onboarding checklist — 9 phases and 21 guided steps — run by a named Clariven team, so you always know exactly what's next and who owns it."
+              description="A single onboarding checklist — 9 phases and 22 guided steps — run by a named Clariven team, so you always know exactly what's next and who owns it."
               delay={0.3}
             />
           </div>
@@ -558,7 +558,7 @@ export default function Home() {
                 <div className="space-y-4">
                   {[
                     'A named Clariven team from kickoff through launch',
-                    'One guided plan — 9 phases, 21 guided steps',
+                    'One guided plan — 9 phases, 22 guided steps',
                     'Compliance, brand, web & fulfillment coordinated for you',
                     'Research-use-only, end to end',
                   ].map((item) => (

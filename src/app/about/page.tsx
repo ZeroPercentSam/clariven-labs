@@ -95,7 +95,7 @@ export default function AboutPage() {
                 icon: Eye,
                 title: 'Our Approach',
                 description:
-                  'One partner from kickoff to launch. A single guided onboarding program — 9 phases, 21 steps — run by a named team, so you always know what’s next and who owns it.',
+                  'One partner from kickoff to launch. A single guided onboarding program — 9 phases, 22 steps — run by a named team, so you always know what’s next and who owns it.',
               },
               {
                 icon: Lightbulb,
