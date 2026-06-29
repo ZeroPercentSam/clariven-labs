@@ -6,6 +6,26 @@
 
 ## Where we are
 
+> **2026-06-29 — Booking→mailto, SMS alerts, onboarding drips, site truth-fix. LIVE.**
+> Five commits to `main`, all deployed to **www.clarivenlabs.com**.
+> - **Booking CTA → pre-filled mailto** (commit `b43130a`): dropped Calendly / `BOOKING_URL`; the
+>   onboarding-call CTA now opens a pre-filled email to Alletia (`alletia.demartino@s8ventures.com`).
+>   New `src/lib/email/request-call.ts`; applied to the live welcome email + `/apply` success screen.
+> - **SMS team alert on `/apply`** (commit `063d3b1`): ported Purity's REST Twilio sender
+>   (`src/lib/notifications/twilio.ts`, no SDK, `TWILIO_MOCK`-aware); best-effort text to
+>   `INQUIRY_ALERT_SMS_TO` on every inquiry. Vercel prod env set (creds copied from Purity): `TWILIO_*`
+>   + recipients (Sam + Victor + Alletia) + **`TWILIO_MOCK=false`** (it had been masking real sends).
+> - **Onboarding drips** (commit `0062c09`, migration 0038 `drip_sends`): daily cron `/api/cron/drips`
+>   (CRON_SECRET-gated, service-role) sends 4 staged follow-ups once per client — sign-reminder,
+>   checklist-nudge, launch-ready, live check-in. Conditions use only tracked state (fee/booking drips
+>   omitted as we don't record those signals). One parameterized template `lib/email/templates/drip.ts`;
+>   4 new email-log kinds. ⚠️ First run reminds the 2 unsigned onboarding clients (Nexverabio, TBD).
+> - **Site step count 21 → 22** (commit `024d870`): home/about/research copy matched to the live
+>   22-step program.
+> - Verified: typecheck + lint (0 err) + build green per commit; `/code-review` clean each.
+> **Still open:** ongoing-support offering (needs price), brokering agreement (paste Alletia's doc),
+> product prices/strengths (Victor's menu), wire `WIRE_*` env. Tracked in ClickUp (ClarivenLabs folder).
+
 > **2026-06-23 — Client-lifecycle program (intake → onboarding capture → order-requests). LIVE.**
 > Built the end-to-end client journey on top of the consulting onboarding, shipped in 4 commits to
 > `main`, all deployed to **www.clarivenlabs.com**.
