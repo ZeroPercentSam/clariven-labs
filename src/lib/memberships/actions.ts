@@ -9,6 +9,7 @@ import { membershipStaffNotifyEmail } from '@/lib/email/templates/membership-sta
 import { membershipWelcomeEmail } from '@/lib/email/templates/membership-welcome';
 import { membershipWireEmail } from '@/lib/email/templates/membership-wire-instructions';
 import { sendAgreement } from '@/lib/integrations/docusign';
+import { sendTwilioSms, twilioConfigured } from '@/lib/notifications/twilio';
 import { INITIAL_ENGAGEMENT_FEE_CENTS } from '@/lib/memberships/constants';
 import { wireFromEnv } from '@/lib/memberships/wire';
 
@@ -77,6 +78,19 @@ export async function submitMembershipRequest(
     await sendEmail({ to: staffTo, subject: t.subject, html: t.html, text: t.text, kind: 'membership-staff-notify' });
   } catch (e) {
     console.warn('[membership] staff notify failed', e);
+  }
+
+  // Best-effort SMS alert to the team (inert until Twilio env + INQUIRY_ALERT_SMS_TO set).
+  if (twilioConfigured()) {
+    const smsTo = (process.env.INQUIRY_ALERT_SMS_TO || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const smsBody = `New Clariven inquiry — ${name}${brand ? ` (${brand})` : ''} — ${email}${phone ? `, ${phone}` : ''}`;
+    for (const to of smsTo) {
+      const r = await sendTwilioSms(to, smsBody);
+      if (!r.ok) console.warn('[membership] sms failed', { to, error: r.error });
+    }
   }
 
   try {
