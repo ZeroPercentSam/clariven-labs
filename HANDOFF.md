@@ -24,7 +24,9 @@
 >   22-step program.
 > - Verified: typecheck + lint (0 err) + build green per commit; `/code-review` clean each.
 > **Still open:** ongoing-support offering (needs price), brokering agreement (paste Alletia's doc),
-> product prices/strengths (Victor's menu), wire `WIRE_*` env. Tracked in ClickUp (ClarivenLabs folder).
+> product prices/strengths (Victor's menu). Tracked in ClickUp (ClarivenLabs folder).
+> **Set 2026-07-01:** `WIRE_*` env (Chase / Clariven Labs LLC / 322271627 / 2909937579, encrypted ×3,
+> deploy `3e3b5d9`) — wire-instructions email now LIVE (fires post-consulting-agreement e-signature).
 
 > **2026-06-23 — Client-lifecycle program (intake → onboarding capture → order-requests). LIVE.**
 > Built the end-to-end client journey on top of the consulting onboarding, shipped in 4 commits to
